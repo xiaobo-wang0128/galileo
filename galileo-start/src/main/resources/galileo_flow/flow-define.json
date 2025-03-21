@@ -1,0 +1,29 @@
+[
+  {
+    "name": "入库单",
+    "code": "Inbound",
+    "bizClass": "com.hairoutech.common.dto.order.InboundOrderDTO->inboundOrderStatus",
+    "flowDefine": [
+      {
+        "name": "标准入库流程",
+        "xmlPath": "galileo_flow/nova_inbound_flow.xml"
+      }
+    ]
+  }
+// ,
+//  {
+//    "name": "上架单",
+//    "code": "Putaway",
+//    "bizClass": "com.hairoutech.common.dto.order.PutAwayTaskDTO->putAwayTaskStatus",
+//    "flowDefine": [
+//      {
+//        "name": "标准上架流程",
+//        "xmlPath": "nova_flow/nova_putaway_flow.xml"
+//      },
+//      {
+//        "name": "制造业上架流程",
+//        "xmlPath": "nova_flow/nova_putaway_zhizhaoye.xml"
+//      }
+//    ]
+//  }
+]

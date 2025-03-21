@@ -1,0 +1,18 @@
+server:
+   port: 9608
+spring:
+   application:
+      name: galileo-i18n
+   profiles:
+      active: dev
+   datasource:
+      driverClassName: com.mysql.cj.jdbc.Driver
+      # 使用druid数据源
+      type: com.alibaba.druid.pool.DruidDataSource
+      url: jdbc:mysql://bronze-dev/i18n_server?useSSL=false&serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true
+      username: root
+      password: Iml123123
+
+
+galileo:
+   sophonUrl: "http://sophon.okios.cn"

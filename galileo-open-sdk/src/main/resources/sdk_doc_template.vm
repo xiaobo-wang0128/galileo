@@ -1,0 +1,330 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+    <style type="text/css">
+        * {
+            font: 14px/1.5 "微软雅黑", tahoma, arial, "Hiragino Sans GB", "宋体", sans-serif;
+        }
+
+        a:LINK {
+            color: #740D06;
+            text-decoration: none;
+        }
+
+        .head_div {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            padding-left: 10px;
+            width: 1100px;
+            left: -550px;
+            position: relative;
+            margin-left: 50%;
+            border-bottom: 1px solid #ccc;
+        }
+        .main_box_div {
+            padding-top: 10px;
+            width: 1100px;
+            left: -550px;
+            position: relative;
+            margin-left: 50%;
+        }
+        .main_box_div div {
+            line-height: 32px;
+        }
+        .menu_div div {
+            cursor: pointer;
+            height: 30px;
+            line-height: 30px;
+            vertical-align: middle;
+        }
+        .right_div div {
+            padding: 5px 5px 5px 15px;
+        }
+        .comment_table {
+            background-color: #ccc;
+            width: 100%;
+        }
+        .comment_table td {
+            padding-left: 5px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            padding-right: 5px;
+            background-color: #fff;
+        }
+
+        .comment_table .table_head td {
+            background-color: #E1DFDB;
+        }
+
+        .doc_group_highlight {
+            font-weight: bold;
+            font-size: 15px;
+            color: #f60;
+        }
+
+        .keyword_input {
+            width: 156px;
+            line-height: 25px;
+            border-left: 1px solid #ccc;
+            border-top: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+            border-right: none;
+            float: left;
+        }
+
+        .search_btn {
+            width: 60px;
+            height: 29px;
+            color: #fff;
+            letter-spacing: 1px;
+            background: #3385ff;
+            border-bottom: 1px solid #2d78f4;
+            outline: medium;
+            -webkit-appearance: none;
+            -webkit-border-radius: 0;
+            border: 0;
+            cursor: pointer;
+        }
+
+        .PL5{
+            padding-left: 5px;
+        }
+        .PARAM_KEY {
+            width: 240px;
+        }
+        .PARAM_TYPE {
+            width: 180px;
+        }
+
+        .doc_menu_div div{
+            height: 32px;
+            line-height: 32px;
+        }
+        .doc_menu_div div a{
+            color: #2a64f9;
+            height: 32px;
+            line-height: 32px;
+        }
+        .doc_menu_div div a:hover{
+            text-decoration: none;
+            text-underline: #2a64f9;
+            cursor: pointer;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<div class="head_div" style="padding-left: 0px;">
+    <table style="width: 100%;">
+        <tr>
+            <td style=" font-size: 16px; width: 100%; color: #2a64f9; padding-left: 0px; font-weight: bold; ">
+                HAIQ-IWMS 接口文档 &nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 12px;">v${version}</span>
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+<div class="main_box_div">
+
+
+    <div style="font-size: 18px; font-weight: bold;">接口清单</div>
+    <div style="height: 10px;"></div>
+    <div class="doc_menu_div" >
+    #foreach($group in $list)
+        <div>调用方向：${group.group}</div>
+        #foreach($doc in $group.docList)
+            <div style="padding-left: 0px; "><a href="#${doc.apiUrl}">${doc.apiName}</a></div>
+        #end
+    #end
+    </div>
+
+    <div style="height: 30px;"></div>
+
+    #foreach($group in $list)
+
+        #foreach($doc in $group.docList)
+
+            <a name="${doc.apiUrl}"></a>
+            <div style="font-size: 18px; font-weight: bold;">$doc.apiName
+            </div>
+
+            #if($util.isNotNull($doc.apiDesc))
+                <div style="border:1px solid #ccc; margin:10px 0px 10px 0px; padding: 0px 10px 0px 10px; background-color: #FAF3E0;">
+                    $!doc.apiDesc
+                </div>
+            #end
+
+            <div style="margin-top: 10px; ">
+                调用方向： #if($doc.type=='customer_to_haiq')客户 → HAIQ</font> #else HAIQ → 客户 #end
+            </div>
+
+            <div>
+                接口地址： <a target="_blank">http://{server_url}${apiHead}/${doc.apiUrl}</a>
+            </div>
+
+            <div>返回类型： $util.escape($!doc.outputType)</div>
+
+            #if($util.isNotEmpty($doc.inputParams))
+
+                <div>
+                    <div style="padding-left: 0px;padding-top: 0px;">输入参数：</div>
+                    <table cellpadding="1" cellspacing="1" class="comment_table">
+                        <tr class="table_head">
+                            <td style="width: 240px"  >参数名</td>
+                            <td style="width: 180px"  >类型(长度)</td>
+                            <td>说明</td>
+                        </tr>
+
+                        #foreach($input in $doc.inputParams)
+
+                            #if($input.isSystem)
+
+                            #else
+
+                                <tr>
+                                    <td>
+                                        $input.name
+                                    </td>
+
+                                    <td #if($util.isNotEmpty($input.subParams))
+                                            style="color: red;" #end>$util.escape($input.type)</td>
+                                    <td>
+                                        $!input.description
+                                    </td>
+                                </tr>
+
+                                #if($util.isNotEmpty($input.subParams))
+                                    #foreach($subP1 in $input.subParams)
+                                        <tr>
+                                            <td style="padding-left: 24px;" >$subP1.name</td>
+                                            <td>$util.escape($subP1.type)</td>
+                                            <td>$!{subP1.description}</td>
+                                        </tr>
+
+                                        #if($util.isNotEmpty($subP1.subParams))
+
+                                            #foreach($subP2 in $subP1.subParams)
+                                                <tr>
+                                                    <td   style="padding-left: 48px;" >$subP2.name</td>
+                                                    <td>$util.escape($subP2.type)</td>
+                                                    <td>$!{subP2.description}</td>
+                                                </tr>
+
+                                                #if($util.isNotEmpty($subP2.subParams))
+                                                    #foreach($subP3 in $subP2.subParams)
+                                                        <tr>
+                                                            <td   style="padding-left: 72px;" >$subP3.name</td>
+                                                            <td>$util.escape($subP3.type)</td>
+                                                            <td>$!{subP3.description}</td>
+                                                        </tr>
+
+                                                        #if($util.isNotEmpty($subP3.subParams))
+                                                            #foreach($subP4 in $subP3.subParams)
+                                                                <tr>
+                                                                    <td  style="padding-left: 96px;" >$subP4.name</td>
+                                                                    <td>$util.escape($subP4.type)</td>
+                                                                    <td>$!{subP4.description}</td>
+                                                                </tr>
+                                                            #end
+                                                        #end
+
+                                                    #end
+                                                #end
+
+
+                                            #end
+                                        #end
+
+
+                                    #end
+                                #end
+                            #end
+                        #end
+
+
+                    </table>
+                </div>
+            #end
+
+            #if($util.isNotEmpty($doc.outputParams))
+                <div>
+                    <div style="padding-left: 0px;padding-top: 0px; line-height: 38px;margin-top: 10px;">输出结果：</div>
+                    <table cellpadding="1" cellspacing="1" class="comment_table">
+                        <tr class="table_head">
+                            <td class="PARAM_KEY">参数名</td>
+                            <td class="PARAM_TYPE">参数类型</td>
+                            <td>说明</td>
+                        </tr>
+                        #foreach($input in $doc.outputParams)
+
+                            <tr>
+                                <td>$input.name</td>
+                                <td #if($util.isNotEmpty($input.subParams))
+                                        style="color: red;" #end> $util.escape($input.type)</td>
+                                <td>$!input.description</td>
+                            </tr>
+
+                            #if($util.isNotEmpty($input.subParams))
+
+                                #foreach($subP in $input.subParams)
+
+                                    <tr>
+                                        <td  style="padding-left: 24px;" >$subP.name</td>
+                                        <td>$util.escape($subP.type)</td>
+                                        <td>$!subP.description</td>
+                                    </tr>
+
+                                    #if($util.isNotEmpty($subP.subParams))
+                                        #foreach($subP2 in $subP.subParams)
+                                            <tr>
+                                                <td style="padding-left: 48px;" >$util.escape($subP2.name)</td>
+                                                <td>$util.escape($subP2.type)</td>
+                                                <td>$!subP2.description</td>
+                                            </tr>
+
+                                            #if($util.isNotEmpty($subP2.subParams))
+                                                #foreach($subP3 in $subP2.subParams)
+                                                    <tr>
+                                                        <td style="padding-left: 72px;">$util.escape($subP3.name)</td>
+                                                        <td>$util.escape($subP3.type)</td>
+                                                        <td>$!subP3.description</td>
+                                                    </tr>
+                                                #end
+                                            #end
+
+
+                                        #end
+                                    #end
+
+                                #end
+                            #end
+                        #end
+                    </table>
+                </div>
+            #end
+
+            <div style="padding-left: 0px;padding-top: 0px; line-height: 38px;margin-top: 10px;  ">输入参数示例：</div>
+
+            <div style=" border: 1px solid #CCC; padding: 0px 10px 0px 10px; " ><pre>${doc.inputMock}</pre></div>
+
+            <div style="padding-left: 0px;padding-top: 0px; line-height: 38px;margin-top: 10px;">输出结果示例：</div>
+
+            <div style=" border: 1px solid #CCC; padding: 10px; " >${doc.outputMock}</div>
+
+            <div style="height: 30px;"></div>
+
+        #end
+    #end
+
+</div>
+
+
+</body>
+</html>

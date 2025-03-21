@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.armada.galileo.i18n_server.dal.mapper.I18nDictionaryValueMapper">
+
+    <select id="getValueByAppAndlocale" resultType="org.armada.galileo.i18n_server.dal.dto.DictionaryDTO">
+        SELECT t1.dictionary_key   AS dictionaryKey,
+               t2.dictionary_value AS dictionaryValue
+        FROM i18n_dictionary_key t1
+                 LEFT JOIN i18n_dictionary_value t2 ON t1.id = t2.dictionary_key_id
+        WHERE t1.app_id = #{appId}
+          AND t2.app_id = #{appId}
+          AND t2.locale = #{locale}
+    </select>
+
+
+    <select id="getUnfinishedDictionaryByAppIdAndLocals" resultType="java.util.Map">
+        SELECT count(1) num,
+        t1.dictionary_key_id dictionaryKeyId
+        FROM i18n_dictionary_value t1
+        <if test="@cn.hutool.core.collection.CollUtil@isNotEmpty(keys)">
+           left join i18n_dictionary_key t2 on t1.dictionary_key_id = t2.id
+        </if>
+        where t1.app_id = #{appId}
+        <if test="@cn.hutool.core.collection.CollUtil@isNotEmpty(keys)">
+            and t2.dictionary_key IN
+            <foreach collection="keys" item="key" separator="," open="(" close=")">
+                #{key}
+            </foreach>
+        </if>
+        GROUP BY t1.dictionary_key_id
+        HAVING num <![CDATA[<]]> #{size}
+    </select>
+
+
+</mapper>

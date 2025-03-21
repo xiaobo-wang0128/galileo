@@ -1,0 +1,126 @@
+<!-- ${domainCnName} - 表单编辑页面 -->
+<template>
+  <div class="page-container">
+
+    <!-- title -->
+    <div class="page-content-title">
+      当前位置：{{operateType}}${domainCnName}
+    </div>
+
+    <ex_super_form ref="form" v-bind="form" :attrs="Object.assign({},form.attrs)" label-width="auto">
+
+      <template v-slot:form-footer-append>
+        <div class="flex-row">
+          <el-button type="primary" @click="submit()">提 交</el-button>
+          <el-button @click="goback()">返 回</el-button>
+        </div>
+      </template>
+    </ex_super_form>
+
+
+
+</template>
+<script>
+  import routerParams from '@/mixin/router-params';
+  let moduleName = "${domainCnName}"
+
+  export default {
+    title: "新增" + moduleName,
+    components: {},
+    mixins: [routerParams],
+    data() {
+      return {
+
+        submitUrl: '${submitUrl}',
+        detailUrl: '${detailUrl}',
+        emitReloadKey: null,
+        form: {
+          itemStyle: { width: "50%", 'min-width': '300px' },
+          //弹窗表单设置，设置方式与搜索框对象一致。
+          model: [
+            { header: "基础信息", },
+            #foreach($obj in $fields)
+            {
+              key: '${obj.prop}', label: '${obj.label}',
+              #if($obj.type == 'Date')
+              type: 'date-picker',
+              attrs: {
+                type: 'datetime', placeholder: '请选择日期时间',
+              },
+              #end
+            },
+            #end
+          ],
+          rules: {
+            #foreach($obj in $fields)
+            '${obj.prop}': { required: true, message: '请输入${obj.label}', trigger: 'blur' },
+            #end
+          },
+        },
+
+
+      };
+    },
+    mounted() {
+      let { title, ...params } = this.intoData
+      if (params) {
+        this.operateType = '修改'
+        // 加载表单主体信息
+        this.$ajax({
+          url: '${detailUrl}',
+          method: 'post',
+          data: params,
+          success: (responseData) => {
+            let obj = responseData.data;
+            this['$refs']['form'].setData(obj)
+          }
+        });
+
+      }
+      else {
+        this.operateType = '新增'
+      }
+    },
+    methods: {
+      submit: _.throttle(function () {
+        this.submitForm()
+      }, 200),
+      submitForm() {
+
+        this['$refs']['form'].validate((valid) => {
+          if (valid) {
+            this.$ajax({
+              url: '${submitUrl}',
+              method: 'post',
+              data: this['$refs']['form'].getData(),
+              success: (responseData) => {
+
+                this.$message({
+                  showClose: true,
+                  message: '提交成功',
+                  type: 'success'
+                })
+                this.returnBack()
+                this.$tag.tagClose()
+
+              },
+              afterAjax() {
+
+              }
+            });
+          } else {
+            return false
+          }
+        });
+      },
+
+      goback() {
+        this.$tag.tagClose()
+      }
+    }
+  };
+
+</script>
+<style>
+
+</style>

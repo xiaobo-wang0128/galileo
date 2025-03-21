@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>帐号mcok登录</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style>
+
+    </style>
+
+    <script type="text/javascript" src="/statics/resource/jquery1.7.js"></script>
+    <script type="text/javascript" src="/statics/resource/jquery.form.js"></script>
+
+</head>
+<body>
+
+<font class="company">账号列表（点击登陆）</font>
+<div style="line-height: 40px;">
+    <font style="font-size: 16px; list-style: 24px;">
+        <a href="javascript:void(0);" ref="11" >测试登陆</a>&nbsp;  &nbsp;  &nbsp;  &nbsp;
+    </font>
+</div>
+<br/>
+
+
+
+<script>
+    $('a').live('click', function(){
+
+        var phone = $(this).attr('ref');
+
+        if(!phone){
+            return;
+        }
+
+        var vcode = $('#verify_code').val();
+
+        var cls = $(this).attr('class');
+
+        var url = '/i18n/i18n_server/LoginRpc/mock.json';
+
+        $.ajax({
+            url: url,
+            dataType : 'json',
+            method:'post',
+            data:{
+                'loginId': phone
+            },
+            success : function(data) {
+                if (data.code==0) {
+                    alert('登陆成功')
+                    window.location='/';
+                } else {
+                    if(data.message){
+                        alert(data.message);
+                    }
+                    else{
+                        alert('网络通信异常');
+                    }
+                }
+            }
+        });
+
+    });
+
+
+
+</script>
+</body>
+</html>

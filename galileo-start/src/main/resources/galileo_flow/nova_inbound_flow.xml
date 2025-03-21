@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 入库流程 -->
+<flow>
+
+    <![CDATA[
+		<!--
+		此处的状态排序为真实状态顺序，会影响业务代码的执行， 添加状态节点时 要注意节点顺序
+		type 状态节点类型： start 开始节点、 end 结束节点
+		code 状态编码
+		name 状态名
+		-->
+	]]>
+    <status-define>
+
+        <status name="新单据" code="NEW" type="start"></status>
+
+        <status name="收货中" code="RECEIVING"></status>
+
+        <status name="上架中" code="PUTTING_AWAY" ></status>
+
+        <status name="收货完成" code="RECEIVED" type="end"></status>
+
+        <status name="已取消" code="CANCEL" type="end"></status>
+
+    </status-define>
+
+    <![CDATA[
+		<!--
+		name: 操作名称
+		type: manual 手动， auto 自动（会在上一个action结束后，自动执行当前action）； task 定时任务
+		expression: 定时任务表达式
+		code: 操作编码
+		targetClass: 执行业务类，必须要有 execute 方法， 不限制参数类型、数量
+		allowStatus： 允许进行该操作的状态（除 beforeStatus 外的其他状态）；
+		beforeStatus: 如果该状态要进行状态变更，它的前置状态必须是什么？
+		targetStatus： 如果操作执行成功，目标状态是什么？
+		exceptionStatus: 如果执行失败，需要变更成什么状态？
+		 -->
+	]]>
+
+    <action-define>
+
+        <action
+                name="创建入库订单"
+                type="manual"
+                targetClass="org.armada.galileo.sample.nova_flow.actions.inbound_order.CreateInboundAction,
+                    org.armada.galileo.sample.nova_flow.actions.inbound_order.extend.CreateInboundAction1,
+                    org.armada.galileo.sample.nova_flow.actions.inbound_order.extend.CreateInboundAction2"
+                beforeStatus=""
+                targetStatus="NEW"
+                exceptionStatus=""></action>
+
+        <action
+                name="整箱上架"
+                type="manual"
+                targetClass="org.armada.galileo.sample.nova_flow.actions.inbound_order.ToteMoveInAction,
+                        org.armada.galileo.sample.nova_flow.actions.inbound_order.extend.ToteMoveInAction1,
+                        org.armada.galileo.sample.nova_flow.actions.inbound_order.extend.ToteMoveInAction2"
+                beforeStatus="NEW"
+                targetStatus="PUTTING_AWAY"
+                exceptionStatus=""></action>
+
+        <action
+                name="收货开始(扫描LPN号)"
+                type="manual"
+                targetClass="org.armada.galileo.sample.nova_flow.actions.inbound_order.StartMoveInAction"
+                beforeStatus="NEW,  RECEIVING"
+                targetStatus="RECEIVING"
+                exceptionStatus=""></action>
+
+        <action
+                name="收货"
+                type="manual"
+                targetClass="org.armada.galileo.sample.nova_flow.actions.inbound_order.MoveInToteAction"
+                beforeStatus="RECEIVING"
+                targetStatus="PUTTING_AWAY"
+                exceptionStatus=""></action>
+
+        <action
+                name="满箱"
+                type="manual"
+                targetClass="org.armada.galileo.sample.nova_flow.actions.inbound_order.MoveInFullAction"
+                beforeStatus="RECEIVING"
+                targetStatus="RECEIVING"
+                exceptionStatus=""></action>
+
+        <action
+                name="上架成功"
+                type="manual"
+                targetClass="org.armada.galileo.sample.nova_flow.actions.inbound_order.InboundSuccessAction"
+                beforeStatus="PUTTING_AWAY,RECEIVING"
+                targetStatus="RECEIVED"
+                exceptionStatus=""></action>
+
+        <action
+                name="取消入库"
+                type="manual"
+                targetClass="org.armada.galileo.sample.nova_flow.actions.inbound_order.CancelInboundOrderAction"
+                beforeStatus="NEW,RECEIVING,PUTTING_AWAY"
+                targetStatus="CANCEL"
+                exceptionStatus=""></action>
+
+        <action
+                name="关闭入库"
+                type="manual"
+                targetClass="org.armada.galileo.sample.nova_flow.actions.inbound_order.CloseInboundOrderAction"
+                beforeStatus="RECEIVING"
+                targetStatus="RECEIVED"
+                exceptionStatus=""></action>
+
+<!--		<action-->
+<!--               name="定时任务测试"-->
+<!--               type="task"-->
+<!--               targetClass="org.armada.galileo.sample.nova_flow.actions.inbound_order.SchedularTestAction,-->
+<!--                        org.armada.galileo.sample.nova_flow.actions.inbound_order.extend.SchedularTestAction1,-->
+<!--                        org.armada.galileo.sample.nova_flow.actions.inbound_order.extend.SchedularTestAction2"-->
+<!--               expression="*/20 * * * * ?"-->
+<!--               beforeStatus="RECEIVING"-->
+<!--               targetStatus="RECEIVED"-->
+<!--               exceptionStatus=""></action>-->
+
+    </action-define>
+
+
+</flow>

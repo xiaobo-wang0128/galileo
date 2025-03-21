@@ -1,0 +1,53 @@
+
+<script>
+$(function(){
+	$('#user_login_form').ajaxForm({
+		dataType : 'json',
+		success : function(data) {
+			if (data.success) {
+				$('#input_id_userId').val(data.data.userId);
+				$('#input_id_token').val(data.data.token);
+			} else {
+				alert(data.data);
+			}
+		}
+	});
+	
+	
+	$('#api_ajax_form').ajaxForm({
+		//dataType : 'json',
+		success : function(data) {
+			$('#api_ajax_form_result').val(data);
+		}
+	});
+});
+
+</script>
+
+
+
+<form id="api_ajax_form" action="${config.contextPath}/cgjr/cgtz_login.htm" method="post">
+	<input type="hidden" name="_request_uri_address" value="${doc.apiUrl}" style="width: 80px;" />
+	
+	#if($doc.needToken)	
+		用户手机号/密码：<br />
+		<input type="text" name="account" value="15722222223" placeHolder="手机号" style="width: 123px;" />
+		<input type="text" name="password" value="123456" style="width: 80px;" /><br />
+		<input type="hidden" name="ip" value="1.1.1.1" style="width: 80px;" />
+	#end
+
+	#foreach($input in $doc.inputParams) 
+		$util.substring($input.description,8)（${input.name}）<br /> 
+		<input id="input_id_$input.name" type="text" name="$input.name" 
+			#if($input.name=='accessFrom') 
+				value="1.0_h5-cgtz"  
+			#end
+			#if($input.name=='appId') 
+				value="$util.uuid32()"  
+			#end
+			 
+		style="width: 220px;" /><br />
+	#end
+	
+	<input type="submit" value="提交" style="margin-top: 5px;"/>
+</form>

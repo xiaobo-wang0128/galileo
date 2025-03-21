@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.armada.galileo.i18n_server.dal.mapper.I18nDictionaryKeyMapper">
+
+    <select id="getDictionaryByAppCodeAndDictionaryKey" resultType="org.armada.galileo.i18n_server.dal.dto.I18nDictionaryKeyDTO">
+        select *
+        from i18n_dictionary_key
+        where app_id = #{appId}
+          and BINARY dictionary_key = #{dictionaryKey}
+    </select>
+</mapper>

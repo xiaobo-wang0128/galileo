@@ -1,0 +1,16 @@
+{
+  "desc": "sdk 文档输出配置文件，请勿随意修改",
+  "version": "1.0-20100301",
+  "apis": [
+    {
+      "clsName": "com.haiq.wms.client.api.WmsRobotApi",
+      "groupName": "客户->HAIQ",
+      "type": "customer_to_haiq"
+    },
+    {
+      "clsName": "com.haiq.wms.client.api.WmsClientApi",
+      "groupName": "HAIQ->客户",
+      "type": "haiq_to_customer"
+    }
+  ]
+}

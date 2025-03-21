@@ -1,0 +1,31 @@
+<!DOCTYPE html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>配置中心</title><script type=text/javascript>var $portal_context = "/armada-galileo"</script><link href=statics/css/app.e62b0f5eb70e3b45194949c49828dffa.css rel=stylesheet></head><body style="margin: 0px 0px 0px 0px; padding:0px 0px 0px 0px; overflow: hidden;"><div id=app></div><script type=text/javascript src=statics/js/manifest.77aaf7bb9fa313a234b5.js></script><script type=text/javascript src=statics/js/vendor.77582cbb460a934a7bf1.js></script><script type=text/javascript src=statics/js/app.f2ee225a84fd708cd7da.js></script></body><script>Array.prototype.contains = function ( obj) {
+    var i = this.length;
+    while (i--) {
+        if (this[i] === obj) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+if (navigator.userAgent && (navigator.userAgent.indexOf('Windows') != -1 || navigator.userAgent.indexOf('Linux') != -1 ) ) {
+  var style = document.createElement("style");
+
+  style.type = "text/css";
+
+
+  try {
+    style.appendChild(document.createTextNode("::-webkit-scrollbar { width: 8px;height: 1px; }"));
+    style.appendChild(document.createTextNode("::-webkit-scrollbar-thumb { border-radius: 8px; -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2); background: #d6d6d6;}"));
+    //style.appendChild(document.createTextNode("::-webkit-scrollbar-track { -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2); border-radius: 8px; background: #EDEDED; }"));
+  } catch (ex) {
+
+    style.styleSheet.cssText = "::-webkit-scrollbar { width: 8px;height: 1px; }  ::-webkit-scrollbar-thumb { border-radius: 8px; -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2); background: #d6d6d6;}  "; //针对IE
+
+  }
+
+  var head = document.getElementsByTagName("head")[0];
+
+  head.appendChild(style);
+}</script></html>

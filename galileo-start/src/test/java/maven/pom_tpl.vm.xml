@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.iml</groupId>
+        <artifactId>${parentId}</artifactId>
+        <version>1.3-20231205-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>${artifactId}</artifactId>
+
+    <packaging>${packaging}</packaging>
+
+    #if($util.isNotEmpty($dependencies))
+    <dependencies>
+        #foreach($dependency in $dependencies)
+        <dependency>
+            <groupId>${dependency.groupId}</groupId>
+            <artifactId>${dependency.artifactId}</artifactId>
+        </dependency>
+        #end
+    </dependencies>
+    #end
+
+    #if($util.isNotEmpty($modules))
+    <modules>
+        #foreach($module in $modules)
+        <module>${module}</module>
+        #end
+    </modules>
+    #end
+
+</project>
