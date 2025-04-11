@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>org.armada</groupId>
+        <artifactId>galileo</artifactId>
+        <version>1.4-20250409-SNAPSHOT</version>
+    </parent>
+    <artifactId>galileo-framework</artifactId>
+    <packaging>pom</packaging>
+    <modelVersion>4.0.0</modelVersion>
+    <modules>
+        <module>galileo-autoconfig</module>
+        <module>galileo-docs</module>
+        <module>galileo-es-sdk</module>
+        <module>galileo-flow</module>
+        <module>galileo-itextpdf</module>
+        <module>galileo-miniwebx</module>
+        <module>galileo-mybatis</module>
+        <module>galileo-open-sdk</module>
+        <module>galileo-plugin</module>
+        <module>galileo-rainbow</module>
+        <module>galileo-tool</module>
+    </modules>
+</project>

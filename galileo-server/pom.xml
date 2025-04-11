@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>org.armada</groupId>
+        <artifactId>galileo</artifactId>
+        <version>1.4-20250409-SNAPSHOT</version>
+    </parent>
+    <artifactId>galileo-server</artifactId>
+    <packaging>pom</packaging>
+    <modelVersion>4.0.0</modelVersion>
+    <modules>
+        <module>galileo-i18n-server</module>
+        <module>galileo-auto-server</module>
+        <module>galileo-docker-server</module>
+    </modules>
+</project>

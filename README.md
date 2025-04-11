@@ -1,9 +1,3 @@
-前端私服务仓库
-npm config set registry http://172.20.8.10:4874
-
-galileo-start
-测试入口 
-
 galileo-autoconfig
 自动化配置
 https://hairobotics.feishu.cn/docs/doccnYcQq0DSq8TjiGY7YgP6FVf

@@ -7,12 +7,12 @@
     <groupId>org.armada</groupId>
     <artifactId>galileo</artifactId>
     <packaging>pom</packaging>
-    <version>1.3-20231205-SNAPSHOT</version>
+    <version>1.4-20250409-SNAPSHOT</version>
     <name>galileo</name>
     <description>基础技术框架</description>
 
     <properties>
-        <galileo.version>1.3-20231205-SNAPSHOT</galileo.version>
+        <galileo.version>1.4-20250409-SNAPSHOT</galileo.version>
         <java.version>11</java.version>
         <project.encoding>UTF-8</project.encoding>
         <project.build.encoding>UTF-8</project.build.encoding>
@@ -41,13 +41,11 @@
         <poi.version>4.1.2</poi.version>
         <hutool.version>5.3.10</hutool.version>
         <mapstruct.version>1.5.0.Beta2</mapstruct.version>
-        <fastjson.version>1.2.73</fastjson.version>
         <redisson.version>3.15.1</redisson.version>
         <disruptor.version>3.4.2</disruptor.version>
         <commons-pool2.version>2.8.0</commons-pool2.version>
         <commons-lang3.version>3.11</commons-lang3.version>
         <swagger2.version>2.9.2</swagger2.version>
-        <guava.version>20.0</guava.version>
         <jjwt.version>0.11.2</jjwt.version>
         <json-path.version>2.4.0</json-path.version>
         <retrofit.version>2.2.2</retrofit.version>
@@ -56,61 +54,13 @@
     </properties>
 
     <modules>
-        <module>galileo-start</module>
-        <module>galileo-portal</module>
-        <module>galileo-plugin</module>
-        <module>galileo-autoconfig</module>
-        <module>galileo-miniwebx</module>
-        <module>galileo-mybatis</module>
-        <module>galileo-rainbow</module>
-        <module>galileo-flow</module>
-        <module>galileo-tool</module>
-        <module>galileo-open-sdk</module>
-        <module>galileo-scan</module>
-        <module>galileo-i18n-server</module>
-        <module>galileo-user</module>
-        <module>galileo-docker-center</module>
-        <module>galileo-auto-server</module>
-        <module>galileo-es-sdk</module>
-        <module>galileo-scan-model</module>
-        <module>galileo-itextpdf</module>
-
+        <module>galileo-framework</module>
+        <module>galileo-server</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
-            <!-- haiq common -->
-
-            <dependency>
-                <groupId>org.armada</groupId>
-                <artifactId>galileo-scan-model</artifactId>
-                <version>${galileo.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.armada</groupId>
-                <artifactId>galileo-es-sdk</artifactId>
-                <version>${galileo.version}</version>
-                <scope>compile</scope>
-                <exclusions>
-                </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>org.armada</groupId>
-                <artifactId>galileo-user</artifactId>
-                <version>${galileo.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.armada</groupId>
-                <artifactId>galileo-open-sdk</artifactId>
-                <version>${galileo.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.armada</groupId>
-                <artifactId>galileo-tool</artifactId>
-                <version>${galileo.version}</version>
-            </dependency>
+            <!--   common -->
             <dependency>
                 <groupId>org.armada</groupId>
                 <artifactId>galileo-autoconfig</artifactId>
@@ -118,7 +68,12 @@
             </dependency>
             <dependency>
                 <groupId>org.armada</groupId>
-                <artifactId>galileo-plugin</artifactId>
+                <artifactId>galileo-docs</artifactId>
+                <version>${galileo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.armada</groupId>
+                <artifactId>galileo-es-sdk</artifactId>
                 <version>${galileo.version}</version>
             </dependency>
             <dependency>
@@ -128,7 +83,17 @@
             </dependency>
             <dependency>
                 <groupId>org.armada</groupId>
+                <artifactId>galileo-itextpdf</artifactId>
+                <version>${galileo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.armada</groupId>
                 <artifactId>galileo-miniwebx</artifactId>
+                <version>${galileo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.armada</groupId>
+                <artifactId>galileo-open-sdk</artifactId>
                 <version>${galileo.version}</version>
             </dependency>
             <dependency>
@@ -136,14 +101,20 @@
                 <artifactId>galileo-mybatis</artifactId>
                 <version>${galileo.version}</version>
             </dependency>
+          
             <dependency>
                 <groupId>org.armada</groupId>
-                <artifactId>galileo-portal</artifactId>
+                <artifactId>galileo-plugin</artifactId>
                 <version>${galileo.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.armada</groupId>
                 <artifactId>galileo-rainbow</artifactId>
+                <version>${galileo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.armada</groupId>
+                <artifactId>galileo-tool</artifactId>
                 <version>${galileo.version}</version>
             </dependency>
 
@@ -227,124 +198,19 @@
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus</artifactId>
-                <version>${mybatis-plus.version}</version>
+                <version>3.3.2</version>
             </dependency>
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
-                <version>${mybatis-plus.version}</version>
+                <version>3.3.2</version>
             </dependency>
             <dependency>
                 <groupId>org.mybatis</groupId>
                 <artifactId>mybatis-spring</artifactId>
                 <version>${mybatis-spring.version}</version>
             </dependency>
-            <!-- 处理java8 日期类型 -->
-            <!--   <dependency>
-                <groupId>org.mybatis</groupId>
-                <artifactId>mybatis-typehandlers-jsr310</artifactId>
-                <version>${mybatis-jsr310.version}</version>
-            </dependency>-->
-            <!--工具类-->
-            <dependency>
-                <groupId>org.apache.poi</groupId>
-                <artifactId>poi-ooxml</artifactId>
-                <version>${poi.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.hutool</groupId>
-                <artifactId>hutool-all</artifactId>
-                <version>${hutool.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>${guava.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>fastjson</artifactId>
-                <version>${fastjson.version}</version>
-            </dependency>
 
-            <!--swagger-->
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger2</artifactId>
-                <version>${swagger2.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger-ui</artifactId>
-                <version>${swagger2.version}</version>
-            </dependency>
-            <!-- redis lettuce pool 缓存连接池 -->
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-pool2</artifactId>
-                <version>${commons-pool2.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${commons-lang3.version}</version>
-            </dependency>
-            <!--分布式锁-->
-            <dependency>
-                <groupId>org.redisson</groupId>
-                <artifactId>redisson</artifactId>
-                <version>${redisson.version}</version>
-            </dependency>
-            <!--异步日志-->
-            <dependency>
-                <groupId>com.lmax</groupId>
-                <artifactId>disruptor</artifactId>
-                <version>${disruptor.version}</version>
-            </dependency>
-            <!-- jwt-->
-            <dependency>
-                <groupId>io.jsonwebtoken</groupId>
-                <artifactId>jjwt-api</artifactId>
-                <version>${jjwt.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.jsonwebtoken</groupId>
-                <artifactId>jjwt-impl</artifactId>
-                <version>${jjwt.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.jsonwebtoken</groupId>
-                <artifactId>jjwt-jackson</artifactId>
-                <version>${jjwt.version}</version>
-            </dependency>
-            <!--json-path -->
-            <dependency>
-                <groupId>com.jayway.jsonpath</groupId>
-                <artifactId>json-path</artifactId>
-                <version>${json-path.version}</version>
-            </dependency>
-            <!--retrofit -->
-            <dependency>
-                <groupId>com.github.lianjiatech</groupId>
-                <artifactId>retrofit-spring-boot-starter</artifactId>
-                <version>${retrofit.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.squareup.okhttp3</groupId>
-                <artifactId>okhttp</artifactId>
-                <version>${okhttp3.version}</version>
-            </dependency>
-            <!--xxljob -->
-            <dependency>
-                <groupId>com.xuxueli</groupId>
-                <artifactId>xxl-job-core</artifactId>
-                <version>${xxljob.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>${lombok.version}</version>
-            </dependency>
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
@@ -425,22 +291,10 @@
             </dependency>
 
             <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>2.6</version>
-            </dependency>
-
-            <dependency>
                 <groupId>commons-net</groupId>
                 <artifactId>commons-net</artifactId>
                 <version>3.6</version>
             </dependency>
-
-<!--            <dependency>-->
-<!--                <groupId>org.apache.rocketmq</groupId>-->
-<!--                <artifactId>rocketmq-client-java-iml</artifactId>-->
-<!--                <version>5.0.4</version>-->
-<!--            </dependency>-->
 
             <dependency>
                 <groupId>com.esotericsoftware</groupId>
@@ -491,6 +345,11 @@
                 <version>7.17.9</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>5.4.1</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
@@ -534,6 +393,7 @@
                     <useDefaultDelimiters>false</useDefaultDelimiters>
                     <outputDirectory/>
                 </configuration>
+                  <version>3.3.1</version>
             </plugin>
 
             <plugin>
