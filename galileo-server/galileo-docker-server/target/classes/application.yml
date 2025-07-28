@@ -1,0 +1,18 @@
+docker:
+   image:
+      save_path: /data/workspace/docker-image-cache
+      # 外网下载地址
+      out_download_url: http://210.21.218.14:60042/
+      # 内网下载地址
+      inner_download_url: http://172.20.8.10:6205/
+
+server:
+   port: 6201
+spring:
+   application:
+      name: docker-center
+   profiles:
+      active: dev
+
+
+

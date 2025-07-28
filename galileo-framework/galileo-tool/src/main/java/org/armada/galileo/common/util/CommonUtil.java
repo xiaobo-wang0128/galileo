@@ -71,8 +71,9 @@ public class CommonUtil {
     private static final String df2 = "yyyy-MM-dd HH:mm:ss";
     private static final String df3 = "yyyy-MM-dd HH:mm:ss.S";
 
-    static CommonUtil util= new CommonUtil();
-    public static CommonUtil instance(){
+    static CommonUtil util = new CommonUtil();
+
+    public static CommonUtil instance() {
         return util;
     }
 
@@ -302,13 +303,6 @@ public class CommonUtil {
         return sb.toString();
     }
 
-    public static void main(String[] args) {
-        System.out.println(isEmail("asdfaff.dfd@qq.com"));
-        System.out.println(isEmail("asdfaf33f.434dfd@qq.com"));
-        System.out.println(isEmail("asdfaf33f@qq.com"));
-
-        System.out.println(isEmail("@qq.com"));
-    }
 
     /**
      * 判断输入是否为 email
@@ -1780,13 +1774,11 @@ public class CommonUtil {
         }
         Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
         if (index >= params.length || index < 0) {
-            log.warn(String.format("Warn: Index: %s, Size of %s's Parameterized Type: %s .", index,
-                    clazz.getSimpleName(), params.length));
+            log.warn(String.format("Warn: Index: %s, Size of %s's Parameterized Type: %s .", index, clazz.getSimpleName(), params.length));
             return Object.class;
         }
         if (!(params[index] instanceof Class)) {
-            log.warn(String.format("Warn: %s not set the actual class on superclass generic parameter",
-                    clazz.getSimpleName()));
+            log.warn(String.format("Warn: %s not set the actual class on superclass generic parameter", clazz.getSimpleName()));
             return Object.class;
         }
         return (Class<?>) params[index];
@@ -1846,13 +1838,7 @@ public class CommonUtil {
     }
 
 
-    private static final char[] toBase64URL = {
-            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-            'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '_'
-    };
+    private static final char[] toBase64URL = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '_'};
 
 
     public static String getRandomString(int len) {
@@ -1864,11 +1850,7 @@ public class CommonUtil {
     }
 
 
-    private static final char[] toBase64URL_simple = {
-            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-            'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
-    };
+    private static final char[] toBase64URL_simple = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
 
     public static String getRandomStringSimple(int len) {
@@ -1995,10 +1977,7 @@ public class CommonUtil {
         }
         int limit = countStep(source.size(), batchSize);
 
-        return Stream.iterate(0, n -> n + 1).limit(limit)
-                .parallel()
-                .map(n -> source.stream().skip(n * batchSize).limit(batchSize).parallel().collect(Collectors.toList()))
-                .collect(Collectors.toList());
+        return Stream.iterate(0, n -> n + 1).limit(limit).parallel().map(n -> source.stream().skip(n * batchSize).limit(batchSize).parallel().collect(Collectors.toList())).collect(Collectors.toList());
     }
 
     /**
@@ -2189,5 +2168,42 @@ public class CommonUtil {
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Headers", "x-requested-with,content-type");
+    }
+
+
+    static DecimalFormat numberFormat = new DecimalFormat("0.00");
+
+    public static String formatNumber(Double v) {
+        if (v == null) {
+            return "";
+        }
+        if (v > 0) {
+            return "+" + numberFormat.format(v);
+        }
+        return numberFormat.format(v);
+    }
+
+    public static String formatNumber(String v) {
+        if (v == null) {
+            return "";
+        }
+        try {
+            Double d = Double.valueOf(v);
+            return formatNumber(d);
+        } catch (Exception e) {
+        }
+        return v;
+    }
+
+
+    public static void main(String[] args) {
+        System.out.println(formatNumber("+3.11"));
+        System.out.println(formatNumber("3.11"));
+        System.out.println(formatNumber("-3"));
+        System.out.println(formatNumber("3"));
+
+        Double d = null;
+        System.out.println(formatNumber(d));
+        System.out.println(formatNumber("pl"));
     }
 }

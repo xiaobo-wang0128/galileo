@@ -1,0 +1,803 @@
+[
+  {
+    "label": "阿拉伯文 (阿拉伯联合酋长国)",
+    "value": "ar_AE",
+    "desc": "Arabic (United Arab Emirates)"
+  },
+  {
+    "label": "阿拉伯文 (约旦)",
+    "value": "ar_JO",
+    "desc": "Arabic (Jordan)"
+  },
+  {
+    "label": "阿拉伯文 (叙利亚)",
+    "value": "ar_SY",
+    "desc": "Arabic (Syria)"
+  },
+  {
+    "label": "克罗地亚文 (克罗地亚)",
+    "value": "hr_HR",
+    "desc": "Croatian (Croatia)"
+  },
+  {
+    "label": "法文 (比利时)",
+    "value": "fr_BE",
+    "desc": "French (Belgium)"
+  },
+  {
+    "label": "西班牙文 (巴拿马)",
+    "value": "es_PA",
+    "desc": "Spanish (Panama)"
+  },
+  {
+    "label": "马耳他文 (马耳他)",
+    "value": "mt_MT",
+    "desc": "Maltese (Malta)"
+  },
+  {
+    "label": "西班牙文 (委内瑞拉)",
+    "value": "es_VE",
+    "desc": "Spanish (Venezuela)"
+  },
+  {
+    "label": "保加利亚文",
+    "value": "bg",
+    "desc": "български"
+  },
+  {
+    "label": "中文 (台湾地区)",
+    "value": "zh_TW",
+    "desc": "Chinese (Taiwan)"
+  },
+  {
+    "label": "意大利文",
+    "value": "it",
+    "desc": "italiano"
+  },
+  {
+    "label": "朝鲜文",
+    "value": "ko",
+    "desc": "한국어"
+  },
+  {
+    "label": "乌克兰文",
+    "value": "uk",
+    "desc": "українська"
+  },
+  {
+    "label": "拉托维亚文(列托)",
+    "value": "lv",
+    "desc": "Latviešu"
+  },
+  {
+    "label": "丹麦文 (丹麦)",
+    "value": "da_DK",
+    "desc": "Danish (Denmark)"
+  },
+  {
+    "label": "西班牙文 (波多黎哥)",
+    "value": "es_PR",
+    "desc": "Spanish (Puerto Rico)"
+  },
+  {
+    "label": "越南文 (越南)",
+    "value": "vi_VN",
+    "desc": "Vietnamese (Vietnam)"
+  },
+  {
+    "label": "英文 (美国)",
+    "value": "en_US",
+    "desc": "English (United States)"
+  },
+  {
+    "label": "塞尔维亚文 (黑山)",
+    "value": "sr_ME",
+    "desc": "Serbian (Montenegro)"
+  },
+  {
+    "label": "瑞典文 (瑞典)",
+    "value": "sv_SE",
+    "desc": "Swedish (Sweden)"
+  },
+  {
+    "label": "西班牙文 (玻利维亚)",
+    "value": "es_BO",
+    "desc": "Spanish (Bolivia)"
+  },
+  {
+    "label": "英文 (新加坡)",
+    "value": "en_SG",
+    "desc": "English (Singapore)"
+  },
+  {
+    "label": "阿拉伯文 (巴林)",
+    "value": "ar_BH",
+    "desc": "Arabic (Bahrain)"
+  },
+  {
+    "label": "葡萄牙文",
+    "value": "pt",
+    "desc": "português"
+  },
+  {
+    "label": "阿拉伯文 (沙特阿拉伯)",
+    "value": "ar_SA",
+    "desc": "Arabic (Saudi Arabia)"
+  },
+  {
+    "label": "斯洛伐克文",
+    "value": "sk",
+    "desc": "Slovenčina"
+  },
+  {
+    "label": "阿拉伯文 (也门)",
+    "value": "ar_YE",
+    "desc": "Arabic (Yemen)"
+  },
+  {
+    "label": "印地文 (印度)",
+    "value": "hi_IN",
+    "desc": "Hindi (India)"
+  },
+  {
+    "label": "爱尔兰文",
+    "value": "ga",
+    "desc": "Gaeilge"
+  },
+  {
+    "label": "英文 (马耳他)",
+    "value": "en_MT",
+    "desc": "English (Malta)"
+  },
+  {
+    "label": "芬兰文 (芬兰)",
+    "value": "fi_FI",
+    "desc": "Finnish (Finland)"
+  },
+  {
+    "label": "爱沙尼亚文",
+    "value": "et",
+    "desc": "Eesti"
+  },
+  {
+    "label": "瑞典文",
+    "value": "sv",
+    "desc": "svenska"
+  },
+  {
+    "label": "捷克文",
+    "value": "cs",
+    "desc": "čeština"
+  },
+  {
+    "label": "塞尔维亚文 (拉丁文,波斯尼亚和黑山共和国)",
+    "value": "sr_BA_#Latn",
+    "desc": "Serbian (Latin,Bosnia & Herzegovina)"
+  },
+  {
+    "label": "希腊文",
+    "value": "el",
+    "desc": "Ελληνικά"
+  },
+  {
+    "label": "乌克兰文 (乌克兰)",
+    "value": "uk_UA",
+    "desc": "Ukrainian (Ukraine)"
+  },
+  {
+    "label": "匈牙利文",
+    "value": "hu",
+    "desc": "magyar"
+  },
+  {
+    "label": "法文 (瑞士)",
+    "value": "fr_CH",
+    "desc": "French (Switzerland)"
+  },
+  {
+    "label": "印度尼西亚文",
+    "value": "in",
+    "desc": "Bahasa Indonesia"
+  },
+  {
+    "label": "西班牙文 (阿根廷)",
+    "value": "es_AR",
+    "desc": "Spanish (Argentina)"
+  },
+  {
+    "label": "阿拉伯文 (埃及)",
+    "value": "ar_EG",
+    "desc": "Arabic (Egypt)"
+  },
+  {
+    "label": "日文 (日本,JP)",
+    "value": "ja_JP_JP_#u-ca-japanese",
+    "desc": "Japanese (Japan,JP)"
+  },
+  {
+    "label": "西班牙文 (萨尔瓦多)",
+    "value": "es_SV",
+    "desc": "Spanish (El Salvador)"
+  },
+  {
+    "label": "葡萄牙文 (巴西)",
+    "value": "pt_BR",
+    "desc": "Portuguese (Brazil)"
+  },
+  {
+    "label": "白俄罗斯文",
+    "value": "be",
+    "desc": "беларускі"
+  },
+  {
+    "label": "冰岛文 (冰岛)",
+    "value": "is_IS",
+    "desc": "Icelandic (Iceland)"
+  },
+  {
+    "label": "捷克文 (捷克共和国)",
+    "value": "cs_CZ",
+    "desc": "Czech (Czechia)"
+  },
+  {
+    "label": "西班牙文",
+    "value": "es",
+    "desc": "español"
+  },
+  {
+    "label": "波兰文 (波兰)",
+    "value": "pl_PL",
+    "desc": "Polish (Poland)"
+  },
+  {
+    "label": "土耳其文",
+    "value": "tr",
+    "desc": "Türkçe"
+  },
+  {
+    "label": "加泰罗尼亚文 (西班牙)",
+    "value": "ca_ES",
+    "desc": "Catalan (Spain)"
+  },
+  {
+    "label": "塞尔维亚文 (塞尔维亚及黑山)",
+    "value": "sr_CS",
+    "desc": "Serbian (Serbia and Montenegro)"
+  },
+  {
+    "label": "马来文 (马来西亚)",
+    "value": "ms_MY",
+    "desc": "Malay (Malaysia)"
+  },
+  {
+    "label": "克罗地亚文",
+    "value": "hr",
+    "desc": "hrvatski"
+  },
+  {
+    "label": "立陶宛文",
+    "value": "lt",
+    "desc": "Lietuvių"
+  },
+  {
+    "label": "西班牙文 (西班牙)",
+    "value": "es_ES",
+    "desc": "Spanish (Spain)"
+  },
+  {
+    "label": "西班牙文 (哥伦比亚)",
+    "value": "es_CO",
+    "desc": "Spanish (Colombia)"
+  },
+  {
+    "label": "保加利亚文 (保加利亚)",
+    "value": "bg_BG",
+    "desc": "Bulgarian (Bulgaria)"
+  },
+  {
+    "label": "阿尔巴尼亚文",
+    "value": "sq",
+    "desc": "shqip"
+  },
+  {
+    "label": "法文",
+    "value": "fr",
+    "desc": "français"
+  },
+  {
+    "label": "日文",
+    "value": "ja",
+    "desc": "日本語"
+  },
+  {
+    "label": "塞尔维亚文 (波斯尼亚和黑山共和国)",
+    "value": "sr_BA",
+    "desc": "Serbian (Bosnia & Herzegovina)"
+  },
+  {
+    "label": "冰岛文",
+    "value": "is",
+    "desc": "íslenska"
+  },
+  {
+    "label": "西班牙文 (巴拉圭)",
+    "value": "es_PY",
+    "desc": "Spanish (Paraguay)"
+  },
+  {
+    "label": "德文",
+    "value": "de",
+    "desc": "Deutsch"
+  },
+  {
+    "label": "西班牙文 (厄瓜多尔)",
+    "value": "es_EC",
+    "desc": "Spanish (Ecuador)"
+  },
+  {
+    "label": "西班牙文 (美国)",
+    "value": "es_US",
+    "desc": "Spanish (United States)"
+  },
+  {
+    "label": "阿拉伯文 (苏丹)",
+    "value": "ar_SD",
+    "desc": "Arabic (Sudan)"
+  },
+  {
+    "label": "英文",
+    "value": "en",
+    "desc": "English"
+  },
+  {
+    "label": "罗马尼亚文 (罗马尼亚)",
+    "value": "ro_RO",
+    "desc": "Romanian (Romania)"
+  },
+  {
+    "label": "英文 (菲律宾)",
+    "value": "en_PH",
+    "desc": "English (Philippines)"
+  },
+  {
+    "label": "加泰罗尼亚文",
+    "value": "ca",
+    "desc": "català"
+  },
+  {
+    "label": "阿拉伯文 (突尼斯)",
+    "value": "ar_TN",
+    "desc": "Arabic (Tunisia)"
+  },
+  {
+    "label": "塞尔维亚文 (拉丁文,黑山)",
+    "value": "sr_ME_#Latn",
+    "desc": "Serbian (Latin,Montenegro)"
+  },
+  {
+    "label": "西班牙文 (危地马拉)",
+    "value": "es_GT",
+    "desc": "Spanish (Guatemala)"
+  },
+  {
+    "label": "斯洛文尼亚文",
+    "value": "sl",
+    "desc": "Slovenščina"
+  },
+  {
+    "label": "朝鲜文 (韩国)",
+    "value": "ko_KR",
+    "desc": "Korean (South Korea)"
+  },
+  {
+    "label": "希腊文 (塞浦路斯)",
+    "value": "el_CY",
+    "desc": "Greek (Cyprus)"
+  },
+  {
+    "label": "西班牙文 (墨西哥)",
+    "value": "es_MX",
+    "desc": "Spanish (Mexico)"
+  },
+  {
+    "label": "俄文 (俄罗斯)",
+    "value": "ru_RU",
+    "desc": "Russian (Russia)"
+  },
+  {
+    "label": "西班牙文 (洪都拉斯)",
+    "value": "es_HN",
+    "desc": "Spanish (Honduras)"
+  },
+  {
+    "label": "中文 (香港)",
+    "value": "zh_HK",
+    "desc": "Chinese (Hong Kong SAR China)"
+  },
+  {
+    "label": "挪威文 (挪威,Nynorsk)",
+    "value": "no_NO_NY",
+    "desc": "Norwegian (Norway,Nynorsk)"
+  },
+  {
+    "label": "匈牙利文 (匈牙利)",
+    "value": "hu_HU",
+    "desc": "Hungarian (Hungary)"
+  },
+  {
+    "label": "泰文 (泰国)",
+    "value": "th_TH",
+    "desc": "Thai (Thailand)"
+  },
+  {
+    "label": "阿拉伯文 (伊拉克)",
+    "value": "ar_IQ",
+    "desc": "Arabic (Iraq)"
+  },
+  {
+    "label": "西班牙文 (智利)",
+    "value": "es_CL",
+    "desc": "Spanish (Chile)"
+  },
+  {
+    "label": "芬兰文",
+    "value": "fi",
+    "desc": "suomi"
+  },
+  {
+    "label": "阿拉伯文 (摩洛哥)",
+    "value": "ar_MA",
+    "desc": "Arabic (Morocco)"
+  },
+  {
+    "label": "爱尔兰文 (爱尔兰)",
+    "value": "ga_IE",
+    "desc": "Irish (Ireland)"
+  },
+  {
+    "label": "马其顿文",
+    "value": "mk",
+    "desc": "македонски"
+  },
+  {
+    "label": "土耳其文 (土耳其)",
+    "value": "tr_TR",
+    "desc": "Turkish (Turkey)"
+  },
+  {
+    "label": "爱沙尼亚文 (爱沙尼亚)",
+    "value": "et_EE",
+    "desc": "Estonian (Estonia)"
+  },
+  {
+    "label": "阿拉伯文 (卡塔尔)",
+    "value": "ar_QA",
+    "desc": "Arabic (Qatar)"
+  },
+  {
+    "label": "塞尔维亚文 (拉丁文)",
+    "value": "sr__#Latn",
+    "desc": "Serbian (Latin)"
+  },
+  {
+    "label": "葡萄牙文 (葡萄牙)",
+    "value": "pt_PT",
+    "desc": "Portuguese (Portugal)"
+  },
+  {
+    "label": "法文 (卢森堡)",
+    "value": "fr_LU",
+    "desc": "French (Luxembourg)"
+  },
+  {
+    "label": "阿拉伯文 (阿曼)",
+    "value": "ar_OM",
+    "desc": "Arabic (Oman)"
+  },
+  {
+    "label": "泰文",
+    "value": "th",
+    "desc": "ไทย"
+  },
+  {
+    "label": "阿尔巴尼亚文 (阿尔巴尼亚)",
+    "value": "sq_AL",
+    "desc": "Albanian (Albania)"
+  },
+  {
+    "label": "西班牙文 (多米尼加共和国)",
+    "value": "es_DO",
+    "desc": "Spanish (Dominican Republic)"
+  },
+  {
+    "label": "西班牙文 (古巴)",
+    "value": "es_CU",
+    "desc": "Spanish (Cuba)"
+  },
+  {
+    "label": "阿拉伯文",
+    "value": "ar",
+    "desc": "العربية"
+  },
+  {
+    "label": "俄文",
+    "value": "ru",
+    "desc": "русский"
+  },
+  {
+    "label": "英文 (新西兰)",
+    "value": "en_NZ",
+    "desc": "English (New Zealand)"
+  },
+  {
+    "label": "塞尔维亚文 (塞尔维亚)",
+    "value": "sr_RS",
+    "desc": "Serbian (Serbia)"
+  },
+  {
+    "label": "德文 (瑞士)",
+    "value": "de_CH",
+    "desc": "German (Switzerland)"
+  },
+  {
+    "label": "西班牙文 (乌拉圭)",
+    "value": "es_UY",
+    "desc": "Spanish (Uruguay)"
+  },
+  {
+    "label": "马来文",
+    "value": "ms",
+    "desc": "Bahasa Melayu"
+  },
+  {
+    "label": "希腊文 (希腊)",
+    "value": "el_GR",
+    "desc": "Greek (Greece)"
+  },
+  {
+    "label": "希伯来文 (以色列)",
+    "value": "iw_IL",
+    "desc": "Hebrew (Israel)"
+  },
+  {
+    "label": "英文 (南非)",
+    "value": "en_ZA",
+    "desc": "English (South Africa)"
+  },
+  {
+    "label": "泰文 (泰国,TH)",
+    "value": "th_TH_TH_#u-nu-thai",
+    "desc": "Thai (Thailand,TH)"
+  },
+  {
+    "label": "印地文",
+    "value": "hi",
+    "desc": "हिंदी"
+  },
+  {
+    "label": "法文 (法国)",
+    "value": "fr_FR",
+    "desc": "French (France)"
+  },
+  {
+    "label": "德文 (奥地利)",
+    "value": "de_AT",
+    "desc": "German (Austria)"
+  },
+  {
+    "label": "荷兰文",
+    "value": "nl",
+    "desc": "Nederlands"
+  },
+  {
+    "label": "挪威文 (挪威)",
+    "value": "no_NO",
+    "desc": "Norwegian (Norway)"
+  },
+  {
+    "label": "英文 (澳大利亚)",
+    "value": "en_AU",
+    "desc": "English (Australia)"
+  },
+  {
+    "label": "越南文",
+    "value": "vi",
+    "desc": "Tiếng Việt"
+  },
+  {
+    "label": "荷兰文 (荷兰)",
+    "value": "nl_NL",
+    "desc": "Dutch (Netherlands)"
+  },
+  {
+    "label": "法文 (加拿大)",
+    "value": "fr_CA",
+    "desc": "French (Canada)"
+  },
+  {
+    "label": "拉托维亚文(列托) (拉脱维亚)",
+    "value": "lv_LV",
+    "desc": "Latvian (Latvia)"
+  },
+  {
+    "label": "德文 (卢森堡)",
+    "value": "de_LU",
+    "desc": "German (Luxembourg)"
+  },
+  {
+    "label": "西班牙文 (哥斯达黎加)",
+    "value": "es_CR",
+    "desc": "Spanish (Costa Rica)"
+  },
+  {
+    "label": "阿拉伯文 (科威特)",
+    "value": "ar_KW",
+    "desc": "Arabic (Kuwait)"
+  },
+  {
+    "label": "塞尔维亚文",
+    "value": "sr",
+    "desc": "Српски"
+  },
+  {
+    "label": "阿拉伯文 (利比亚)",
+    "value": "ar_LY",
+    "desc": "Arabic (Libya)"
+  },
+  {
+    "label": "马耳他文",
+    "value": "mt",
+    "desc": "Malti"
+  },
+  {
+    "label": "意大利文 (瑞士)",
+    "value": "it_CH",
+    "desc": "Italian (Switzerland)"
+  },
+  {
+    "label": "丹麦文",
+    "value": "da",
+    "desc": "Dansk"
+  },
+  {
+    "label": "德文 (德国)",
+    "value": "de_DE",
+    "desc": "German (Germany)"
+  },
+  {
+    "label": "阿拉伯文 (阿尔及利亚)",
+    "value": "ar_DZ",
+    "desc": "Arabic (Algeria)"
+  },
+  {
+    "label": "斯洛伐克文 (斯洛伐克)",
+    "value": "sk_SK",
+    "desc": "Slovak (Slovakia)"
+  },
+  {
+    "label": "立陶宛文 (立陶宛)",
+    "value": "lt_LT",
+    "desc": "Lithuanian (Lithuania)"
+  },
+  {
+    "label": "意大利文 (意大利)",
+    "value": "it_IT",
+    "desc": "Italian (Italy)"
+  },
+  {
+    "label": "英文 (爱尔兰)",
+    "value": "en_IE",
+    "desc": "English (Ireland)"
+  },
+  {
+    "label": "中文 (新加坡)",
+    "value": "zh_SG",
+    "desc": "Chinese (Singapore)"
+  },
+  {
+    "label": "罗马尼亚文",
+    "value": "ro",
+    "desc": "română"
+  },
+  {
+    "label": "英文 (加拿大)",
+    "value": "en_CA",
+    "desc": "English (Canada)"
+  },
+  {
+    "label": "荷兰文 (比利时)",
+    "value": "nl_BE",
+    "desc": "Dutch (Belgium)"
+  },
+  {
+    "label": "挪威文",
+    "value": "no",
+    "desc": "norsk"
+  },
+  {
+    "label": "波兰文",
+    "value": "pl",
+    "desc": "polski"
+  },
+  {
+    "label": "中文 (中国)",
+    "value": "zh_CN",
+    "desc": "Chinese (China)"
+  },
+  {
+    "label": "日文 (日本)",
+    "value": "ja_JP",
+    "desc": "Japanese (Japan)"
+  },
+  {
+    "label": "德文 (希腊)",
+    "value": "de_GR",
+    "desc": "German (Greece)"
+  },
+  {
+    "label": "塞尔维亚文 (拉丁文,塞尔维亚)",
+    "value": "sr_RS_#Latn",
+    "desc": "Serbian (Latin,Serbia)"
+  },
+  {
+    "label": "希伯来文",
+    "value": "iw",
+    "desc": "עברית"
+  },
+  {
+    "label": "英文 (印度)",
+    "value": "en_IN",
+    "desc": "English (India)"
+  },
+  {
+    "label": "阿拉伯文 (黎巴嫩)",
+    "value": "ar_LB",
+    "desc": "Arabic (Lebanon)"
+  },
+  {
+    "label": "西班牙文 (尼加拉瓜)",
+    "value": "es_NI",
+    "desc": "Spanish (Nicaragua)"
+  },
+  {
+    "label": "中文",
+    "value": "zh",
+    "desc": "中文"
+  },
+  {
+    "label": "马其顿文 (马其顿王国)",
+    "value": "mk_MK",
+    "desc": "Macedonian (North Macedonia)"
+  },
+  {
+    "label": "白俄罗斯文 (白俄罗斯)",
+    "value": "be_BY",
+    "desc": "Belarusian (Belarus)"
+  },
+  {
+    "label": "斯洛文尼亚文 (斯洛文尼亚)",
+    "value": "sl_SI",
+    "desc": "Slovenian (Slovenia)"
+  },
+  {
+    "label": "西班牙文 (秘鲁)",
+    "value": "es_PE",
+    "desc": "Spanish (Peru)"
+  },
+  {
+    "label": "印度尼西亚文 (印度尼西亚)",
+    "value": "in_ID",
+    "desc": "Indonesian (Indonesia)"
+  },
+  {
+    "label": "英文 (英国)",
+    "value": "en_GB",
+    "desc": "English (United Kingdom)"
+  },
+  {
+    "label": "哈萨克语",
+    "value": "kk",
+    "desc": "哈萨克语"
+  }
+
+]

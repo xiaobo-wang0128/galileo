@@ -1,0 +1,315 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+    <title>Docker 镜像下载工具</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="Author" content="">
+    <meta name="Keywords" content="">
+    <meta name="Description" content="">
+    <style type="text/css">
+        * {
+            font: 14px/1.5 "微软雅黑", tahoma, arial, "Hiragino Sans GB", "宋体", sans-serif;
+        }
+
+        a:LINK {
+            color: #740D06;
+            text-decoration: none;
+        }
+
+        body {
+            position: relative;
+        }
+
+        .div-wapper {
+            position: absolute;
+            width: 1200px;
+            left: 50%;
+            margin-left: -600px;
+        }
+
+        .main_box_div {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .keyword_input {
+            border-left: 1px solid #ccc;
+            border-top: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+            border-right: none;
+            float: left;
+        }
+
+        .search_btn {
+            color: #fff;
+            letter-spacing: 1px;
+            background: #3385ff;
+            border-bottom: 1px solid #2d78f4;
+            outline: medium;
+            -webkit-appearance: none;
+            -webkit-border-radius: 0;
+            border: 0;
+            cursor: pointer;
+        }
+        .download-div{
+            display: flex; line-height: 32px;
+        }
+        .download-div div{
+            padding-left: 100px;
+        }
+        .download-div div, .download-div a{
+            line-height: 40px;
+        }
+
+        .clear-job-btn{
+            padding: 10px 0px 0px 100px;
+        }
+        .clear-job-btn a{
+            display: none;
+        }
+
+    </style>
+    <script type="text/javascript" src="/statics/resource/jquery1.7.js"></script>
+    <script type="text/javascript" src="/statics/resource/jquery.form.js"></script>
+    <!-- <script type="text/javascript" src="/resource/md5.js"></script> -->
+</head>
+
+<body>
+<div class="div-wapper">
+    <div style="line-height: 50px; font-size: 14px; color: #666; padding: 0px 0px 0px 4px;">
+        docker 镜像下载器
+        #if($access_type == 'outer')
+            &nbsp;&nbsp;(公司内网访问地址: <a href="${local_address}">${local_address}</a>)
+        #end
+    </div>
+    <div class="main_box_div">
+        <div style="display: flex; box-sizing: border-box;">
+            <form id="submitForm" method="POST">
+                <input type="text" name="requestList" placeHolder="请输入镜像址，多个以空格分隔" class="keyword_input"
+                       
+                       style="width: 1080px; line-height: 40px; padding-left: 8px; box-sizing: border-box;" autocomplete="off"/>
+                <input id="submit_btn" class="search_btn" type="submit" value="生成下载链接" style="width: 118px; line-height: 40px; text-align: center; padding: 0px 8px 0px 8px; height: 44px;"  />
+            </form>
+        </div>
+        <div class="menu_div">
+        </div>
+    </div>
+
+    <div id="result" style="padding: 20px 0px 0px 0px;">
+        <!--         <div class="download-div">
+                    <div style="width: 400px; ">asdfasdfasd.tar</div>
+                    <div style="width: 200px; ">生成中...</div>
+                    <div style="width: 100px; ">
+                        <a href="/ddd/dddd" target="_blank" >点击下载</a>
+                    </div>
+                 </div>
+                 <div>
+                    <div>asdfasdfasd.tar</div>
+                    <div>已下载</div>
+                    <div><a href="/ddd/dddd" target="_blank" >点击下载</a></div>
+                 </div>
+                 <div>
+                    <div>asdfasdfasd.tar</div>
+                    <div>镜像不存在</div>
+                    <div><a href="/ddd/dddd" target="_blank" >点击下载</a></div>
+                 </div> -->
+
+
+    </div>
+
+    <div id="result" class="clear-job-btn">
+        <a href="javascript:;" id="clearCookieJobs">清除任务列表</a>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+
+
+    var ROOT_PATH = '${down_path}'
+
+    var clearJobInterval;
+
+
+    var StatusMap = {
+        "success": "下载链接生成成功",
+        "saving": "链接生成中...",
+        "fail": "生成失败",
+        "done": "下载链接生成成功"
+    }
+
+    var renderResult = function(requestList){
+
+        let html = ''
+
+        let successPaths = []
+        let autoUrls = []
+        for(var i =0 ; i<requestList.length; i++){
+
+            let tmp = requestList[i]
+
+            html += '<div class="download-div">'
+            html += '<div style="width: 400px; ">' + tmp.fileName+ '</div>'
+            html += '<div style="width: 200px; ">' + StatusMap[tmp.status] + '</div>'
+            html += '<div style="width: 100px; ">'
+            if(tmp.status == 'success' || tmp.status== 'done'){
+                html += '<a href=" ' + ROOT_PATH + tmp.fileName + '" >点击下载</a>'
+            }
+            else if(tmp.status == 'fail' ){
+                html += tmp.failMessage
+            }
+
+            html += '</div>'
+            html += '</div>'
+
+            if(tmp.status == 'success'){
+                successPaths.push(tmp.imagePath)
+                autoUrls.push(ROOT_PATH + tmp.fileName)
+            }
+
+        }
+
+        if(requestList.length>0){
+            $('#clearCookieJobs').show()
+        }
+
+
+        if(successPaths.length>0){
+            $.ajax({
+                url: '/docker-center/docker_center/ImageDownloaderRpc/doDownload.json',
+                contentType: 'application/json',
+                type: 'POST',
+                data: JSON.stringify(successPaths),
+                dataType: 'json',
+                success: function(res) {
+                    if (res.code == 0) {
+
+                    } else {
+                        console.log(JSON.stringify(res))
+                    }
+                }
+            })
+        }
+
+        if(autoUrls.length>0){
+
+            let autoDownLoad = window.setInterval(function(){
+
+                if(!autoUrls || autoUrls.length == 0){
+
+                    window.clearInterval(autoDownLoad)
+
+                    return 
+                }
+
+                let url = autoUrls.pop();
+
+                window.location.href = url
+
+            }, 1500)
+        }        
+
+
+        $('#result').html(html)
+    }
+
+    var startIntervalJob = function(){
+
+        if(clearJobInterval ){
+            window.clearInterval(clearJobInterval)
+        }
+
+        clearJobInterval = window.setInterval(function(){
+
+            loadTask();
+
+        }, 2000)
+
+    }
+
+
+    var loadTask = function(){
+        $.ajax({
+            url: '/docker-center/docker_center/ImageDownloaderRpc/getDownloadUrls.json',
+            dataType: 'json',
+            success: function(res) {
+                
+                if (res.code == 0 && res.data && res.data.rows) {
+                    
+                    renderResult(res.data.rows);
+
+                    let needClear = true
+
+                    for(let i = 0; i<res.data.rows.length; i++){
+
+                        let tmp = res.data.rows[i]
+
+                        if(tmp.status == 'success' || tmp.status == 'saving'){
+                            needClear = false
+                        }
+                    }
+
+                    if(needClear){
+                        window.clearInterval(clearJobInterval)
+                    }
+
+                } else {
+                    window.clearInterval(clearJobInterval)
+                }
+            }
+        })
+    }
+
+    $('#submitForm').ajaxForm({
+        url: '/docker-center/docker_center/ImageDownloaderRpc/submitRequest.json',
+        dataType: 'json',
+
+        beforeSend: function(){
+            $('#submit_btn').val('解析处理中...')
+        },
+        success: function(res) {
+            if (res.code == 0) {
+
+                renderResult(res.data.rows);
+
+                startIntervalJob();
+
+
+            } else {
+                alert(res.message);
+            }
+
+            $('#submit_btn').val('生成下载链接')
+        }
+    })
+
+
+    $('#clearCookieJobs').live('click', function(){
+        $.ajax({
+            url: '/docker-center/docker_center/ImageDownloaderRpc/clearCookie.json',
+            success: function(res) {
+                if (res.code == 0) {
+                    $('#result').html('')
+                    $('#clearCookieJobs').css('display', 'none')
+
+                } else {
+                    console.log(JSON.stringify(res))
+                }
+            }
+        })        
+
+
+    })
+
+    loadTask()
+
+    startIntervalJob()
+
+
+</script>
+
+</body>
+
+</html>

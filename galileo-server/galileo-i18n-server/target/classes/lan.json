@@ -1,0 +1,34 @@
+[
+  {
+    "label": "中文",
+    "value": "zh"
+  },
+  {
+    "label": "英文",
+    "value": "en"
+  },
+  {
+    "label": "俄文",
+    "value": "ru"
+  },
+  {
+    "label": "法文",
+    "value": "fr"
+  },
+  {
+    "label": "日文",
+    "value": "ja"
+  },
+  {
+    "label": "德文",
+    "value": "de"
+  },
+  {
+    "label": "朝鲜文",
+    "value": "ko"
+  },
+  {
+    "label": "哈萨克语",
+    "value": "kk"
+  }
+]

@@ -1,0 +1,118 @@
+<template>
+  #set($tagOpen="$pub.tagOpen")
+  <div class="ex-page-container">
+    <div class="ex-search">
+      <div class="ex-search-box">
+        <el-form :inline="true" ref="ruleFormRef" class="standard-search-form-wrapper">
+          <el-form-item label="关键字">
+            <el-input v-model="formSearch.keyword" placeholder=" " clearable />
+          </el-form-item>
+          <el-form-item label="xx类型" >
+            <enum-select v-model="formSearch.modifyType" enumKey="AccountModifyTypeEnum" @handleSelect="(item) => {}" style="width: 140px;"></enum-select>
+          </el-form-item>
+          <el-form-item label="发生时间" >
+            <div style="display: flex; flex-direction: row; gap: 4px; width: 280px;">
+              <el-date-picker v-model="formSearch.time1" type="date" placeholder="" value-format="x"/>
+              <el-date-picker v-model="formSearch.time2" type="date" placeholder="" value-format="x"/>
+            </div>
+          </el-form-item>
+          <el-form-item class="ex-btn">
+            <el-button type="primary" @click="$refs['tableRef'].loadData(formSearch)">搜索</el-button>
+            <el-button @click="formSearch={}">重置</el-button>
+            <el-button :icon="Plus"
+                       @click="
+                formValue= {};
+                formTitle='新增${domainCnName}';
+                formValueDialogVisible = true; ">新增${domainCnName}</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+
+      <div class="ex-action">
+      </div>
+    </div>
+
+    <div class="ex-table-page-body">
+      <ex-table-auto ref="tableRef" border url="${listUrl}"  :autoPage="true" class="el-table-nowwarp">
+        <el-table-column type="index" label="#" width="43"></el-table-column>
+        #foreach($obj in $fields)
+        #if($util.isNotEmpty($obj.formatRender))
+        <el-table-column prop="${obj.prop}" label="${obj.label}" align="left" min-width="100">
+          <template #default="scope">
+            ${obj.formatRender}
+          </template>
+        </el-table-column>
+        #else
+        <el-table-column prop="${obj.prop}" label="${obj.label}" align="left" min-width="100">
+        </el-table-column>
+        #end
+
+        #end
+        <el-table-column prop="status" fixed="right" align="center" label="操作" width="230">
+          <template #default="scope">
+            <!-- 编辑 -->
+            <el-button text type="primary" @click="${tagOpen}('${fileDir}${fileName}_form', {id: scope.row.id})">修改</el-button>
+
+            <!-- 启用、禁用 -->
+            <ex-button-delete
+                    deleteUrl="${statusChangeUrl}"
+                    :deleteParam="{ id: scope.row.id, type: (scope.row.status=='ENABLE'? 'DISABLED' : 'ENABLE') }"
+                    @afterOperationDone="handleSearch"
+                    :message="'确定要' + (scope.row.status=='ENABLE'? '禁用' : '启用') + scope.row.name + ' 吗？'"
+                    :label="scope.row.status=='ENABLE'? '禁用' : '启用'"
+                    type="danger"
+                    text
+                    :disabled="false">
+            </ex-button-delete>
+
+            <!-- 删除 -->
+            <ex-button-delete
+                    deleteUrl="${delUrl}"
+                    :deleteParam="{ id: scope.row.id }"
+                    @afterOperationDone="$refs['tableRef'].reload()"
+                    message="确认删吗？"
+                    label="删除"
+                    text
+                    :disabled="false">
+            </ex-button-delete>
+
+          </template>
+        </el-table-column>
+      </ex-table-auto>
+    </div>
+  </div>
+
+</template>
+
+<script>
+
+  export default {
+
+    components: {},
+
+    data() {
+
+      return {
+
+        formValueDialogVisible: false,
+
+        formTitle: '',
+
+        formSearch: {
+        },
+
+        formValue: {
+        }
+      };
+    },
+
+    mounted() {
+
+    },
+
+    methods: {
+    }
+  };
+
+</script>
+<style></style>

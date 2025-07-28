@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<script type="text/javascript" src="/statics/resource/jquery1.7.js"></script>
+</head>
+<body>
+
+
+
+	<button @click="addBtn">add</button>
+	<article class="document_edit_div"
+		style="width: 80%; border: 1px solid #dcdfe6; height: 500px; display: block;"
+		contenteditable="true">
+
+
+
+		<span id="span_8921875259763334533" @click="spanOnclick"
+			contenteditable="false"
+			style="border: 1px solid #dcdfe6; cursor: pointer; padding: 5px 5px 5px 5px; border-radius: 8px; -moz-user-select: none; -webkit-user-select: none; -khtml-user-select: none;">超度在要工</span>
+
+		<font color="red">asdfadf</font> <span contenteditable="false"
+			style="border: 1px solid #dcdfe6; cursor: pointer; padding: 5px 5px 5px 5px; border-radius: 8px; -moz-user-select: none; -webkit-user-select: none; -khtml-user-select: none;">超度在要工</span>
+
+	</article>
+
+
+<script type="text/javascript">
+
+
+</script>
+</body>
+</html>
+

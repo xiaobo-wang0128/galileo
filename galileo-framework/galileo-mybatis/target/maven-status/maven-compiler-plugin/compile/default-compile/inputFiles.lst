@@ -1,0 +1,13 @@
+/Users/wangxiaobo/project/_codes/github/galileo/galileo-framework/galileo-mybatis/src/main/java/org/armada/galileo/mybatis/interceptor/MyMetaObjectHandler.java
+/Users/wangxiaobo/project/_codes/github/galileo/galileo-framework/galileo-mybatis/src/main/java/org/armada/galileo/mybatis/interceptor/MybatisSqlInterceptor.java
+/Users/wangxiaobo/project/_codes/github/galileo/galileo-framework/galileo-mybatis/src/main/java/org/armada/galileo/mybatis/generator/YamlReader.java
+/Users/wangxiaobo/project/_codes/github/galileo/galileo-framework/galileo-mybatis/src/main/java/org/armada/galileo/mybatis/bo/BaseBO.java
+/Users/wangxiaobo/project/_codes/github/galileo/galileo-framework/galileo-mybatis/src/main/java/org/armada/galileo/mybatis/bo/impl/BaseBOImpl.java
+/Users/wangxiaobo/project/_codes/github/galileo/galileo-framework/galileo-mybatis/src/main/java/org/armada/galileo/mybatis/interceptor/MybatisSqlInterceptorFoundRowsVersion.java
+/Users/wangxiaobo/project/_codes/github/galileo/galileo-framework/galileo-mybatis/src/main/java/org/armada/galileo/mybatis/handler/ListLongTypeHandler.java
+/Users/wangxiaobo/project/_codes/github/galileo/galileo-framework/galileo-mybatis/src/main/java/org/armada/galileo/mybatis/generator/SuperMybatisGenerator.java
+/Users/wangxiaobo/project/_codes/github/galileo/galileo-framework/galileo-mybatis/src/main/java/org/armada/galileo/mybatis/BaseMysqlEntity.java
+/Users/wangxiaobo/project/_codes/github/galileo/galileo-framework/galileo-mybatis/src/main/java/org/armada/galileo/mybatis/interceptor/MybatisLogInterceptor.java
+/Users/wangxiaobo/project/_codes/github/galileo/galileo-framework/galileo-mybatis/src/main/java/org/armada/galileo/mybatis/bo/MapstructConvertor.java
+/Users/wangxiaobo/project/_codes/github/galileo/galileo-framework/galileo-mybatis/src/main/java/org/armada/galileo/mybatis/handler/ListStringTypeHandler.java
+/Users/wangxiaobo/project/_codes/github/galileo/galileo-framework/galileo-mybatis/src/main/java/org/armada/galileo/mybatis/interceptor/MybatisUpdateInterceptor.java

@@ -1,0 +1,8 @@
+/Users/wangxiaobo/project/_codes/github/galileo/galileo-server/galileo-docker-server/src/main/java/org/armada/galileo/docker_center/vo/ImageRequestVO.java
+/Users/wangxiaobo/project/_codes/github/galileo/galileo-server/galileo-docker-server/src/main/java/org/armada/galileo/docker_center/web/rpc/ImageDownloaderRpc.java
+/Users/wangxiaobo/project/_codes/github/galileo/galileo-server/galileo-docker-server/src/main/java/org/armada/galileo/docker_center/config/mvc/NovaPortalViewConfig.java
+/Users/wangxiaobo/project/_codes/github/galileo/galileo-server/galileo-docker-server/src/main/java/org/armada/galileo/docker_center/DockerCenterApplication.java
+/Users/wangxiaobo/project/_codes/github/galileo/galileo-server/galileo-docker-server/src/main/java/org/armada/galileo/docker_center/util/DockerCookieUtil.java
+/Users/wangxiaobo/project/_codes/github/galileo/galileo-server/galileo-docker-server/src/main/java/org/armada/galileo/facade/web/screen/Index.java
+/Users/wangxiaobo/project/_codes/github/galileo/galileo-server/galileo-docker-server/src/main/java/org/armada/galileo/docker_center/util/CookieUtil.java
+/Users/wangxiaobo/project/_codes/github/galileo/galileo-server/galileo-docker-server/src/main/java/org/armada/galileo/docker_center/util/DownloadThread.java

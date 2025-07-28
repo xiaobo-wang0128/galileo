@@ -158,7 +158,7 @@ public class FlowExecutorFacade {
         List<Action> actionList = stateActionFlow.getStatusActionMap().get(statusValue);
 
         if (CommonUtil.isNotEmpty(actionList)) {
-            return actionList.stream().map(e -> e.getCode()).collect(Collectors.toList());
+            return actionList.stream().filter(e -> e.getType().equals("manual")).map(e -> e.getCode()).collect(Collectors.toList());
         }
 
         return null;

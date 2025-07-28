@@ -1,0 +1,626 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>$title</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Author" content="">
+<meta name="Keywords" content="">
+<meta name="Description" content="">
+<style type="text/css">
+* {
+	font: 14px/1.5 "微软雅黑",tahoma,arial,"Hiragino Sans GB","宋体",sans-serif;
+}
+a:LINK{
+	color: #740D06;
+	text-decoration: none;
+}
+.head_div {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	width: 1100px;
+	left: -550px;
+	position: relative;
+	margin-left: 50%;
+	border-bottom: 1px solid #ccc;
+	
+}
+
+.main_box_div {
+	padding-top: 10px;
+	width: 1100px;
+	left: -550px;
+	position: relative;
+	margin-left: 50%;
+}
+
+.menu_div {
+	padding-left: 10px;
+	width: 230px;
+	height: 700px; text-align : left;
+	float: left;
+	display: block;
+	/* border-right: 1px solid #ccc; */
+	margin: 0px 0px 50px 0px;
+	text-align: left;
+}
+
+.menu_div div {
+	cursor: pointer;
+	height: 30px;
+	line-height: 30px;
+	vertical-align: middle;
+}
+
+.right_div {
+	width: 850px;
+	float: right;
+}
+.right_div div{
+	padding: 5px 5px 5px 15px;
+}
+
+.error_msg_div {
+	color: red;
+}
+
+.comment_table{
+	background-color: #ccc;
+	width: 100%;
+}
+
+.comment_table td{
+	padding:5px;
+	background-color: #fff;
+}
+.comment_table .table_head td{
+	background-color: #E1DFDB;
+}
+
+.doc_group_highlight{
+	font-weight: bold; 
+	font-size: 15px; 
+	color: #f60;
+}
+
+
+.keyword_input{
+	width:156px; 
+	line-height: 25px;
+	border-left: 1px solid #ccc;
+	border-top:  1px solid #ccc;
+	border-bottom:  1px solid #ccc;
+	border-right:  none;
+	float: left;
+}
+.search_btn{
+	width: 60px;
+	height: 29px;
+	color: #fff;
+	letter-spacing: 1px;
+	background: #3385ff;
+	border-bottom: 1px solid #2d78f4;
+	outline: medium;
+	-webkit-appearance: none;
+	-webkit-border-radius: 0;
+	border: 0;
+	cursor: pointer;
+}
+
+</style>
+
+
+<script type="text/javascript" src="/statics/resource/jquery1.7.js"></script>
+<script type="text/javascript" src="/statics/resource/jquery.form.js"></script>
+
+
+<!-- <script type="text/javascript" src="/resource/md5.js"></script> -->
+
+
+<script>
+	var current_uri = '${uri}';
+	$(function(){
+		var i =0;
+		$('.menu_div div').each(function(){
+			var div_uri = $(this).attr('ref');
+			
+			$(this).bind('click', function(){
+				window.location="/?uri="+div_uri;
+			});
+			
+			if(div_uri==current_uri){
+				$(this).css('font-weight', 'bold');
+				$(this).css('color', '#f60');
+			}
+			
+		});
+		$('#debug_win_div').hide();
+		
+		$('.debug_span_title').bind('click', function(){
+			$('#debug_win_div').show();
+		});
+		
+		$('#debug_win_div_close_btn').bind('click', function(){
+			$('#debug_win_div').hide();
+		});
+		
+		
+		
+		$('#mock_win_div').hide();
+		
+		$('.mock_span_title').bind('click', function(){
+			$('#mock_win_div').show();
+		});
+		
+		$('#mock_win_div_close_btn').bind('click', function(){
+			$('#mock_win_div').hide();
+		});
+		
+	});
+
+
+</script>
+</head>
+
+<body>
+
+
+
+	<div class="head_div">
+	<table style="width: 100%;">
+		<tr>
+			<td style="font-weight:bold; font-size: 14px; width: 198px; color: #666; ">$title  #* #if($appSecret)（app版） #else （pc版） #end  *#</td>
+			<td style=" text-align: center;">
+				#foreach($obj in $docs)
+					#if($obj.group==$doc.group)
+						#set($docList2 = $obj.docList)
+						<font class="doc_group_highlight">$obj.group</font>
+					#else
+						<a href="/?uri=${obj.docList[0].apiUrl}" style="color: #000;">
+							$obj.group
+						</a>
+					#end
+					&nbsp;&nbsp;&nbsp;&nbsp;
+				#end
+			</td>
+			<td style="text-align: right; width: 200px;">
+				#if($appSecret)
+					<a /href="/app_rule.htm">app请求协议</a>
+				#end
+				##
+				
+				&nbsp;&nbsp;
+				<a href="/">返回值说明</a>
+			</td>
+		</tr>
+	</table>
+	</div>
+
+	<div class="main_box_div">
+
+		<div class="menu_div">
+		
+		<form action="/search.htm">
+				<input type="text" name="keyword" placeHolder="请输入关键字" class="keyword_input" value="$!{keyword}" /><input class="search_btn" type="submit" value="搜索" />
+    	</form>
+	
+		<div style="height: 10px;"></div>
+			#foreach($obj in $docList2)
+			<div ref="${obj.apiUrl}"
+				#if($obj.isDeprecated)
+					style="text-decoration:line-through;"
+				#end
+			>
+			> ${obj.apiName}
+			</div>
+			#end
+		</div>
+
+		<div class="right_div">
+		#if($util.isNotNull($doc))
+			<div style="font-size: 16px; font-weight: bold;">$doc.apiName
+				#if($doc.isDeprecated)
+					（已废弃）
+				#end
+			</div>
+			
+			#if($util.isNotNull($doc.apiDesc))
+			<div style="border:1px solid #ccc; margin:10px 10px 10px 15px;  background-color: #FAF3E0;"> $!doc.apiDesc </div>
+			#end
+			
+			<div>
+				接口地址：  <a href="${doc_address}${doc.apiUrl}" target="_blank">$doc.apiUrl</a>
+				#if($doc.isAdmin)
+				#else
+				&nbsp;&nbsp;&nbsp;<span class="debug_span_title" style="cursor: pointer; color: blue;">[测试]</span>
+				&nbsp;&nbsp;&nbsp;<span class="mock_span_title" style="cursor: pointer; color: blue;">[mock]</span>
+				#end
+				
+			</div>
+			
+			<div>返回类型： $util.escape($!doc.outputType) </div>
+			
+			#if($doc.isPage)
+			<div>是否分页：是</div>
+			#end
+			
+			#if($util.isNotNull($doc.outputDesc))
+			<div>返回说明：$doc.outputDesc</div>
+			#end
+		
+			#if($util.isNotEmpty($doc.inputParams))
+				
+				<!-- 
+				<div>
+					<div style="padding-left: 0px;padding-top: 0px;">输入参数（通用参数）<font color="#999">（在http头中传参，框架封装，请勿手动传入）</font>：</div>
+					<table cellpadding="1" cellspacing="1" class="comment_table">
+						<tr class="table_head">
+							<td style="width: 210px">参数名</td>
+							<td style="width: 100px">必填项</td>
+							<td style="width: 100px">参数类型</td>
+							<td>说明</td>
+						</tr>
+						#foreach($input in $doc.inputParams)
+							#if($input.isSystem)
+								<tr>
+									<td>
+										<font color="green">$input.name</font>
+									</td>
+									<td style="width: 100px">
+										Y
+									</td>
+									<td>
+										<font color="green">$input.type</font>
+									</td>
+									<td>
+										<font color="green">$!input.description</font>
+									</td>
+								</tr>
+							#end
+						#end
+					</table>
+				</div>
+				 -->
+				 
+				<div>
+					<div style="padding-left: 0px;padding-top: 0px;">输入参数（业务参数）：</div>
+					<table cellpadding="1" cellspacing="1" class="comment_table">
+						<tr class="table_head">
+							<td style="width: 210px">参数名</td>
+							<td style="width: 100px">必填项</td>
+							<td style="width: 100px">类型(长度)</td>
+							<td>说明</td>
+						</tr>
+						#foreach($input in $doc.inputParams)
+							
+							#if($input.isSystem)
+								
+							#else
+							
+								<tr>
+									<td>
+										#if($input.isSystem)
+											<font color="#006600">$input.name</font>
+										#else
+											$input.name
+										#end
+									</td>
+									<td style="width: 100px;">
+										#if(!$input.allowNull)
+											Y
+										#end
+									</td>
+									<td>
+										#if($input.isSystem)
+											<font color="#006600">$input.type</font>
+										#else
+											$input.type #if($input.maxLen>0) ($input.maxLen) #end
+										#end
+									</td>
+									<td>
+										#if($input.isSystem)
+											<font color="#006600">$!input.description</font>
+										#else
+											$!input.description
+										#end
+									</td>
+								</tr>
+								#if($util.isNotEmpty($doc.subParams))
+									#foreach($subP in $doc.subParams)
+										<tr><td>$subP.name</td><td>$subP.type</td><td>$!{subP.description}</td></tr>
+									#end
+								#end
+							#end
+						#end
+					</table>
+				</div>	
+			#end
+			
+			#if($util.isNotEmpty($doc.outputParams))
+				<div>
+					<div style="padding-left: 0px;padding-top: 0px;">输出参数：</div>
+					<table cellpadding="1" cellspacing="1" class="comment_table">
+						<tr class="table_head">
+							<td style="width: 210px">参数名</td>
+							<td style="width: 100px">参数类型</td>
+							<td>说明</td>
+						</tr>
+						#foreach($input in $doc.outputParams)
+						<tr>
+							<td>$input.name</td>
+							<td #if($util.isNotEmpty($input.subParams)) style="color: red;" #end> $util.escape($input.type)</td>
+							<td>$!input.description</td>
+						</tr>
+							#if($util.isNotEmpty($input.subParams))
+								#foreach($subP in $input.subParams)
+									<tr>
+										<td style="padding-left: 45px;">$subP.name</td>
+										<td #if($util.isNotEmpty($subP.subParams)) style="color: red;" #end>$util.escape($subP.type)</td>
+										<td>$!subP.description</td>
+									</tr>
+									
+					                 #if($util.isNotEmpty($subP.subParams))
+					                    #foreach($subP2 in $subP.subParams)
+					                      <tr>
+					                        <td style="padding-left: 90px;">$util.escape($subP2.name)</td>
+					                        <td>$subP2.type</td>
+					                        <td>$!subP2.description</td>
+					                      </tr>
+					                    #end  
+					                 #end
+									
+								#end	
+							#end
+						#end
+					</table>
+				</div>	
+			#end
+			
+		#else
+			##显示接口说明文档
+			$controll.include('/doc/api_desc.vm')
+		#end 
+		</div>
+
+	</div>
+
+
+	<div id="debug_win_div" style="display: none; top: 80px; left: -400px; z-index: 99999; width: 800px;  margin-left: 50%; padding: 0px 10px 10px 10px; border: 1px solid #ccc; background-color: #deeeee; position: absolute;">
+		<div style="width: 100%; text-align: right;"><span id="debug_win_div_close_btn" style="cursor: pointer;">关闭</span></div>
+		<div style="width: 220px; float: left;">
+			
+			#if($appSecret)
+				$controll.include('/doc/form_app.vm', "doc", $doc, 'doc_address', $doc_address)
+			#else
+				$controll.include("/doc/form_pc.vm", "doc", $doc, 'doc_address', $doc_address)
+			#end
+			
+		</div>
+		<div style="width: 560px; float:right; padding-left: 10px; height: 100%;">
+			返回结果：
+			<textarea id="api_ajax_form_result" style="width:530px; height:500px;" ></textarea>
+		</div>
+	</div>
+
+	<div id="mock_win_div" style="display: none; top: 80px; left: -400px; z-index: 99999; width: 800px;  margin-left: 50%; padding: 0px 10px 10px 10px; border: 1px solid #ccc; background-color: #deeeee; position: absolute;">
+		<div style="width: 100%; text-align: right;"><span id="mock_win_div_close_btn" style="cursor: pointer;">关闭</span></div>
+		
+		<div style="width: 220px; float: left;">
+		<input type="button" value="添加 mock 地址" id="add_more_mock" />
+		
+		<div class="mock_ul" style="padding: 10px 0px 10px 10px;">
+		
+		<!-- <div style="display: block; position: relative;" date-ref="base" > 默认地址 <a date-ref="base" title="删除" style="position: absolute; right: 0px; top: 0px; display: none; cursor: pointer;">X</a></div> -->
+			
+		</div>
+		
+		</div>
+		<div style="width: 560px; float:right; padding-left: 10px; height: 100%;">
+		
+			<input type="hidden" name="uri" id="input_uri" />
+			<input type="hidden" name="version" id="input_version" />
+			
+			<div style="padding: 5px 5px 5px 5px;">
+				mock地址：<input type="text" value="/askja/askja/MockRpc/access.json?uri=$!{doc.apiUrl}" style="width: 350px" id="input_address1"/>
+				&nbsp;&nbsp;
+				<a href="/askja/askja/MockRpc/access.json?uri=$!{doc.apiUrl}" id="input_address2" target="_blank">点击访问</a>
+			</div>
+			
+			
+			
+			<textarea id="input_data" style="width:97%; height:500px;" name="data">$!{doc.mockMessage}</textarea>
+			<div style="padding: 10px 0px 0px 0px;">
+				<input type="button" value="保存修改" style="padding: 0px 5px 0px 5px;" class="save_mock_cfg_btn"/>
+			</div>
+		</div>
+	</div>
+
+	<style>
+	
+	</style>
+#if($util.isNotNull($doc))
+	
+	<script type="text/javascript">
+		
+		$('.save_mock_cfg_btn').click(function(){
+			$.ajax({
+				url:'/askja/askja/MockRpc/save.json',
+				data:{
+					'uri': $('#input_uri').val(),
+					'version': $('#input_version').val(),
+					'data': $('#input_data').val()
+				},
+				dataType : 'json',
+				success : function(data) {
+					if (data.code=='0') {
+						alert('修改成功')
+					} else {
+						alert(data.message);
+					}
+				}
+			})
+		});
+		
+		var fillFormPanels = function(record){
+			if(!record){
+				return;
+			}
+			
+			var mockUrl = '';
+			if(record && record.uri){
+				
+				mockUrl = '/askja/askja/MockRpc/access.json?uri='+ record.uri;
+				if(record.version ){
+					mockUrl += '&version='+ record.version;
+				}	
+			}
+			
+			$('#input_uri').val(record.uri);
+			$('#input_version').val(record.version);
+			$('#input_address1').val(mockUrl);
+			$('#input_address2').attr('href', mockUrl);
+			
+			
+			$('#input_data').val(record.data);
+		};
+	
+		$('.mock_ul div').live('click', function(e){
+			
+			$(this).parent().find('div').each(function(){
+				var tmpDiv = $(this);
+				
+				//tmpDiv.css('font-weight', 'normal');
+				tmpDiv.css('color', '#000');
+			});
+			
+			//$(this).css('font-weight', 'bold');
+			$(this).css('color', '#f60');
+			
+			
+			var clickUri = $(this).attr('ref-uri');
+			var clickVersion = $(this).attr('ref-version');
+			
+			console.log(clickUri)
+			console.log(clickVersion)
+			
+			$.ajax({
+				url:'/askja/askja/MockRpc/detail.json',
+				data:{
+					'uri': clickUri,
+					'version': clickVersion
+				},
+				dataType : 'json',
+				success : function(data) {
+					if (data.code=='0') {
+						
+						fillFormPanels(data.data);
+					} else {
+						alert(data.message);
+					}
+				}
+			})
+		});
+		
+		$('.mock_ul div').mouseover(function(){
+			$(this).find('a').css('display', '');
+		});
+		
+		$('.mock_ul div').live('mouseover', function(){
+			$(this).find('a').css('display', '');
+		});  
+		
+		$('.mock_ul div').live('mouseout', function(){
+			$(this).find('a').css('display', 'none');
+		});  
+		
+		$('.mock_ul div a').live('click', function(e){
+			
+			var clickUri = $(this).parent().attr('ref-uri');
+			var clickVersion = $(this).parent().attr('ref-version');
+			
+			console.log(clickUri)
+			console.log(clickVersion)
+			
+			$.ajax({
+				url:'/askja/askja/MockRpc/delete.json',
+				data:{
+					'uri': clickUri,
+					'version': clickVersion
+				},
+				dataType : 'json',
+				success : function(data) {
+					if (data.code=='0') {
+						fillFormPanels({
+							uri:'',
+							name:'',
+							address:'',
+							version:'',
+							data:''
+						});
+						
+					} else {
+						alert(data.message);
+					}
+				}
+			});
+			
+			$(this).parent().remove();
+			
+		});
+		
+		
+		var appendMockLine = function(obj){
+			var line = "<div style='position: relative; cursor: pointer; line-height: 25px; ' ref-version='"+ obj.version + "' ref-uri='"+ obj.uri + "'>";
+			
+			line += obj.name ;
+			if( obj.version!='' ){
+				line += "<a date-ref='base' title='删除' style='z-index:100; position: absolute; right: 0px; top: 0px; display: none; cursor: pointer;'>x</a>";	
+			}
+			line += "</div>";
+			
+			$('.mock_ul').append(line);
+		}
+		
+		$('#add_more_mock').click(function(){
+			
+			$.ajax({
+				url:'/askja/askja/MockRpc/add.json',
+				data:{
+					'uri': '$!{doc.apiUrl}'
+				},
+				dataType : 'json',
+				success : function(data) {
+					if (data.code=='0') {
+						appendMockLine(data.data);
+					} else {
+						alert(data.message);
+					}
+				}
+			})
+			
+		});
+		
+
+		$.ajax({
+			url:'/askja/askja/MockRpc/list.json',
+			data:{
+				'uri': '$!{doc.apiUrl}'
+			},
+			dataType : 'json',
+			success : function(data) {
+				if (data.code=='0') {
+					
+					for(var i=0 ;i< data.data.rows.length; i++){
+						var obj = data.data.rows[i];
+						appendMockLine(obj);
+					}
+					
+				} else {
+					alert(data.message);
+				}
+			}
+		})
+	</script>
+#end
+</body>
+</html>

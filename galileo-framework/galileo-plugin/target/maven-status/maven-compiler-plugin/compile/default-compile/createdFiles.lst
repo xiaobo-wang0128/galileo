@@ -1,0 +1,16 @@
+org/armada/galileo/plugin/util/NovaPluginBean$3.class
+org/armada/galileo/plugin/util/PluginNacosUtil$1.class
+org/armada/galileo/plugin/util/PluginSdkUtils.class
+org/armada/galileo/plugin/util/NovaPluginBean$RemotePluginConfig.class
+org/armada/galileo/plugin/util/PluginNacosUtil$NacosListener.class
+org/armada/galileo/plugin/web/rpc/NovaPluginRpc.class
+org/armada/galileo/plugin/util/NovaPluginBean$PluginGroup.class
+org/armada/galileo/plugin/annotation/NovaPluginImpl.class
+org/armada/galileo/plugin/util/NovaPluginBean$PluginInterface.class
+org/armada/galileo/plugin/util/NovaPluginBean$2.class
+org/armada/galileo/plugin/annotation/NovaPlugin.class
+org/armada/galileo/plugin/util/NovaPluginBean$1.class
+org/armada/galileo/plugin/util/NovaPluginBean.class
+org/armada/galileo/plugin/web/rpc/NovaPluginRpc$1.class
+org/armada/galileo/plugin/util/PluginNacosUtil.class
+org/armada/galileo/plugin/util/NovaPluginBean$PluginImpl.class

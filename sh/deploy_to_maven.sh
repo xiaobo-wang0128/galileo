@@ -1,33 +1,15 @@
 
 WORKSPACE=$(cd "$(dirname "$0")"; pwd)
 
-# 前端 vue 打包
-
-#cd ${WORKSPACE}/galileo-vue/galileo-portal-vue
-#
-#mkdir -p ${WORKSPACE}/galileo-vue/galileo-portal-vue/static
-#
-#npm i
-#
-#rm -rf ./dist/*
-#
-#npm run build
-#
-#rm -rf ${WORKSPACE}/galileo-portal/src/main/resources/views/screen/index.vm
-#
-#cp ${WORKSPACE}/galileo-vue/galileo-portal-vue/dist/index.html ${WORKSPACE}/galileo-portal/src/main/resources/views/screen/index.vm
-#
-#rm -rf ${WORKSPACE}/galileo-portal/src/main/resources/statics
-#
-#cp -r ${WORKSPACE}/galileo-vue/galileo-portal-vue/dist/statics ${WORKSPACE}/galileo-portal/src/main/resources/
-
-# java jar包发布
+echo ${WORKSPACE}
 
 cd ${WORKSPACE}
 
+cd ..
+
 mvn clean deploy -pl ./pom.xml -am
 
-mvn clean deploy -pl galileo-itextpdf,galileo-miniwebx,galileo-flow,galileo-rainbow,galileo-tool,galileo-open-sdk,galileo-es-sdk,galileo-scan,galileo-scan-model -am -Dmaven.test.skip=true
+mvn clean deploy -pl galileo-framework/galileo-autoconfig,galileo-framework/galileo-docs,galileo-framework/galileo-es-sdk,galileo-framework/galileo-flow,galileo-framework/galileo-itextpdf,galileo-framework/galileo-miniwebx,galileo-framework/galileo-mybatis,galileo-framework/galileo-open-sdk,galileo-framework/galileo-plugin,galileo-framework/galileo-rainbow,galileo-framework/galileo-tool -am -Dmaven.test.skip=true
 
 #mvn clean deploy -pl galileo-autoconfig -am -Dmaven.test.skip=true
 #mvn clean deploy -pl galileo-flow -am -Dmaven.test.skip=true
