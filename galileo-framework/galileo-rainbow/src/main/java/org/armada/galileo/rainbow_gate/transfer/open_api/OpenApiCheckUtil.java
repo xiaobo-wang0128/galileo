@@ -91,7 +91,7 @@ public class OpenApiCheckUtil {
                         clz = Class.forName(apiClassName);
 
                         // 被动接收请求
-                        if (docItem.getApiFrom().equals(ApiRole.KYB.toString())) {
+                        if (docItem.getApiFrom().equals(ApiRole.LOCAL.toString())) {
                             continue;
                         }
 

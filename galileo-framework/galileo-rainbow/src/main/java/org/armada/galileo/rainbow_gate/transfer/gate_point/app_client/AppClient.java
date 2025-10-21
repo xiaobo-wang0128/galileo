@@ -1,6 +1,5 @@
 package org.armada.galileo.rainbow_gate.transfer.gate_point.app_client;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,7 +16,6 @@ import org.armada.galileo.common.util.HttpUtil;
 import org.armada.galileo.common.util.JsonUtil;
 import org.armada.galileo.exception.BizException;
 import org.armada.galileo.annotation.rainbow.RouteKey;
-import org.armada.galileo.rainbow_gate.transfer.open_api.InvokeObject;
 import org.armada.galileo.rainbow_gate.transfer.connection.http.HttpPostUtil;
 import org.armada.galileo.rainbow_gate.transfer.constant.GateConstant;
 import org.armada.galileo.rainbow_gate.transfer.constant.HttpOpenConstant;
@@ -27,7 +25,6 @@ import org.armada.galileo.rainbow_gate.transfer.domain.protocol.AppResponseDomai
 import org.armada.galileo.rainbow_gate.transfer.domain.protocol.RainbowRequestType;
 import org.armada.galileo.rainbow_gate.transfer.gate_codec.GateCodecUtil;
 import org.armada.galileo.rainbow_gate.transfer.gate_point.app_server.AppServer;
-import org.armada.galileo.rainbow_gate.transfer.gate_point.app_server.HttpJsonServer;
 import org.armada.galileo.rainbow_gate.transfer.gate_point.app_server.RainbowRpcInit;
 import org.armada.galileo.rainbow_gate.transfer.gate_point.register.RegisterUtil;
 import org.armada.galileo.rainbow_gate.transfer.interceptor.RainbowInterceptor;
@@ -415,7 +412,7 @@ public class AppClient implements InvocationHandler {
         boolean isOpenApiResponse = false;
         if (method.getDeclaringClass().isAnnotationPresent(OpenApi.class)) {
             OpenApi cls = method.getDeclaringClass().getAnnotation(OpenApi.class);
-            isOpenApiResponse = (cls.apiFrom() == ApiRole.KYB);
+            isOpenApiResponse = (cls.apiFrom() == ApiRole.LOCAL);
         }
 
 

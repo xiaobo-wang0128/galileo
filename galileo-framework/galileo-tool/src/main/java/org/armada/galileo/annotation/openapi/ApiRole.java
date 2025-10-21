@@ -7,15 +7,27 @@ package org.armada.galileo.annotation.openapi;
  */
 public enum ApiRole {
 
+
+    /**
+     * 上游 HIS
+     */
+    HIS,
+
+//    /**
+//     * 本地 DTS 系统
+//     */
+//    DTS,
+//
+//
     /**
      * 上游 ERP
      */
     ERP,
 
     /**
-     * 跨运宝
+     * 本系统
      */
-    KYB,
+    LOCAL,
 
     /**
      * 自营/第三方 WMS

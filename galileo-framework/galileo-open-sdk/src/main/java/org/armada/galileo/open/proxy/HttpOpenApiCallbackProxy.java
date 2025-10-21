@@ -268,7 +268,7 @@ public class HttpOpenApiCallbackProxy implements InvocationHandler {
             rm.setHappenTime(happenTime);
             // 传输方向
             // rm.setApiType(OpenApiType.ResponseApi);
-            rm.setApiFrom(ApiRole.KYB);
+            rm.setApiFrom(ApiRole.LOCAL);
             // 状态
             if (ex != null) {
                 rm.setStatus(RequestMessageStatus.FAIL);

@@ -9,6 +9,17 @@ import org.armada.galileo.open.DocScanJob;
 public class OpenApiScanTest {
     public static void main(String[] args) throws Exception {
 
+        DocScanJob.main(new String[]{
+                "OPEN_API",
+                "/Users/wangxiaobo/project/_codes/vot_2024/galaxy-java",
+                "/Users/wangxiaobo/project/_codes/vot_2024/galaxy-java/galaxy-dts",
+                "/Users/wangxiaobo/project/_codes/vot_2024/galaxy-java/galaxy-dts/dts-web/src/main/resources/open_api.json",
+                "org.vot"
+        });
+
+
+
+
 //        DocScanJob.main(new String[]{
 //                "/Users/wangxiaobo/project/_codes/aml_2022/galileo",
 //                "/Users/wangxiaobo/project/_codes/aml_2022/galileo/galileo-open-test1/src/main/resources/api_doc.json",
@@ -35,13 +46,13 @@ public class OpenApiScanTest {
 //        });
 //
 //
-        DocScanJob.main(new String[]{
-                "OPEN_API",
-                "/Users/wangxiaobo/project/_codes/aml_2022/bronze.git",
-                "/Users/wangxiaobo/project/_codes/aml_2022/bronze.git/bronze-fms",
-                "/Users/wangxiaobo/project/_codes/aml_2022/bronze.git/bronze-fms/fms-web/src/main/resources/open_api.json",
-                "com.iml"
-        });
+//        DocScanJob.main(new String[]{
+//                "OPEN_API",
+//                "/Users/wangxiaobo/project/_codes/aml_2022/bronze.git",
+//                "/Users/wangxiaobo/project/_codes/aml_2022/bronze.git/bronze-fms",
+//                "/Users/wangxiaobo/project/_codes/aml_2022/bronze.git/bronze-fms/fms-web/src/main/resources/open_api.json",
+//                "com.iml"
+//        });
 
 //
 //        DocScanJob.main(new String[]{

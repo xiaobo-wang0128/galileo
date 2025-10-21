@@ -48,8 +48,8 @@ public class OpenApiScan {
     public void doScan(String scanPath) {
 
         List<String> webPaths = srcPaths.stream().filter(
-                        e -> e.startsWith(scanPath) && (e.endsWith("-spi/src/main/java/") || e.endsWith("-open/src/main/java/"))
-                ).collect(Collectors.toList());
+                e -> e.startsWith(scanPath) && (e.endsWith("-spi/src/main/java/") || e.endsWith("-open/src/main/java/"))
+        ).collect(Collectors.toList());
 
         for (String webPath : webPaths) {
             try {
@@ -89,6 +89,10 @@ public class OpenApiScan {
 
     private void scanOpenApiUrlConfig(String path) throws Exception {
         File file = new File(path);
+
+        if (!file.exists()) {
+            return;
+        }
 
         if (uriHead != null && uriHead != null) {
             return;
@@ -152,7 +156,6 @@ public class OpenApiScan {
             }, exist);
 
         } else {
-
             for (File listFile : file.listFiles()) {
                 scanOpenApiUrlConfig(listFile.getAbsolutePath());
             }

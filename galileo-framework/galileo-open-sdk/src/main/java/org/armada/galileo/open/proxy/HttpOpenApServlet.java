@@ -326,7 +326,7 @@ public class HttpOpenApServlet extends HttpServlet {
             // 发生时间
             rm.setHappenTime(happenTime);
             // 传输方向
-            rm.setApiTo(ApiRole.KYB);
+            rm.setApiTo(ApiRole.LOCAL);
 
             rm.setRequestSize(requestByteSize);
             rm.setResponseSize(responseByteSize);

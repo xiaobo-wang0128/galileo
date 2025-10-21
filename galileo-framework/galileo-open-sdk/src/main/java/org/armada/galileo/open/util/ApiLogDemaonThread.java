@@ -81,7 +81,7 @@ public class ApiLogDemaonThread extends Thread {
 
                         vo.setIsAsync("Y");
                         vo.setStatus("doing");
-                        vo.setApiTo(ApiRole.KYB);
+                        vo.setApiTo(ApiRole.LOCAL);
                         List<OpenRequestMessage> asyncJobList = null; //openApiService.queryRequestMsg(vo);
                         if (asyncJobList != null && asyncJobList.size() > 0) {
                             for (OpenRequestMessage msg : asyncJobList) {
@@ -219,7 +219,7 @@ public class ApiLogDemaonThread extends Thread {
 
                         vo.setMaxRetryTime(openApiService.getMaxRetryTime());
                         vo.setStatus("fail,doing");
-                        vo.setApiFrom(ApiRole.KYB);
+                        vo.setApiFrom(ApiRole.LOCAL);
                         vo.setQueryForNotify(true);
                         // vo.setLastUpdateTime(new Date(System.currentTimeMillis() - OpenApiService.getRetrySleepTime()));
 
@@ -242,7 +242,7 @@ public class ApiLogDemaonThread extends Thread {
                             vo = new OpenRequestMessageQueryVO();
                             vo.setGroups(groups);
                             vo.setStatus("fail,doing");
-                            vo.setApiFrom(ApiRole.KYB);
+                            vo.setApiFrom(ApiRole.LOCAL);
 
                             List<OpenRequestMessage> groupMessage = openApiService.queryOpenRequestMessage(vo);
                             Map<String, List<OpenRequestMessage>> groupMap = groupMessage.stream().collect(Collectors.groupingBy(e -> e.getMsgGroup()));
