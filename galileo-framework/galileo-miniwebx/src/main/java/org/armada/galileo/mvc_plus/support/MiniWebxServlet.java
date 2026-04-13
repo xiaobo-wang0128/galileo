@@ -189,6 +189,15 @@ public class MiniWebxServlet extends HttpServlet {
         doDispatch(req, resp);
     }
 
+    protected void doOptions(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException{
+        // 设置CORS头部以允许预检请求
+        resp.setHeader("Access-Control-Allow-Origin", "*");
+        resp.setHeader("Access-Control-Allow-Methods", "POST");
+        resp.setHeader("Access-Control-Allow-Headers", "Content-Type");
+        resp.setStatus(HttpServletResponse.SC_OK);
+    }
+
     public void doDispatch(HttpServletRequest request, HttpServletResponse response) {
         // 获取 uri
         String uri = request.getRequestURI().substring(request.getContextPath().length());

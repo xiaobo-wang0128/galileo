@@ -162,15 +162,14 @@ public class StateActionFactory {
                     //生效的实现类
                     String actionOptionActiveClass = e.getValue().getActiveClass();
                     // action 实现类可选项
-                    List<FlowConfigFormVO.ActionImplOption> actionOptionImplOptions = e.getValue().getActionClassImpls()
-                            .stream().map(e3 -> {
+                    List<FlowConfigFormVO.ActionImplOption> actionOptionImplOptions = e.getValue().getActionClassImpls().stream().map(e3 -> {
 
-                                String implOptionImplName = e3.getName();
-                                String implOptionClassName = e3.getClassName();
-                                String desc = e3.getDesc();
-                                return new FlowConfigFormVO.ActionImplOption(implOptionImplName, implOptionClassName, desc);
+                        String implOptionImplName = e3.getName();
+                        String implOptionClassName = e3.getClassName();
+                        String desc = e3.getDesc();
+                        return new FlowConfigFormVO.ActionImplOption(implOptionImplName, implOptionClassName, desc);
 
-                            }).collect(Collectors.toList());
+                    }).collect(Collectors.toList());
 
                     return new ActionOption(actionOptionActionCode, actionOptionActionName, actionOptionActiveClass, actionOptionImplOptions);
 
@@ -409,6 +408,9 @@ public class StateActionFactory {
             String targetClass = element.attributeValue("targetClass");
             String beforeStatus = element.attributeValue("beforeStatus");
             String targetStatus = element.attributeValue("targetStatus");
+
+            String allowStatusStr = element.attributeValue("allowStatus");
+
             String exceptionStatus = element.attributeValue("exceptionStatus");
 
             List<ActionClassImpl> actionClassImpls = new ArrayList<ActionClassImpl>();
@@ -425,6 +427,19 @@ public class StateActionFactory {
                 exceptionStatus = null;
             }
 
+            if (allowStatusStr != null && !allowStatusStr.matches("\\s*")) {
+                List<String> allows = CommonUtil.split(allowStatusStr, ",");
+                for (String allow : allows) {
+                    if (allow == null || allow.matches("\\s*")) {
+                        continue;
+                    }
+                    allow = allow.trim();
+                    if (!allowStatus.contains(allow)) {
+                        allowStatus.add(allow);
+                    }
+                }
+            }
+
             if (targetStatus != null && exceptionStatus != null && exceptionStatus.equals(targetStatus)) {
                 throw new RuntimeException("[nova-flow] action配置错误，targetStatus 与 exceptionStatus不能相同，actionName: " + name);
             }
@@ -432,9 +447,18 @@ public class StateActionFactory {
             // 同时存在多个前置状态
             List<String> beforeList = CommonUtil.split(beforeStatus, ",");
             if (CommonUtil.isNotEmpty(beforeList)) {
-                beforeList = beforeList.stream().distinct().collect(Collectors.toList());
-                beforeStatus = beforeList.get(0);
-                allowStatus = beforeList;
+                for (String before : beforeList) {
+                    if (before == null || before.matches("\\s*")) {
+                        continue;
+                    }
+                    before = before.trim();
+                    if (!allowStatus.contains(before)) {
+                        allowStatus.add(before);
+                    }
+                    if (beforeStatus == null) {
+                        beforeStatus = before;
+                    }
+                }
             }
 
             // 解析action 实现类
@@ -521,7 +545,7 @@ public class StateActionFactory {
             actionMap.put(action.getCode(), action);
 
 
-            if(CommonUtil.isNotEmpty(allowStatus)){
+            if (CommonUtil.isNotEmpty(allowStatus)) {
                 for (String status : allowStatus) {
                     List<Action> actionList = statusActionMap.get(status);
                     if (actionList == null) {
@@ -529,9 +553,9 @@ public class StateActionFactory {
                         statusActionMap.put(status, actionList);
                     }
 
-                    List<String> existActionCodes = actionList.stream().map(e->e.getCode()).collect(Collectors.toList());
+                    List<String> existActionCodes = actionList.stream().map(e -> e.getCode()).collect(Collectors.toList());
 
-                    if(!existActionCodes.contains(action.getCode())){
+                    if (!existActionCodes.contains(action.getCode())) {
                         actionList.add(action);
                     }
                 }
