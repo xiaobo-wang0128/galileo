@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.armada.galileo.common.util.JsonUtil;
 import org.armada.galileo.exception.BizException;
 import org.armada.galileo.exception.LoginTimeoutException;
-import org.armada.galileo.i18n_server.user.LoginUser;
+import org.armada.galileo.model.domain.LoginUser;
 import org.armada.galileo.mvc_plus.encrypt.EncryptUtil;
 
 import javax.security.auth.login.LoginException;
@@ -142,7 +142,7 @@ public class LoginCookieUtil {
     public static String byte2Hex(byte buf[]) {
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < buf.length; i++) {
-            String hex = Integer.toHexString(buf[i] & 0xFF);
+            String hex = Long.toHexString(buf[i] & 0xFF);
             if (hex.length() == 1) {
                 hex = '0' + hex;
             }

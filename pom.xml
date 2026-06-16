@@ -27,7 +27,7 @@
         <mysql-connector.version>8.0.16</mysql-connector.version>
         <druid.version>1.1.17</druid.version>
         <jsqlparser.version>3.1</jsqlparser.version>
-        <mybatis-plus.version>3.3.2</mybatis-plus.version>
+        <mybatis-plus.version>3.4.1</mybatis-plus.version>
         <mybatis-spring.version>2.0.3</mybatis-spring.version>
         <mybatis-typehandlers-jsr310.version>1.0.2</mybatis-typehandlers-jsr310.version>
         <mybatis-jsr310.version>1.0.2</mybatis-jsr310.version>
@@ -101,7 +101,6 @@
                 <artifactId>galileo-mybatis</artifactId>
                 <version>${galileo.version}</version>
             </dependency>
-          
             <dependency>
                 <groupId>org.armada</groupId>
                 <artifactId>galileo-plugin</artifactId>
@@ -115,6 +114,11 @@
             <dependency>
                 <groupId>org.armada</groupId>
                 <artifactId>galileo-tool</artifactId>
+                <version>${galileo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.armada</groupId>
+                <artifactId>galileo-model</artifactId>
                 <version>${galileo.version}</version>
             </dependency>
 
@@ -185,11 +189,11 @@
                 <artifactId>mapstruct</artifactId>
                 <version>${mapstruct.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.mapstruct</groupId>
-                <artifactId>mapstruct-jdk8</artifactId>
-                <version>${mapstruct.version}</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.mapstruct</groupId>-->
+<!--                <artifactId>mapstruct-jdk8</artifactId>-->
+<!--                <version>${mapstruct.version}</version>-->
+<!--            </dependency>-->
             <dependency>
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct-processor</artifactId>
@@ -349,6 +353,12 @@
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi-ooxml</artifactId>
                 <version>5.4.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.reflections</groupId>
+                <artifactId>reflections</artifactId>
+                <version>0.10.2</version>
             </dependency>
 
         </dependencies>

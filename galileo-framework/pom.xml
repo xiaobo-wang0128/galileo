@@ -20,5 +20,6 @@
         <module>galileo-plugin</module>
         <module>galileo-rainbow</module>
         <module>galileo-tool</module>
+        <module>galileo-model</module>
     </modules>
 </project>

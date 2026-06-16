@@ -1,10 +1,12 @@
 package org.armada.galileo.i18n_server.dal.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.armada.galileo.i18n_server.dal.enums.StatusEnum;
+import org.armada.galileo.mybatis.domain.BaseEntity;
 
 import java.io.Serializable;
 
@@ -15,17 +17,17 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class I18nDictionaryValue extends BaseMysqlEntity implements Serializable  {
+public class I18nDictionaryValue extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     /**
      * 应用主键
      */
-    private Integer appId;
+    private Long appId;
     /**
      * 词条键值id
      */
-    private Integer dictionaryKeyId;
+    private Long dictionaryKeyId;
     /**
      * 词条对应值
      */
@@ -35,5 +37,10 @@ public class I18nDictionaryValue extends BaseMysqlEntity implements Serializable
      */
     private String locale;
 
-
+    /**
+     * 原生枚举（带{@link StatusEnum}):
+     * 启用或禁用->enable or disable
+     */
+    @TableField(fill = FieldFill.INSERT)
+    private StatusEnum status;
 }

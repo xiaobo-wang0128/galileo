@@ -12,7 +12,7 @@ public class SimilarTest {
     public static double getSimilarity(String doc1, String doc2) {
         if (doc1 != null && doc1.trim().length() > 0 && doc2 != null && doc2.trim().length() > 0) {
 
-            Map<Integer, int[]> AlgorithmMap = new HashMap<Integer, int[]>();
+            Map<Integer, int[]> algorithmMap = new HashMap<Integer, int[]>();
 
             //将两个字符串中的中文字符以及出现的总数封装到，AlgorithmMap中
             for (int i = 0; i < doc1.length(); i++) {
@@ -20,14 +20,14 @@ public class SimilarTest {
                 if (isHanZi(d1)) {//标点和数字不处理
                     int charIndex = getGB2312Id(d1);//保存字符对应的GB2312编码
                     if (charIndex != -1) {
-                        int[] fq = AlgorithmMap.get(charIndex);
+                        int[] fq = algorithmMap.get(charIndex);
                         if (fq != null && fq.length == 2) {
                             fq[0]++;//已有该字符，加1
                         } else {
                             fq = new int[2];
                             fq[0] = 1;
                             fq[1] = 0;
-                            AlgorithmMap.put(charIndex, fq);//新增字符入map
+                            algorithmMap.put(charIndex, fq);//新增字符入map
                         }
                     }
                 }
@@ -38,25 +38,25 @@ public class SimilarTest {
                 if (isHanZi(d2)) {
                     int charIndex = getGB2312Id(d2);
                     if (charIndex != -1) {
-                        int[] fq = AlgorithmMap.get(charIndex);
+                        int[] fq = algorithmMap.get(charIndex);
                         if (fq != null && fq.length == 2) {
                             fq[1]++;
                         } else {
                             fq = new int[2];
                             fq[0] = 0;
                             fq[1] = 1;
-                            AlgorithmMap.put(charIndex, fq);
+                            algorithmMap.put(charIndex, fq);
                         }
                     }
                 }
             }
 
-            Iterator<Integer> iterator = AlgorithmMap.keySet().iterator();
+            Iterator<Integer> iterator = algorithmMap.keySet().iterator();
             double sqdoc1 = 0;
             double sqdoc2 = 0;
             double denominator = 0;
             while (iterator.hasNext()) {
-                int[] c = AlgorithmMap.get(iterator.next());
+                int[] c = algorithmMap.get(iterator.next());
                 denominator += c[0] * c[1];
                 sqdoc1 += c[0] * c[0];
                 sqdoc2 += c[1] * c[1];

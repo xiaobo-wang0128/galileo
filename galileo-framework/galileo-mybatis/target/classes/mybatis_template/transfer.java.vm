@@ -1,0 +1,18 @@
+package ${package.Entity.substring(0, $package.Entity.length() - 11 )}.transfer;
+
+import static org.mapstruct.NullValueCheckStrategy.ALWAYS;
+import static org.mapstruct.NullValueMappingStrategy.RETURN_DEFAULT;
+
+import org.mapstruct.Mapper;
+
+import org.vot.common.config.config.framwork.mybatis.bo.MapstructConvertor;
+
+import ${package.Entity.substring(0, $package.Entity.length() - 11 )}.dto.${entity}DTO;
+
+import ${package.Entity}.${entity};
+
+@Mapper(componentModel = "spring", nullValueCheckStrategy = ALWAYS, nullValueMappingStrategy = RETURN_DEFAULT)
+public interface ${entity}Transfer extends MapstructConvertor<${entity}, ${entity}DTO> {
+}
+
+

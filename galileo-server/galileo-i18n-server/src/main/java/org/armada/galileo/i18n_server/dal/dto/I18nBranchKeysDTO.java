@@ -15,7 +15,7 @@ public class I18nBranchKeysDTO {
     /**
      * 应用主键
      */
-    private Integer appId;
+    private Long appId;
     /**
      * 分支类型
      */

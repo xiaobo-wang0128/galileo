@@ -78,7 +78,7 @@ public class I18nRpc {
 //        if (count != 1) {
 //            throw new BizException("资源文件的导出类型不一致");
 //        }
-        List<Integer> appIds = apps.stream().map(e -> e.getId()).collect(Collectors.toList());
+        List<Long> appIds = apps.stream().map(e -> e.getId()).collect(Collectors.toList());
 
         QueryWrapper<I18nDictionaryKey> queryWrapper = new QueryWrapper<I18nDictionaryKey>();
         queryWrapper.in("app_id", appIds);
@@ -115,7 +115,7 @@ public class I18nRpc {
 
 
 
-        List<Integer> appIds = apps.stream().map(e -> e.getId()).collect(Collectors.toList());
+        List<Long> appIds = apps.stream().map(e -> e.getId()).collect(Collectors.toList());
 
         QueryWrapper<I18nDictionaryKey> queryWrapper = new QueryWrapper<I18nDictionaryKey>();
         queryWrapper.in("app_id", appIds);

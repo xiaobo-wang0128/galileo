@@ -1,0 +1,26 @@
+package ${package.ServiceImpl};
+
+import ${package.Entity}.${entity};
+import ${package.Mapper}.${table.mapperName};
+import ${package.Service}.${table.serviceName};
+import org.vot.common.config.config.framwork.mybatis.bo.impl.BaseBOImpl;
+import org.springframework.stereotype.Service;
+
+import ${package.Entity.substring(0, $package.Entity.length() - 11 )}.dto.${entity}DTO;
+
+import ${package.Entity.substring(0, $package.Entity.length() - 11 )}.transfer.${entity}Transfer;
+
+/**
+ * <p>
+ * $!{table.comment} 服务实现类
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Service
+public class ${table.serviceImplName} extends BaseBOImpl<${entity}, ${entity}DTO, ${table.mapperName}, ${entity}Transfer> implements ${table.serviceName} {
+
+}
+
+

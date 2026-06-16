@@ -1,7 +1,7 @@
 package test;
 
-import org.armada.galileo.autoconfig.NacosConfig;
-import org.armada.galileo.autoconfig.NacosUtil;
+import org.armada.galileo.autoconfig.util.NacosConfig;
+import org.armada.galileo.autoconfig.util.NacosUtil;
 import org.armada.galileo.common.util.JsonUtil;
 
 import java.util.List;

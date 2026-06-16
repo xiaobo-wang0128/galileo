@@ -15,7 +15,7 @@ public class I18nAppDTO {
     /**
      * 主键
      */
-    private Integer id;
+    private Long id;
     /**
      * 应用code
      */

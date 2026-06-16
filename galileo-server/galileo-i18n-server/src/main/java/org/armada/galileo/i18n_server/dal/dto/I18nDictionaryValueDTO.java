@@ -14,16 +14,16 @@ public class I18nDictionaryValueDTO {
     /**
      * 主键
      */
-    private Integer id;
+    private Long id;
     private static final long serialVersionUID = 1L;
     /**
      * 应用主键
      */
-    private Integer appId;
+    private Long appId;
     /**
      * 词条键值id
      */
-    private Integer dictionaryKeyId;
+    private Long dictionaryKeyId;
     /**
      * 词条对应值
      */

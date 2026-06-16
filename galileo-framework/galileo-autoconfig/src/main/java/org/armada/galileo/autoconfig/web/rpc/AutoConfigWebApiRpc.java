@@ -4,8 +4,8 @@ import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.armada.galileo.autoconfig.AutoConfigBean;
-import org.armada.galileo.autoconfig.NacosConfig;
+import org.armada.galileo.autoconfig.util.AutoConfigBean;
+import org.armada.galileo.autoconfig.util.NacosConfig;
 import org.armada.galileo.autoconfig.form.ATFormGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

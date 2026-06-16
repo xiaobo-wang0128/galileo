@@ -52,7 +52,11 @@
 			<artifactId>spring-boot-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+        <dependency>
+            <groupId>org.armada</groupId>
+            <artifactId>galileo-model</artifactId>
+        </dependency>
 
-	</dependencies>
+    </dependencies>
 
 </project>

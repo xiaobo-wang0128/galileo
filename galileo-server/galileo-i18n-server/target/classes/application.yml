@@ -11,7 +11,7 @@ spring:
       type: com.alibaba.druid.pool.DruidDataSource
       url: jdbc:mysql://bronze-dev/i18n_server?useSSL=false&serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true
       username: root
-      password: Iml123123
+      password: 123456
 
 
 galileo:

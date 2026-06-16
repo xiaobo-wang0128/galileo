@@ -34,7 +34,7 @@ public class AppRpc {
 
         List<I18nAppDTO> oldList = appBO.selectAll();
         if (oldList != null && oldList.size() > 0) {
-            List<Integer> newIds = dtoList.stream().map(e -> e.getId()).collect(Collectors.toList());
+            List<Long> newIds = dtoList.stream().map(e -> e.getId()).collect(Collectors.toList());
             for (I18nAppDTO i18nAppDTO : oldList) {
                 if (!newIds.contains(i18nAppDTO.getId())) {
                     appBO.removeById(i18nAppDTO.getId());

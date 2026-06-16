@@ -16,5 +16,5 @@ import org.armada.galileo.i18n_server.dal.entity.I18nDictionaryKey;
 public interface I18nDictionaryKeyMapper extends BaseMapper<I18nDictionaryKey> {
 
 
-    I18nDictionaryKeyDTO getDictionaryByAppCodeAndDictionaryKey(@Param("appId") Integer appId, @Param("dictionaryKey") String dictionaryKey);
+    I18nDictionaryKeyDTO getDictionaryByAppCodeAndDictionaryKey(@Param("appId") Long appId, @Param("dictionaryKey") String dictionaryKey);
 }

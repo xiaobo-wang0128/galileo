@@ -30,14 +30,14 @@ public class I18nDictionaryValueBOImpl extends BaseBOImpl<I18nDictionaryValue, I
 
 
     @Override
-    public List<Integer> getUnfinishedDictionaryByAppIdAndLocals(Set<String> keys, Integer appId, Integer size) {
-        List<Integer> dictionaryKeyIds = Lists.newArrayList();
+    public List<Long> getUnfinishedDictionaryByAppIdAndLocals(Set<String> keys, Long appId, Long size) {
+        List<Long> dictionaryKeyIds = Lists.newArrayList();
         List<Map<String, Object>> maps = mapper.getUnfinishedDictionaryByAppIdAndLocals(keys,appId, size);
         if (CollUtil.isNotEmpty(maps)) {
             for (Map<String, Object> map : maps) {
                 Object dictionaryKeyId = map.get("dictionaryKeyId");
                 if (dictionaryKeyId != null)
-                    dictionaryKeyIds.add((Integer) dictionaryKeyId);
+                    dictionaryKeyIds.add((Long) dictionaryKeyId);
             }
         }
         return dictionaryKeyIds;

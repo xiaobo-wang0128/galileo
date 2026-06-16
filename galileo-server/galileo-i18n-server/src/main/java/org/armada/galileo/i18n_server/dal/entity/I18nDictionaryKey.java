@@ -1,11 +1,14 @@
 package org.armada.galileo.i18n_server.dal.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.armada.galileo.i18n_server.dal.enums.StatusEnum;
+import org.armada.galileo.mybatis.domain.BaseEntity;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -18,13 +21,13 @@ import java.util.Map;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName(autoResultMap = true)
-public class I18nDictionaryKey extends BaseMysqlEntity implements Serializable {
+public class I18nDictionaryKey extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     /**
      * 应用主键
      */
-    private Integer appId;
+    private Long appId;
 
     /**
      * 应用 code
@@ -62,5 +65,12 @@ public class I18nDictionaryKey extends BaseMysqlEntity implements Serializable {
      * y / n 自动翻译
      */
     private String autoTranslate;
+
+    /**
+     * 原生枚举（带{@link StatusEnum}):
+     * 启用或禁用->enable or disable
+     */
+    @TableField(fill = FieldFill.INSERT)
+    private StatusEnum status;
 
 }

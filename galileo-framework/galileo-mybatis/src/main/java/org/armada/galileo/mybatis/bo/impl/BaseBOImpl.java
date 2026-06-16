@@ -1,7 +1,32 @@
 package org.armada.galileo.mybatis.bo.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.enums.SqlMethod;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.TableInfo;
+import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
+import com.baomidou.mybatisplus.core.toolkit.*;
+import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
+import org.apache.ibatis.logging.Log;
+import org.apache.ibatis.logging.LogFactory;
+import org.apache.ibatis.session.SqlSession;
+import org.armada.galileo.common.page.PageList;
+import org.armada.galileo.common.page.PageParam;
+import org.armada.galileo.common.page.ThreadPagingUtil;
+import org.armada.galileo.common.util.CommonUtil;
+import org.armada.galileo.exception.BizException;
+import org.armada.galileo.model.constant.YesOrNoEnum;
+import org.armada.galileo.mybatis.bo.BaseBO;
+import org.armada.galileo.mybatis.bo.MapstructConvertor;
+import org.armada.galileo.mybatis.domain.BaseDTO;
+import org.armada.galileo.mybatis.domain.BaseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -9,30 +34,6 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
-import org.apache.ibatis.binding.MapperMethod;
-import org.apache.ibatis.logging.Log;
-import org.apache.ibatis.logging.LogFactory;
-import org.apache.ibatis.session.SqlSession;
-import org.armada.galileo.common.page.PageList;
-import org.armada.galileo.common.page.PageParam;
-import org.armada.galileo.common.page.ThreadPagingUtil;
-import org.armada.galileo.mybatis.bo.BaseBO;
-import org.armada.galileo.mybatis.bo.MapstructConvertor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ReflectionUtils;
-
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.enums.SqlMethod;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.TableInfo;
-import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
-import com.baomidou.mybatisplus.core.toolkit.Assert;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.baomidou.mybatisplus.core.toolkit.Constants;
-import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 
 public class BaseBOImpl<DO, DTO, M extends BaseMapper<DO>, C extends MapstructConvertor<DO, DTO>> implements BaseBO<DO, DTO> {
 
@@ -47,6 +48,8 @@ public class BaseBOImpl<DO, DTO, M extends BaseMapper<DO>, C extends MapstructCo
 	protected Class<DO> entityClass = currentModelClass();
 
 	protected Class<DO> mapperClass = currentMapperClass();
+
+	private boolean isBaseEntity = isBaseEntity();
 
 	protected M getBaseMapper() {
 		return this.mapper;
@@ -98,6 +101,14 @@ public class BaseBOImpl<DO, DTO, M extends BaseMapper<DO>, C extends MapstructCo
 		return (Class<DO>) ReflectionKit.getSuperClassGenericType(getClass(), 0);
 	}
 
+	private boolean isBaseEntity() {
+		if (entityClass.getSuperclass().getName().equals(BaseEntity.class.getName())) {
+			return true;
+		}
+		return false;
+	}
+
+
 	/**
 	 * 获取mapperStatementId
 	 *
@@ -126,50 +137,53 @@ public class BaseBOImpl<DO, DTO, M extends BaseMapper<DO>, C extends MapstructCo
 	/**
 	 * 插入一条记录（选择字段，策略插入）
 	 *
-	 * @param dto 实体对象
+	 * @param dto
 	 */
-	public boolean save(DTO dto) {
+	public boolean insert(DTO dto) {
 		DO entity = convertor.toDO(dto);
-		int insert = getBaseMapper().insert(entity);
-		try {
+
+		boolean bool = SqlHelper.retBool(getBaseMapper().insert(entity));
+		//try {
+		if (isBaseEntity) {
+			BaseDTO baseDto = (BaseDTO) dto;
 			TableInfo tableInfo = TableInfoHelper.getTableInfo(this.entityClass);
 			Object idVal = ReflectionKit.getFieldValue(entity, tableInfo.getKeyProperty());
-			Field fid = dto.getClass().getDeclaredField(tableInfo.getKeyProperty());
-			ReflectionUtils.makeAccessible(fid);
-			ReflectionUtils.setField(fid, dto, idVal);
-
-		} catch (Exception e) {
-			log.error("dto id 回写失败");
-			log.error(e.getMessage(), e);
+			baseDto.setId((Long) idVal);
+		} else {
+			throw new RuntimeException("仅支持 baseEntity 的子类");
 		}
 
-		return SqlHelper.retBool(insert);
+		return bool;
 	}
 
 	/**
 	 * 根据 ID 选择修改
 	 *
-	 * @param dto 实体对象
+	 * @param dto
 	 */
 	public boolean updateById(DTO dto) {
 		DO entity = convertor.toDO(dto);
 		return SqlHelper.retBool(getBaseMapper().updateById(entity));
 	}
 
-	/**
-	 * 插入（批量）
-	 *
-	 * @param entityList 实体对象集合
-	 */
-	@Transactional(rollbackFor = Exception.class)
-	public boolean saveBatch(Collection<DTO> entityList) {
-		return saveBatch(entityList, DEFAULT_BATCH_SIZE);
-	}
+//
+//    @Override
+//    public boolean updateDTO(DTO dto, UpdateWrapper<DO> updateWrapper) {
+//        if (dto != null) {
+//            return getBaseMapper().update(convertor.toDO(dto), updateWrapper) > 0;
+//        } else {
+//            return getBaseMapper().update(null, updateWrapper) > 0;
+//        }
+//    }
+
 
 	@Override
-	public boolean saveBatchDO(Collection<DO> entityList) {
-		String sqlStatement = getSqlStatement(SqlMethod.INSERT_ONE);
-		return executeBatch(entityList, 1000, (sqlSession, entity) -> sqlSession.insert(sqlStatement, entity));
+	public int updateDTO(DTO dto, Wrapper<DO> queryWrapper) {
+		if (dto != null) {
+			return getBaseMapper().update(convertor.toDO(dto), queryWrapper);
+		} else {
+			return getBaseMapper().update(null, queryWrapper);
+		}
 	}
 
 	/**
@@ -178,6 +192,17 @@ public class BaseBOImpl<DO, DTO, M extends BaseMapper<DO>, C extends MapstructCo
 	 * @param id 主键ID
 	 */
 	public boolean removeById(Serializable id) {
+		if (isBaseEntity) {
+			try {
+				DO entity = entityClass.newInstance();
+				((BaseEntity) entity).setId((Long) id).setIsDelete(YesOrNoEnum.Y);
+				SqlHelper.retBool(getBaseMapper().updateById(entity));
+			} catch (Exception e) {
+				log.error(e.getMessage(), e);
+				return false;
+			}
+			return true;
+		}
 		return SqlHelper.retBool(getBaseMapper().deleteById(id));
 	}
 
@@ -193,6 +218,17 @@ public class BaseBOImpl<DO, DTO, M extends BaseMapper<DO>, C extends MapstructCo
 		return SqlHelper.retBool(getBaseMapper().deleteBatchIds(idList));
 	}
 
+	@Override
+	public void removeBatch(Wrapper<DO> query) {
+		try {
+			DO entity = entityClass.newInstance();
+			((BaseEntity) entity).setIsDelete(YesOrNoEnum.Y);
+			getBaseMapper().update(entity, query);
+		} catch (Exception e) {
+			throw new BizException(e);
+		}
+	}
+
 	/**
 	 * 根据 ID 查询
 	 *
@@ -200,6 +236,15 @@ public class BaseBOImpl<DO, DTO, M extends BaseMapper<DO>, C extends MapstructCo
 	 */
 	public DTO selectById(Serializable id) {
 		DO entity = getBaseMapper().selectById(id);
+		if (Objects.isNull(entity)) {
+			return null;
+		}
+		if (isBaseEntity) {
+			BaseEntity be = ((BaseEntity) entity);
+			if (YesOrNoEnum.Y == (be.getIsDelete())) {
+				return null;
+			}
+		}
 		return convertor.toDTO(entity);
 	}
 
@@ -218,103 +263,181 @@ public class BaseBOImpl<DO, DTO, M extends BaseMapper<DO>, C extends MapstructCo
 	 *
 	 * @param
 	 */
-	public List<DTO> selectList(QueryWrapper<DO> query) {
+	public List<DTO> selectList(Wrapper<DO> query) {
+		if (query instanceof QueryWrapper) {
+			((QueryWrapper) query).eq("is_delete", YesOrNoEnum.N.name());
+		} else if (query instanceof LambdaQueryWrapper) {
+			((LambdaQueryWrapper<DO>) query).apply("is_delete='N'");
+			// ((LambdaQueryWrapper<DO>) query).last("is_delete='N'");
+		}
+
 		List<DO> doList = getBaseMapper().selectList(query);
 		return convertToDtoList(doList);
 	}
 
 	/**
-	 * TableId 注解存在更新记录，否插入一条记录
+	 * 根据 entity 条件，查询一条记录
 	 *
-	 * @param dto 实体对象
-	 * @return boolean
+	 * @param query 查询
+	 * @return {@code DTO}
+	 */
+	public DTO selectOne(Wrapper<DO> query) {
+		if (query instanceof QueryWrapper) {
+			((QueryWrapper) query).eq("is_delete", YesOrNoEnum.N.name());
+		} else if (query instanceof LambdaQueryWrapper) {
+			((LambdaQueryWrapper<DO>) query).apply("is_delete='N'");
+		}
+		DO entity = getBaseMapper().selectOne(query);
+		if (entity == null) {
+			return null;
+		}
+		return convertor.toDTO(entity);
+	}
+
+
+	/**
+	 * 保存或更新记录
+	 * 当id为空时，调用 insert 语句
+	 * 当id不为空时，先根据id查询，若返回为空则新增，返回不为空则更新
+	 *
+	 * @param dto
+	 * @return
 	 */
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public boolean saveOrUpdate(DTO dto) {
+		if (!isBaseEntity) {
+			throw new BizException("当前 Entity 不是 BaseEntity 的子类，不支持该操作");
+		}
+
 		if (null != dto) {
-			DO entity = convertor.toDO(dto);
-			TableInfo tableInfo = TableInfoHelper.getTableInfo(this.entityClass);
-
-			Assert.notNull(tableInfo, "error: can not execute. because can not find cache of TableInfo for entity!");
-			String keyProperty = tableInfo.getKeyProperty();
-			Assert.notEmpty(keyProperty, "error: can not execute. because can not find column for id from entity!");
-			Object idVal = ReflectionKit.getFieldValue(entity, tableInfo.getKeyProperty());
-
-			if (StringUtils.checkValNull(idVal) || Objects.isNull(selectById((Serializable) idVal))) {
-
-				getBaseMapper().insert(entity);
-
-				try {
-					idVal = ReflectionKit.getFieldValue(entity, tableInfo.getKeyProperty());
-					Field fid = dto.getClass().getDeclaredField(tableInfo.getKeyProperty());
-					ReflectionUtils.makeAccessible(fid);
-					ReflectionUtils.setField(fid, dto, idVal);
-				} catch (Exception e) {
-					log.error("dto id 回写失败");
-					log.error(e.getMessage(), e);
-				}
-
-				return true;
-
+			DO aDo = convertor.toDO(dto);
+			BaseEntity entity = (BaseEntity) aDo;
+			if (entity.getId() == null) {
+				mapper.insert(aDo);
 			} else {
-				return SqlHelper.retBool(getBaseMapper().updateById(entity));
+				if (mapper.selectById(entity.getId()) == null) {
+					mapper.insert(aDo);
+				} else {
+					mapper.updateById(aDo);
+				}
 			}
+			// 回写 id
+			BaseDTO baseDto = (BaseDTO) dto;
+			baseDto.setId(entity.getId());
+			return true;
 		}
 		return false;
 	}
 
-	/**
-	 * 批量插入
-	 *
-	 * @param dtoList   ignore
-	 * @param batchSize ignore
-	 * @return ignore
-	 */
+	@Override
+	public boolean saveUpdateBatchDTO(Collection<DTO> dtoList) {
+		if (CommonUtil.isEmpty(dtoList)) {
+			return false;
+		}
+		for (DTO dto : dtoList) {
+			saveOrUpdate(dto);
+		}
+		return true;
+	}
+
+	@Override
+	public boolean insertBatchDO(Collection<DO> entityList) {
+		if (CommonUtil.isEmpty(entityList)) {
+			return false;
+		}
+
+		for (DO ado : entityList) {
+			mapper.insert(ado);
+		}
+		return true;
+	}
+
+	@Override
+	public boolean insertBatchDTO(Collection<DTO> dtoList) {
+		if (CommonUtil.isEmpty(dtoList)) {
+			return false;
+		}
+
+		for (DTO dto : dtoList) {
+			DO ado = convertor.toDO(dto);
+			mapper.insert(ado);
+		}
+		return true;
+	}
+
+	@Override
+	public boolean saveUpdateBatchDO(Collection<DO> entityList) {
+		if (CommonUtil.isEmpty(entityList)) {
+			return false;
+		}
+
+		if (!isBaseEntity) {
+			throw new BizException("当前 Entity 不是 BaseEntity 的子类，不支持该操作");
+		}
+
+		for (DO aDo : entityList) {
+			BaseEntity entity = (BaseEntity) aDo;
+			if (entity.getId() == null) {
+				mapper.insert(aDo);
+			} else {
+				if (mapper.selectById(entity.getId()) == null) {
+					mapper.insert(aDo);
+				} else {
+					mapper.updateById(aDo);
+				}
+			}
+		}
+		return true;
+	}
+
+
 	@Transactional(rollbackFor = Exception.class)
-	public boolean saveBatch(Collection<DTO> dtoList, int batchSize) {
+	@Override
+	public boolean updateBatchDO(Collection<DO> entityList) {
+
+		if (!isBaseEntity) {
+			throw new BizException("当前 Entity 不是 BaseEntity 的子类，不支持该操作");
+		}
+
+		for (DO aDo : entityList) {
+			BaseEntity entity = (BaseEntity) aDo;
+			if (entity.getId() == null) {
+				continue;
+			}
+			mapper.updateById(aDo);
+		}
+
+		return true;
+	}
+
+	@Override
+	public boolean updateBatchDTO(Collection<DTO> dtoList) {
+		if (CommonUtil.isEmpty(dtoList)) {
+			return false;
+		}
 		Collection<DO> entityList = dtoList.stream().map(e -> convertor.toDO(e)).collect(Collectors.toList());
-		String sqlStatement = getSqlStatement(SqlMethod.INSERT_ONE);
-		return executeBatch(entityList, batchSize, (sqlSession, entity) -> sqlSession.insert(sqlStatement, entity));
-	}
-
-	@Transactional(rollbackFor = Exception.class)
-	@Override
-	public boolean saveOrUpdateBatch(Collection<DO> entityList, int batchSize) {
-		TableInfo tableInfo = TableInfoHelper.getTableInfo(entityClass);
-		Assert.notNull(tableInfo, "error: can not execute. because can not find cache of TableInfo for entity!");
-		String keyProperty = tableInfo.getKeyProperty();
-		Assert.notEmpty(keyProperty, "error: can not execute. because can not find column for id from entity!");
-		return SqlHelper.saveOrUpdateBatch(this.entityClass, this.mapperClass, this.log, entityList, batchSize, (sqlSession, entity) -> {
-			Object idVal = ReflectionKit.getFieldValue(entity, keyProperty);
-			return StringUtils.checkValNull(idVal) || CollectionUtils.isEmpty(sqlSession.selectList(getSqlStatement(SqlMethod.SELECT_BY_ID), entity));
-		}, (sqlSession, entity) -> {
-			MapperMethod.ParamMap<DO> param = new MapperMethod.ParamMap<>();
-			param.put(Constants.ENTITY, entity);
-			sqlSession.update(getSqlStatement(SqlMethod.UPDATE_BY_ID), param);
-		});
-	}
-
-	@Transactional(rollbackFor = Exception.class)
-	@Override
-	public boolean updateBatchById(Collection<DO> entityList) {
-
-		int batchSize = 1000;
-		String sqlStatement = getSqlStatement(SqlMethod.UPDATE_BY_ID);
-		return executeBatch(entityList, batchSize, (sqlSession, entity) -> {
-			MapperMethod.ParamMap<DO> param = new MapperMethod.ParamMap<>();
-			param.put(Constants.ENTITY, entity);
-			sqlSession.update(sqlStatement, param);
-		});
+		return updateBatchDO(entityList);
 	}
 
 	public List<DTO> selectAll() {
+
 		if (ThreadPagingUtil.get() == null) {
-			PageParam pageParam = PageParam.instanceByPageIndex(1,1000);
-			ThreadPagingUtil.set(pageParam);
+			PageParam pp = PageParam.instanceByOffset(0, 1000);
+			ThreadPagingUtil.set(pp);
+			ThreadPagingUtil.turnOn();
 		}
-		ThreadPagingUtil.turnOn();
+
+		if (isBaseEntity) {
+			QueryWrapper<DO> query = new QueryWrapper<>();
+			query.eq("is_delete", YesOrNoEnum.N.name());
+			return convertToDtoList(getBaseMapper().selectList(query));
+		}
 		return convertToDtoList(getBaseMapper().selectList(null));
+	}
+
+	public Integer selectCount(Wrapper<DO> query) {
+		return getBaseMapper().selectCount(query);
 	}
 
 }

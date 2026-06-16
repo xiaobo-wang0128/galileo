@@ -13,7 +13,7 @@ import java.util.Map;
 @Accessors(chain = true)
 public class DictVO {
 
-    private Integer appId;
+    private Long appId;
 
     /**
      * 应用 code
@@ -23,7 +23,7 @@ public class DictVO {
     /**
      * 字条id
      */
-    private Integer dictId;
+    private Long dictId;
 
     /**
      * 字条 key

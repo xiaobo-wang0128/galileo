@@ -48,6 +48,10 @@ public class AutoTranslate {
             return;
         }
 
+        if (!XunFeiUtil.hasOpen()) {
+            log.info("未开启自动翻译配置");
+            return;
+        }
         try {
 
             List<I18nApp> allApps = i18nAppMapper.selectList(new QueryWrapper<>());
@@ -81,6 +85,10 @@ public class AutoTranslate {
                         }
 
                         List<String> lans = appLocatMap.get(i18nDictionaryKey.getAppCode());
+
+                        if (CommonUtil.isEmpty(lans)) {
+                            continue;
+                        }
 
                         boolean success = false;
 

@@ -1,0 +1,75 @@
+package ${package.Controller};
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import ${package.Service}.$!{superServiceClass}${table.serviceName};
+import ${package.Entity.substring(0, $package.Entity.lastIndexOf('.'))}.dto.$!{superServiceClass}${entity}DTO;
+import org.springframework.web.bind.annotation.RequestBody;
+import java.util.List;
+
+/**
+ * <p>
+ * $!{table.comment} 前端入口
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Controller
+public class ${table.controllerName} {
+	#set($bo = $table.serviceName.substring(0,1).toLowerCase() + $table.serviceName.substring(1))
+
+	@Autowired
+	private $!{superServiceClass}${table.serviceName} $bo;
+
+	/**
+	 * $!{table.comment} - 新增/修改
+	 *
+	 * @param dto
+	 */
+	public void saveUpdate(@RequestBody $!{superServiceClass}${entity}DTO dto) {
+		if(dto.getId() == null){
+			${bo}.insert(dto);
+		}
+		else{
+			$!{superServiceClass}${entity}DTO db = ${bo}.selectById(dto.getId());
+			if(db != null){
+				${bo}.updateById(dto);
+			}
+		}
+	}
+
+	/**
+	 * $!{table.comment} - 删除
+	 *
+	 * @param id
+	 */
+	public void remove(Long id) {
+		$!{superServiceClass}${entity}DTO db = ${bo}.selectById(id);
+		if(db != null){
+			${bo}.removeById(id);
+		}
+	}
+
+	/**
+	 * $!{table.comment} - 查询
+	 *
+	 * @return
+	 */
+	public List<$!{superServiceClass}${entity}DTO> selectAll() {
+		return ${bo}.selectAll();
+	}
+
+	/**
+	 * $!{table.comment} - 详情
+	 *
+	 * @param id
+	 * @return
+	 */
+	public $!{superServiceClass}${entity}DTO detail(Long id) {
+		$!{superServiceClass}${entity}DTO db = ${bo}.selectById(id);
+		return db;
+	}
+
+}
+

@@ -22,7 +22,7 @@ public class DocScanJob {
         String projectPath = args[1]; // "/Users/wangxiaobo/project/_codes/aml_2022/bronze.git";
         String outputFileName = args[2];  // "/Users/wangxiaobo/project/_codes/aml_2022/galileo/galileo-vue/galileo-portal-vue/src/page/system/api_sub/api.json";
         String rootPackage = args[3]; // "com.iml";
-
+        String i18nServer =  args[4]; // "http://x.x.x.x";
 
         // webx url 扫描
         if ("WEBX_URL".equals(jobType)) {
@@ -35,7 +35,7 @@ public class DocScanJob {
         }
         // 枚举 i18n
         else if ("ENUM_SCAN".equals(jobType)) {
-            EnumScan.doScan(projectPath, outputFileName);
+            EnumScan.doScan(projectPath, outputFileName, i18nServer);
         }
         // 枚举 i18n json
         else if ("ENUM_SCAN_JSON".equals(jobType)) {

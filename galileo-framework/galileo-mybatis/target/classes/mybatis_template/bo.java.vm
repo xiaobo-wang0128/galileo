@@ -1,0 +1,19 @@
+package ${package.Service};
+
+import org.vot.common.config.config.framwork.mybatis.bo.BaseBO;
+import ${package.Entity}.${entity};
+
+import ${package.Entity.substring(0, $package.Entity.length() - 11 )}.dto.${entity}DTO;
+
+/**
+ * <p>
+ * $!{table.comment} 服务类
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+
+public interface ${table.serviceName} extends BaseBO<${entity}, ${entity}DTO> {
+
+}

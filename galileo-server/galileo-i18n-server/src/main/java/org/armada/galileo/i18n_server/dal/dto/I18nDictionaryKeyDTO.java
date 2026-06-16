@@ -17,11 +17,11 @@ public class I18nDictionaryKeyDTO {
     /**
      * 主键
      */
-    private Integer id;
+    private Long id;
     /**
      * 应用主键
      */
-    private Integer appId;
+    private Long appId;
     /**
      * 应用编码
      */
@@ -96,14 +96,14 @@ public class I18nDictionaryKeyDTO {
     /**
      * 转换string词条Id List
      */
-    private List<Integer> transitionDictionaryKeyIds = new ArrayList<>();
+    private List<Long> transitionDictionaryKeyIds = new ArrayList<>();
 
     public void transition() {
         if (StrUtil.isNotEmpty(this.dictionaryKeyIds)) {
             if (this.dictionaryKeyIds.length() > 2) {
                 String[] split = this.dictionaryKeyIds.substring(1, this.dictionaryKeyIds.length() - 1).split(",");
                 for (String s : split) {
-                    this.transitionDictionaryKeyIds.add(Integer.valueOf(s));
+                    this.transitionDictionaryKeyIds.add(Long.valueOf(s));
                 }
             }
         }

@@ -61,7 +61,7 @@ public class DictRpc {
      */
     public void saveUpdate(@RequestBody DictVO dto) {
 
-        Integer dictId = dto.getDictId();
+        Long dictId = dto.getDictId();
 
         I18nDictionaryKey dict = dictionaryKeyMapper.selectById(dictId);
         if (dict == null) {
@@ -265,7 +265,6 @@ public class DictRpc {
     public void auto_create_dict_by_scan(String appCode, HttpServletRequest request) throws Exception {
 
         String json = CommonUtil.readJsonForm(request);
-
 
         I18nApp app = dictService.selectByAppCode(appCode);
         if (app == null) {

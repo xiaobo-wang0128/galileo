@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class DictQueryVO {
 
-    Integer appId;
+    Long appId;
 
     private String appCode;
 

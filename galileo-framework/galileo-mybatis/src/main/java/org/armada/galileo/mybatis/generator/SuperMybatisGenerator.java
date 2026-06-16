@@ -1,69 +1,74 @@
 package org.armada.galileo.mybatis.generator;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.InjectionConfig;
-import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
-import com.baomidou.mybatisplus.generator.config.FileOutConfig;
-import com.baomidou.mybatisplus.generator.config.GlobalConfig;
-import com.baomidou.mybatisplus.generator.config.IFileCreate;
-import com.baomidou.mybatisplus.generator.config.PackageConfig;
-import com.baomidou.mybatisplus.generator.config.StrategyConfig;
-import com.baomidou.mybatisplus.generator.config.TemplateConfig;
+import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.FileType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.VelocityTemplateEngine;
 
+import java.io.File;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
 public class SuperMybatisGenerator {
 
-    String driverClassName = null;
-    String url = null;
-    String username = null;
-    String password = null;
-    String rootPackagePath = "com.hairoutech.wms.core.domain.mysql";
+    public static String driverClassName = null;
+    public static String url = null;
+    public static String username = null;
+    public static String password = null;
+
+//	static {
+//		driverClassName = YamlReader.instance.getValueByKey("spring.datasource.driverClassName");
+//		url = YamlReader.instance.getValueByKey("spring.datasource.url");
+//		username = YamlReader.instance.getValueByKey("spring.datasource.username");
+//		password = YamlReader.instance.getValueByKey("spring.datasource.password");
+//	}
 
 
-    public SuperMybatisGenerator(String driverClassName,
-                                 String url,
-                                 String username,
-                                 String password,
-                                 String rootPackagePath) {
+    public static String dalPath = null;
+    public static String webPath = null;
+    public static String servicePath = null;
 
-        this.driverClassName = driverClassName;
-        this.url = url;
-        this.username = username;
-        this.password = password;
-        this.rootPackagePath = rootPackagePath;
+    public static enum JobType {
+        web,
 
+        dal,
+
+        service,
+
+        spi,
+
+        transfer
     }
 
-
-    public void doGenerateJob(String modulePath, String subModuleName, String tables, boolean generateRpc) {
-
-        doGenerateCommon(modulePath, subModuleName, tables, generateRpc);
-
-        doGenerateDTO(modulePath, subModuleName, tables);
-    }
 
     /**
-     * 生成 mapper、entity、bo、web_rpc
+     * 生成代码
      *
-     * @param modulePath    模块相对路径
-     * @param subModuleName 子模块名
-     * @param tables        表名
+     * @param rootPackage 包根目录
+     * @param jobType     任务类型
+     * @param targetPath  目录路径
+     * @param subModel    子模块名
+     * @param tables      表名
      */
-    public void doGenerateCommon(String modulePath, String subModuleName, String tables, boolean generateRpc) {
+    public static void doGenerateCommon(String rootPackage, JobType jobType, String targetPath, String subModel, String tables) {
 
-        // 路径 相关
-        String rootPackage = rootPackagePath;
+        String[] tableNames = tables.split(",|\\s+");
 
-        String[] tableNames = tables.split(",");
+        boolean needSetSuperService = false;
+        String sys = rootPackage.substring(rootPackage.lastIndexOf(".") + 1);
+        for (String tableName : tableNames) {
+            if (tableName.toLowerCase(Locale.ROOT).startsWith(sys)) {
+                needSetSuperService = true;
+                break;
+            }
+        }
 
         // 代码生成器
         AutoGenerator mpg = new AutoGenerator();
@@ -78,37 +83,31 @@ public class SuperMybatisGenerator {
         mpg.setDataSource(dsc);
 
         // 全局配置
+        URL url = SuperMybatisGenerator.class.getResource("");
         GlobalConfig gc = new GlobalConfig();
-        String userDir = System.getProperty("user.dir");
-        // userDir = userDir.substring(0, userDir.lastIndexOf("/")) + "/" + modulePath;
 
-        String projectPath = userDir + "/" + modulePath;
+        String userDir = url.getPath();
 
-        gc.setOutputDir(projectPath + "/src/main/java");
-        if(! new File(gc.getOutputDir()).exists()){
-            throw  new RuntimeException("源码路径不存在: "  + gc.getOutputDir());
+        String tmpSign = "/galaxy-common/common-generate/target";
+        if (userDir.indexOf(tmpSign) != -1) {
+            userDir = userDir.substring(0, userDir.indexOf(tmpSign));
         }
 
+        String projectPath = userDir;
+        gc.setOutputDir(projectPath + "/" + targetPath + "/src/main/java");
         gc.setAuthor("");
         gc.setOpen(false);
         gc.setDateType(DateType.ONLY_DATE);
 
-        gc.setServiceName("%sBO");
-        gc.setServiceImplName("%sBOImpl");
-        gc.setControllerName("%sRpc");
-        mpg.setGlobalConfig(gc);
 
         // 包配置
         PackageConfig pc = new PackageConfig();
-        pc.setModuleName(subModuleName);
-        pc.setParent(rootPackagePath);
-        pc.setEntity("dal.entity");
-        pc.setMapper("dal.mapper");
-        pc.setService("bo");
-        pc.setServiceImpl("bo.impl");
-        pc.setController("web.rpc");
 
-        mpg.setPackageInfo(pc);
+        pc.setModuleName(subModel);
+        pc.setParent(rootPackage);
+
+        // 配置模板
+        TemplateConfig templateConfig = new TemplateConfig();
 
         // 自定义配置
         InjectionConfig cfg = new InjectionConfig() {
@@ -117,150 +116,134 @@ public class SuperMybatisGenerator {
             }
         };
 
-        // 如果模板引擎是 velocity
-        String templatePath = "/templates/mapper.xml.vm";
-
-        // 自定义输出配置
-        List<FileOutConfig> focList = new ArrayList<>();
-        focList.add(new FileOutConfig(templatePath) {
-            public String outputFile(com.baomidou.mybatisplus.generator.config.po.TableInfo tableInfo) {
-                return projectPath + "/src/main/java/" + rootPackage.replaceAll("\\.", "/") + "/" + pc.getModuleName() + "/dal/mapper/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
-            }
-        });
-        cfg.setFileCreate(new IFileCreate() {
-            @Override
-            public boolean isCreate(ConfigBuilder configBuilder, FileType fileType, String filePath) {
-                if (fileType == FileType.MAPPER || fileType == FileType.XML || fileType == FileType.SERVICE || fileType == FileType.SERVICE_IMPL || fileType == FileType.CONTROLLER) {
-                    return !new File(filePath).exists();
-                }
-                return true;
-            }
-        });
-
-        cfg.setFileOutConfigList(focList);
-        mpg.setCfg(cfg);
-
-        // 配置模板
-        TemplateConfig templateConfig = new TemplateConfig();
-
         // 不生成如下类型模板
-        templateConfig.setXml(null);
-        templateConfig.setController(null);
-        templateConfig.setService("/mybatis_template/bo.java.vm");
-        templateConfig.setServiceImpl("/mybatis_template/bo.impl.java.vm");
-        if (generateRpc) {
+        if (jobType == JobType.web) {
+            pc.setController("web.rpc");
+            pc.setService("bo");
+            pc.setServiceImpl("bo.impl");
+
+            gc.setServiceName("%sBO");
+            gc.setServiceImplName("%sBOImpl");
+            gc.setControllerName("%sRpc");
+
             templateConfig.setController("/mybatis_template/web_rpc.java.vm");
-        } else {
+
+            templateConfig.setEntity(null);
+            templateConfig.setXml(null);
+            templateConfig.setService(null);
+            templateConfig.setServiceImpl(null);
+            templateConfig.setMapper(null);
+            templateConfig.setEntityKt(null);
+
+        } else if (jobType == JobType.spi) {
+            gc.setEntityName("%sDTO");
+            pc.setEntity("dto");
+
+            templateConfig.setEntity("/mybatis_template/dto.java.vm");
+
             templateConfig.setController(null);
+            templateConfig.setXml(null);
+            templateConfig.setService(null);
+            templateConfig.setServiceImpl(null);
+            templateConfig.setMapper(null);
+            templateConfig.setEntityKt(null);
+
+        } else if (jobType == JobType.transfer) {
+
+            gc.setServiceName("%sTransfer");
+            pc.setService("transfer");
+
+            templateConfig.setService("/mybatis_template/transfer.java.vm");
+
+            templateConfig.setController(null);
+            templateConfig.setEntity(null);
+            templateConfig.setXml(null);
+            templateConfig.setServiceImpl(null);
+            templateConfig.setMapper(null);
+            templateConfig.setEntityKt(null);
+
+
+            pc.setEntity("dal.entity");
+
+        } else if (jobType == JobType.dal) {
+
+            String templatePath = "/templates/mapper.xml.vm";
+
+            List<FileOutConfig> focList = new ArrayList<>();
+
+            // 自定义输出配置
+            focList.add(new FileOutConfig(templatePath) {
+                public String outputFile(com.baomidou.mybatisplus.generator.config.po.TableInfo tableInfo) {
+                    String ttPath = gc.getOutputDir() + "/" + rootPackage.replaceAll("\\.", "/") + "/" + pc.getModuleName() + "/dal/mapper/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
+
+                    System.out.println("ttPath: " + ttPath);
+                    return ttPath;
+                }
+            });
+
+            cfg.setFileOutConfigList(focList);
+
+            templateConfig.setXml(null);
+            templateConfig.setService(null);
+            templateConfig.setServiceImpl(null);
+            templateConfig.setController(null);
+            templateConfig.setEntity("/mybatis_template/entity.java.vm");
+
+
+            pc.setEntity("dal.entity");
+            pc.setMapper("dal.mapper");
+
+        } else if (jobType == JobType.service) {
+            gc.setServiceName("%sBO");
+            gc.setServiceImplName("%sBOImpl");
+
+            pc.setService("bo");
+            pc.setServiceImpl("bo.impl");
+            pc.setEntity("dal.entity");
+            pc.setMapper("dal.mapper");
+
+            templateConfig.setService("/mybatis_template/bo.java.vm");
+            templateConfig.setServiceImpl("/mybatis_template/bo.impl.java.vm");
+
+            templateConfig.setController(null);
+            templateConfig.setEntity(null);
+            templateConfig.setXml(null);
+            templateConfig.setMapper(null);
+            templateConfig.setEntityKt(null);
+
         }
-
-        mpg.setTemplate(templateConfig);
-
-        // 策略配置
-        StrategyConfig strategy = new StrategyConfig();
-        strategy.setNaming(NamingStrategy.underline_to_camel);
-        strategy.setColumnNaming(NamingStrategy.underline_to_camel);
-
-        // 所有实体类的基类， 等代码全部迁移完成，测试通过后 再调整
-        // strategy.setSuperEntityClass("com.haiq.train.common.base.BaseEntity");
-        // strategy.setSuperEntityColumns("id", "create_time", "update_time",
-        // "create_user", "update_user");
-
-        strategy.setEntityLombokModel(true);
-        strategy.setRestControllerStyle(false);
-        strategy.setInclude(tableNames);
-        strategy.setChainModel(true);
-
-        // 生成的文件去除表前缀
-        // strategy.setTablePrefix(pc.getModuleName() + "_");
-
-        mpg.setStrategy(strategy);
-
-        mpg.setTemplateEngine(new VelocityTemplateEngine());
-        mpg.execute();
-    }
-
-    /**
-     * 生成 DTO、 Transfer
-     *
-     * @param modulePath    模块相对路径
-     * @param subModuleName 子模块名
-     * @param tables        表名
-     */
-    public void doGenerateDTO(String modulePath, String subModuleName, String tables) {
-
-        String[] tableNames = tables.split(",");
-
-        // 代码生成器
-        AutoGenerator mpg = new AutoGenerator();
-
-        // 数据源配置
-        DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl(url);
-        dsc.setDriverName(driverClassName);
-        dsc.setUsername(username);
-        dsc.setPassword(password);
-        mpg.setDataSource(dsc);
-
-        // 全局配置
-        GlobalConfig gc = new GlobalConfig();
-        String userDir = System.getProperty("user.dir");
-        // userDir = userDir.substring(0, userDir.lastIndexOf("/")) + "/" + modulePath;
-        String projectPath = userDir + "/" + modulePath;
-        gc.setOutputDir(projectPath + "/src/main/java");
-        if(! new File(gc.getOutputDir()).exists()){
-            throw  new RuntimeException("源码路径不存在: "  + gc.getOutputDir());
-        }
-
-        gc.setAuthor("");
-        gc.setOpen(false);
-        gc.setDateType(DateType.ONLY_DATE);
-        gc.setEntityName("%sDTO");
-        gc.setServiceName("%sTransfer");
-
-        mpg.setGlobalConfig(gc);
-
-        // 包配置
-        PackageConfig pc = new PackageConfig();
-        pc.setModuleName(subModuleName);
-        pc.setParent(rootPackagePath);
-        pc.setEntity("dal.dto");
-        pc.setService("dal.transfer");
 
         mpg.setPackageInfo(pc);
 
-        // 自定义配置
-        InjectionConfig cfg = new InjectionConfig() {
-            @Override
-            public void initMap() {
-            }
-        };
-
-        cfg.setFileCreate(new IFileCreate() {
-            @Override
-            public boolean isCreate(ConfigBuilder configBuilder, FileType fileType, String filePath) {
-                if (fileType == FileType.ENTITY || fileType == FileType.SERVICE) {
-                    return !new File(filePath).exists();
+        if (jobType == JobType.spi) {
+            cfg.setFileCreate(new IFileCreate() {
+                @Override
+                public boolean isCreate(ConfigBuilder configBuilder, FileType fileType, String filePath) {
+                    if (fileType == FileType.ENTITY || fileType == FileType.MAPPER || fileType == FileType.XML || fileType == FileType.SERVICE || fileType == FileType.SERVICE_IMPL || fileType == FileType.CONTROLLER) {
+                        return !new File(filePath).exists();
+                    }
+                    return true;
                 }
-                return true;
-            }
-        });
+            });
+        } else {
+            cfg.setFileCreate(new IFileCreate() {
+                @Override
+                public boolean isCreate(ConfigBuilder configBuilder, FileType fileType, String filePath) {
+                    if (filePath.endsWith(".xml")) {
+                        return !new File(filePath).exists();
+                    }
+                    if (fileType == FileType.MAPPER || fileType == FileType.XML || fileType == FileType.SERVICE || fileType == FileType.SERVICE_IMPL || fileType == FileType.CONTROLLER) {
+                        return !new File(filePath).exists();
+                    }
+                    return true;
+                }
+            });
+        }
+
 
         mpg.setCfg(cfg);
+        mpg.setGlobalConfig(gc);
 
-        // 配置模板
-        TemplateConfig templateConfig = new TemplateConfig();
-
-        // 不生成如下类型模板
-        templateConfig.setEntity("/mybatis_template/dto.java.vm");
-        templateConfig.setService("/mybatis_template/transfer.java.vm");
-        templateConfig.setController(null);
-
-        templateConfig.setXml(null);
-
-        templateConfig.setServiceImpl(null);
-        templateConfig.setMapper(null);
-        templateConfig.setEntityKt(null);
 
         mpg.setTemplate(templateConfig);
 
@@ -270,9 +253,13 @@ public class SuperMybatisGenerator {
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
 
         // 所有实体类的基类， 等代码全部迁移完成，测试通过后 再调整
-        // strategy.setSuperEntityClass("com.haiq.train.common.base.BaseEntity");
-        // strategy.setSuperEntityColumns("id", "create_time", "update_time",
-        // "create_user", "update_user");
+        if (jobType == JobType.dal) {
+            strategy.setSuperEntityClass("org.vot.common.common.model.BaseEntity");
+        } else {
+            strategy.setSuperEntityClass("org.vot.common.common.model.BaseDTO");
+        }
+
+        strategy.setSuperEntityColumns("id", "gmt_create", "gmt_modify", "creator", "modifier", "is_delete", "tenant_id");
 
         strategy.setEntityLombokModel(true);
         strategy.setRestControllerStyle(false);
@@ -280,7 +267,17 @@ public class SuperMybatisGenerator {
         strategy.setChainModel(true);
 
         // 生成的文件去除表前缀
-        // strategy.setTablePrefix(pc.getModuleName() + "_");
+        if (jobType == JobType.web ) {
+            if (needSetSuperService) {
+                String system = rootPackage.substring(rootPackage.lastIndexOf(".") + 1);
+                strategy.setTablePrefix(system + "_");
+                strategy.setSuperServiceClass(system.substring(0, 1).toUpperCase(Locale.ROOT) + system.substring(1));
+            } else {
+                strategy.setTablePrefix("");
+                strategy.setSuperServiceClass("");
+            }
+        }
+
 
         mpg.setStrategy(strategy);
 

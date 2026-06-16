@@ -5,9 +5,9 @@ import org.armada.galileo.common.util.CommonUtil;
 import org.armada.galileo.common.util.Convert;
 import org.armada.galileo.common.util.HttpUtil;
 import org.armada.galileo.common.util.JsonUtil;
-import org.armada.galileo.i18n_server.user.LoginUser;
 import org.armada.galileo.i18n_server.util.LoginCookieUtil;
 import org.armada.galileo.annotation.mvc.NoToken;
+import org.armada.galileo.model.domain.LoginUser;
 import org.armada.galileo.mvc_plus.encrypt.EncryptUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -47,7 +47,7 @@ public class Login {
         }.getType());
 
         LoginUser u = new LoginUser();
-        u.setName(Convert.asString(map.get("name")));
+        u.setUserName(Convert.asString(map.get("name")));
         u.setUserId(Convert.asLong(map.get("id")));
         LoginCookieUtil.setLoginData(u, request, response);
 

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-06-03T17:08:40+0800",
+    date = "2026-06-15T11:45:40+0800",
     comments = "version: 1.5.0.Beta2, compiler: javac, environment: Java 11.0.27 (Azul Systems, Inc.)"
 )
 @Component
@@ -24,27 +24,6 @@ public class I18nDictionaryKeyTransferImpl implements I18nDictionaryKeyTransfer 
         if ( arg0.getId() != null ) {
             i18nDictionaryKey.setId( arg0.getId() );
         }
-        if ( arg0.getCreateTime() != null ) {
-            i18nDictionaryKey.setCreateTime( arg0.getCreateTime() );
-        }
-        if ( arg0.getUpdateTime() != null ) {
-            i18nDictionaryKey.setUpdateTime( arg0.getUpdateTime() );
-        }
-        if ( arg0.getCreateUser() != null ) {
-            i18nDictionaryKey.setCreateUser( arg0.getCreateUser() );
-        }
-        if ( arg0.getUpdateUser() != null ) {
-            i18nDictionaryKey.setUpdateUser( arg0.getUpdateUser() );
-        }
-        if ( arg0.getCreateUserId() != null ) {
-            i18nDictionaryKey.setCreateUserId( arg0.getCreateUserId() );
-        }
-        if ( arg0.getUpdateUserId() != null ) {
-            i18nDictionaryKey.setUpdateUserId( arg0.getUpdateUserId() );
-        }
-        if ( arg0.getStatus() != null ) {
-            i18nDictionaryKey.setStatus( arg0.getStatus() );
-        }
         if ( arg0.getAppId() != null ) {
             i18nDictionaryKey.setAppId( arg0.getAppId() );
         }
@@ -53,6 +32,9 @@ public class I18nDictionaryKeyTransferImpl implements I18nDictionaryKeyTransfer 
         }
         if ( arg0.getDictionaryKey() != null ) {
             i18nDictionaryKey.setDictionaryKey( arg0.getDictionaryKey() );
+        }
+        if ( arg0.getStatus() != null ) {
+            i18nDictionaryKey.setStatus( arg0.getStatus() );
         }
 
         return i18nDictionaryKey;
@@ -77,24 +59,6 @@ public class I18nDictionaryKeyTransferImpl implements I18nDictionaryKeyTransfer 
         }
         if ( arg0.getDictionaryKey() != null ) {
             i18nDictionaryKeyDTO.setDictionaryKey( arg0.getDictionaryKey() );
-        }
-        if ( arg0.getCreateTime() != null ) {
-            i18nDictionaryKeyDTO.setCreateTime( arg0.getCreateTime() );
-        }
-        if ( arg0.getUpdateTime() != null ) {
-            i18nDictionaryKeyDTO.setUpdateTime( arg0.getUpdateTime() );
-        }
-        if ( arg0.getCreateUser() != null ) {
-            i18nDictionaryKeyDTO.setCreateUser( arg0.getCreateUser() );
-        }
-        if ( arg0.getUpdateUser() != null ) {
-            i18nDictionaryKeyDTO.setUpdateUser( arg0.getUpdateUser() );
-        }
-        if ( arg0.getCreateUserId() != null ) {
-            i18nDictionaryKeyDTO.setCreateUserId( arg0.getCreateUserId() );
-        }
-        if ( arg0.getUpdateUserId() != null ) {
-            i18nDictionaryKeyDTO.setUpdateUserId( arg0.getUpdateUserId() );
         }
         if ( arg0.getStatus() != null ) {
             i18nDictionaryKeyDTO.setStatus( arg0.getStatus() );

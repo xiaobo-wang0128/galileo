@@ -190,7 +190,7 @@ public class DictService {
 
     }
 
-    public DictVO selectByAppAndDictKey(Integer appId, String dictKey) {
+    public DictVO selectByAppAndDictKey(Long appId, String dictKey) {
 
         QueryWrapper<I18nDictionaryKey> query = new QueryWrapper<>();
         query.eq("app_id", appId);
@@ -216,7 +216,7 @@ public class DictService {
 
     public DictVO autoCreateDictKey(I18nApp app, String dictKey, Map<String, String> defaultValues, int sort, String group) {
 
-        Integer appId = app.getId();
+        Long appId = app.getId();
         String appCode = app.getAppCode();
         int languageSize = app.getLocales().size();
 

@@ -1,9 +1,9 @@
 package org.armada.galileo.i18n_server.web.rpc;
 
-import org.armada.galileo.i18n_server.user.LoginUser;
-import org.armada.galileo.i18n_server.user.ThreadUser;
 import org.armada.galileo.i18n_server.util.LoginCookieUtil;
 import org.armada.galileo.annotation.mvc.NoToken;
+import org.armada.galileo.model.domain.LoginUser;
+import org.armada.galileo.model.domain.ThreadUser;
 import org.springframework.stereotype.Controller;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,13 +19,13 @@ public class LoginRpc {
     @NoToken
     public void mock(HttpServletRequest request, HttpServletResponse response) {
         LoginUser u = new LoginUser();
-        u.setName("test");
         u.setUserId(11L);
+        u.setUserName("test");
         LoginCookieUtil.setLoginData(u, request, response);
     }
 
     @NoToken
-    public LoginUser getLogin(){
+    public LoginUser getLogin() {
         return ThreadUser.get();
     }
 

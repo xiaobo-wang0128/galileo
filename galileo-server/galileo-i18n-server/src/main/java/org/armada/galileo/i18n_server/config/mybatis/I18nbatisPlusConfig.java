@@ -2,8 +2,9 @@ package org.armada.galileo.i18n_server.config.mybatis;
 
 import com.baomidou.mybatisplus.core.config.GlobalConfig;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
-import org.armada.galileo.i18n_server.config.interceptor.MybatisSqlLogInterceptor;
-import org.armada.galileo.mybatis.interceptor.MybatisSqlInterceptor;
+import org.armada.galileo.mybatis.interceptor.MybatisPageInterceptor;
+import org.armada.galileo.mybatis.interceptor.MybatisSqlLogInterceptor;
+import org.armada.galileo.mybatis.interceptor.MybatisUpdateInterceptor;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -41,12 +42,9 @@ public class I18nbatisPlusConfig {
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         factory.setMapperLocations(resolver.getResources("classpath*:org.armada.galileo.i18n_server.dal.mapper/*.xml"));
         factory.setPlugins(
-                new MybatisSqlInterceptor(),
+                new MybatisUpdateInterceptor(),
                 new MybatisSqlLogInterceptor()
         );
-        GlobalConfig globalConfig = new GlobalConfig();
-        globalConfig.setMetaObjectHandler(new I18nMetaObjectHandler());
-        factory.setGlobalConfig(globalConfig);
         return factory;
     }
 

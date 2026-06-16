@@ -374,7 +374,7 @@ public class ExcelUtil {
                         if (autoChangeType) {
                             if (tmp.matches("\\d+")) {
                                 // 设置单元格格式
-                                cell.setCellValue(Integer.valueOf(tmp));
+                                cell.setCellValue(Long.valueOf(tmp));
                                 cell.setCellStyle(intCellStyle);
                             } else if (tmp.matches("\\d+\\.\\d+")) {
                                 // 设置单元格格式

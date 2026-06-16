@@ -19,8 +19,8 @@ import java.util.Set;
  */
 public interface I18nDictionaryValueMapper extends BaseMapper<I18nDictionaryValue> {
 
-    List<DictionaryDTO> getValueByAppAndlocale(@Param("appId") Integer appId, @Param("locale") String locale);
+    List<DictionaryDTO> getValueByAppAndlocale(@Param("appId") Long appId, @Param("locale") String locale);
 
-    List<Map<String,Object>> getUnfinishedDictionaryByAppIdAndLocals(@Param("keys") Set<String> keys, @Param("appId") Integer appId, @Param("size") Integer size);
+    List<Map<String,Object>> getUnfinishedDictionaryByAppIdAndLocals(@Param("keys") Set<String> keys, @Param("appId") Long appId, @Param("size") Long size);
 
 }

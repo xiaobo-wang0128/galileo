@@ -1,8 +1,6 @@
 package org.armada.galileo.i18n_server.config.mvc;
 
 import org.armada.galileo.common.util.CommonUtil;
-import org.armada.galileo.i18n_server.config.interceptor.MvcCommonInterceptor;
-import org.armada.galileo.i18n_server.config.interceptor.PagingInterceptor;
 import org.armada.galileo.mvc_plus.converter.*;
 import org.armada.galileo.mvc_plus.support.MiniWebxServlet;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +63,7 @@ public class NovaPortalViewConfig {
 
         List<HandlerInterceptor> interceptors = new ArrayList<HandlerInterceptor>();
         // 登陆状态拦截器
-         interceptors.add(new MvcCommonInterceptor());
+         // interceptors.add(new MvcCommonInterceptor());
         // 分页参数拦截器
         interceptors.add(new PagingInterceptor());
 

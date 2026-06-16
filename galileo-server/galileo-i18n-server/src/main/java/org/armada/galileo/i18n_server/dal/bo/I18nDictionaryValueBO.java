@@ -18,5 +18,5 @@ import java.util.Set;
 
 public interface I18nDictionaryValueBO extends BaseBO<I18nDictionaryValue, I18nDictionaryValueDTO> {
 
-    List<Integer> getUnfinishedDictionaryByAppIdAndLocals(Set<String> keys, Integer appId, Integer size);
+    List<Long> getUnfinishedDictionaryByAppIdAndLocals(Set<String> keys, Long appId, Long size);
 }

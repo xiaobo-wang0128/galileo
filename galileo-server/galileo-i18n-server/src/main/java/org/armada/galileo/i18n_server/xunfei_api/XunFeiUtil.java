@@ -57,13 +57,13 @@ public class XunFeiUtil {
     private static final String WebITS_URL = "https://itrans.xfyun.cn/v2/its";
 
     // 应用ID（到控制台获取）
-    private static String APPID = "f46df18f";
+    private static String APPID = null; //"f46df18f";
 
     // 接口APISercet（到控制台机器翻译服务页面获取）
-    private static String API_SECRET = "OTNjMTg0MmFiOWZmNjJhNzVjOThhNWNm";
+    private static String API_SECRET = null; //"OTNjMTg0MmFiOWZmNjJhNzVjOThhNWNm";
 
     // 接口APIKey（到控制台机器翻译服务页面获取）
-    private static String API_KEY = "eb5a375478509ab8c82052c8fcc5b7a5";
+    private static String API_KEY = null; //"eb5a375478509ab8c82052c8fcc5b7a5";
 
     // 语种列表参数值请参照接口文档：https://doc.xfyun.cn/rest_api/机器翻译.html
     // 源语种
@@ -76,6 +76,12 @@ public class XunFeiUtil {
 //    private static final String TEXT = "中华人民共和国于1949年成立";
 
 
+    public static boolean hasOpen(){
+        if(CommonUtil.isNotEmpty(APPID) && CommonUtil.isNotEmpty(API_SECRET) && CommonUtil.isNotEmpty(API_KEY)){
+            return true;
+        }
+        return false;
+    }
 
 
     public static String doTranslate4Zh(String input, String jobType) throws Exception {

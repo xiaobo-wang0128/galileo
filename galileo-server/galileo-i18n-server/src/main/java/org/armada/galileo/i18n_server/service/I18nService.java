@@ -105,7 +105,7 @@
 //        }
 //    }
 //
-//    public Integer createOrUpdateI18nApp(I18nAppDTO i18nApp) {
+//    public Long createOrUpdateI18nApp(I18nAppDTO i18nApp) {
 //        if (i18nApp == null ||
 //                StrUtil.isEmpty(i18nApp.getAppCode()) ||
 //                // StrUtil.isEmpty(i18nApp.getAppName()) ||
@@ -158,13 +158,13 @@
 //                        .in(CollUtil.isNotEmpty(keys), "dictionary_key", keys)
 //                        .like(StrUtil.isNotEmpty(i18nDictionaryKeyDTO.getDictionaryKey()), "dictionary_key", i18nDictionaryKeyDTO.getDictionaryKey()));
 //        if (CollUtil.isNotEmpty(i18nDictionaryKeyDTOS)) {
-//            Set<Integer> dictionaryKeyId = i18nDictionaryKeyDTOS.stream().map(I18nDictionaryKeyDTO::getId).collect(Collectors.toSet());
+//            Set<Long> dictionaryKeyId = i18nDictionaryKeyDTOS.stream().map(I18nDictionaryKeyDTO::getId).collect(Collectors.toSet());
 //            List<I18nDictionaryValueDTO> i18nDictionaryValueDTOS = i18nDictionaryValueBO.selectList(
 //                    new QueryWrapper<I18nDictionaryValue>()
 //                            .in("dictionary_key_id", dictionaryKeyId)
 //                            .in("locale", i18nDictionaryKeyDTO.getLocales()));
 //            if (CollUtil.isNotEmpty(i18nDictionaryValueDTOS)) {
-//                Map<Integer, List<I18nDictionaryValueDTO>> listMap = i18nDictionaryValueDTOS.stream().collect(Collectors.groupingBy(I18nDictionaryValueDTO::getDictionaryKeyId));
+//                Map<Long, List<I18nDictionaryValueDTO>> listMap = i18nDictionaryValueDTOS.stream().collect(Collectors.groupingBy(I18nDictionaryValueDTO::getDictionaryKeyId));
 //                for (I18nDictionaryKeyDTO nDictionaryKeyDTO : i18nDictionaryKeyDTOS) {
 //                    nDictionaryKeyDTO.setAppCode(i18nAppDTO.getAppCode());
 //                    nDictionaryKeyDTO.setAppName(i18nAppDTO.getAppName());
@@ -181,7 +181,7 @@
 //        return i18nDictionaryKeyDTOS;
 //    }
 //
-//    private Set<String> queryBranchKeysByBranch(Map<String, List<String>> branchMaps, Integer appId) {
+//    private Set<String> queryBranchKeysByBranch(Map<String, List<String>> branchMaps, Long appId) {
 //        Set<String> keys = new HashSet<>();
 //        if (CollUtil.isNotEmpty(branchMaps) && CollUtil.isNotEmpty(branchMaps.values())) {
 //            branchMaps.forEach((k, v) -> {
@@ -196,7 +196,7 @@
 //        return keys;
 //    }
 //
-//    private Collection<String> queryBranchKeysByAppIdAndPathAndType(Integer appId, List<String> v, String code) {
+//    private Collection<String> queryBranchKeysByAppIdAndPathAndType(Long appId, List<String> v, String code) {
 //        return i18nBranchKeysMapper.selectList(Wrappers.<I18nBranchKeys>lambdaQuery()
 //                        .eq(I18nBranchKeys::getBranchType, code)
 //                        .eq(I18nBranchKeys::getAppId, appId)
@@ -222,7 +222,7 @@
 //        }
 //    }
 //
-//    private void removeValueByKeyId(Integer keyId) {
+//    private void removeValueByKeyId(Long keyId) {
 //        if (keyId != null) {
 //            List<I18nDictionaryValueDTO> i18nDictionaryValueDTOS = i18nDictionaryValueBO.selectList(new QueryWrapper<I18nDictionaryValue>().eq("dictionary_key_id", keyId));
 //            if (CollUtil.isNotEmpty(i18nDictionaryValueDTOS)) {
@@ -298,7 +298,7 @@
 //        }
 //    }
 //
-//    public void getImportTemplate(Integer appId, HttpServletResponse response) {
+//    public void getImportTemplate(Long appId, HttpServletResponse response) {
 //        I18nDictionaryKeyDTO i18nDictionaryKeyDTO = new I18nDictionaryKeyDTO();
 //        i18nDictionaryKeyDTO.setAppId(appId);
 //        List<I18nDictionaryKeyDTO> i18nAllAppDictionarys = (List) getI18nAllAppDictionary(i18nDictionaryKeyDTO, false);
@@ -379,7 +379,7 @@
 //
 //    public void importAppDictionary(HttpServletRequest request) {
 //        List<I18nAppDTO> i18nAppDTOS = i18nAppBO.selectAll();
-//        Map<String, Integer> codeByIdMap = i18nAppDTOS.stream().collect(Collectors.toMap(I18nAppDTO::getAppCode, I18nAppDTO::getId));
+//        Map<String, Long> codeByIdMap = i18nAppDTOS.stream().collect(Collectors.toMap(I18nAppDTO::getAppCode, I18nAppDTO::getId));
 //        try {
 //            byte[] uploadBytes = CommonUtil.getUploadBytes(request);
 //            List<Map<String, Object>> maps = ExcelUtil.getReader(IoUtil.toStream(uploadBytes)).readAll();
@@ -394,12 +394,12 @@
 //        }
 //    }
 //
-//    private void doImport(Map<String, Object> map, Map<String, Integer> codeByIdMap, AtomicInteger taskNum) {
+//    private void doImport(Map<String, Object> map, Map<String, Long> codeByIdMap, AtomicInteger taskNum) {
 //        try {
 //            String appCode = map.getOrDefault("appCode", "").toString();
 //            String dictionaryKey = map.getOrDefault("dictionaryKey", "").toString();
 //            if (StrUtil.isNotEmpty(appCode) && StrUtil.isNotEmpty(dictionaryKey)) {
-//                Integer appId = codeByIdMap.get(appCode);
+//                Long appId = codeByIdMap.get(appCode);
 //                if (appId != null) {
 //                    Map<String, Object> map1 = importMap.get(appCode + dictionaryKey);
 //                    map.remove("appCode");
@@ -484,7 +484,7 @@
 //            List<I18nAppDTO> app = i18nAppBO.selectList(new QueryWrapper<I18nApp>().eq("app_code", branchType.getAppCode()));
 //            if (CollUtil.isEmpty(app))
 //                return;
-//            Integer id = app.get(0).getId();
+//            Long id = app.get(0).getId();
 //            I18nBranchKeys i18nBranchKeys = i18nBranchKeysMapper.selectOne(Wrappers.<I18nBranchKeys>lambdaQuery()
 //                    .eq(I18nBranchKeys::getBranchType, branchType.getCode())
 //                    .eq(I18nBranchKeys::getAppId, id)
@@ -562,7 +562,7 @@
 //    }
 //
 //
-//    public List<Integer> getUnfinishedDictionary(I18nDictionaryKeyDTO i18nDictionaryKeyDTO) {
+//    public List<Long> getUnfinishedDictionary(I18nDictionaryKeyDTO i18nDictionaryKeyDTO) {
 //        I18nAppDTO i18nAppDTO = i18nAppBO.selectById(i18nDictionaryKeyDTO.getAppId());
 ////        if (i18nAppDTO != null && CollUtil.isNotEmpty(i18nAppDTO.getLocales())) {
 ////            i18nDictionaryKeyDTO.transition();
@@ -571,18 +571,18 @@
 ////        }
 //
 //        List<I18nApp> appList = appMapper.selectList(null);
-//        Map<Integer, I18nApp> appMap = appList.stream().collect(Collectors.toMap(e -> e.getId(), e -> e));
+//        Map<Long, I18nApp> appMap = appList.stream().collect(Collectors.toMap(e -> e.getId(), e -> e));
 //
 //        QueryWrapper<I18nDictionaryKey> keyQuery = new QueryWrapper<>();
 //        List<I18nDictionaryKey> keyList = dictionaryKeyMapper.selectList(keyQuery);
-//        Map<Integer, List<I18nDictionaryKey>> appKeyCache = keyList.stream().collect(Collectors.groupingBy(e -> e.getAppId()));
+//        Map<Long, List<I18nDictionaryKey>> appKeyCache = keyList.stream().collect(Collectors.groupingBy(e -> e.getAppId()));
 //
 //        QueryWrapper<I18nDictionaryValue> valueQuery = new QueryWrapper<>();
 //        valueQuery.isNotNull("dictionary_value");
 //        List<I18nDictionaryValue> valueList = dictionaryValueMapper.selectList(valueQuery);
-//        Map<Integer, List<I18nDictionaryValue>> appValueCache = valueList.stream().collect(Collectors.groupingBy(e -> e.getAppId()));
+//        Map<Long, List<I18nDictionaryValue>> appValueCache = valueList.stream().collect(Collectors.groupingBy(e -> e.getAppId()));
 //
-//        List<Integer> results = new ArrayList<>();
+//        List<Long> results = new ArrayList<>();
 //        for (I18nApp i18nApp : appList) {
 //            List<String> locales = i18nApp.getLocales();
 //
@@ -601,7 +601,7 @@
 //            }
 //
 //            // 每个字词 各有 多少种翻译  keyId: count
-//            Map<Integer, List<I18nDictionaryValue>> keyCount = appValues.stream().collect(Collectors.groupingBy(e -> e.getDictionaryKeyId()));
+//            Map<Long, List<I18nDictionaryValue>> keyCount = appValues.stream().collect(Collectors.groupingBy(e -> e.getDictionaryKeyId()));
 //
 //            for (I18nDictionaryKey appKey : appKeys) {
 //                if (CommonUtil.isEmpty(keyCount.get(appKey.getId())) || keyCount.get(appKey.getId()).size() < locales.size()) {
@@ -627,7 +627,7 @@
 //        throw new RuntimeException("密钥不正确");
 //    }
 //
-//    public Object getAppBranchs(Integer appId) {
+//    public Object getAppBranchs(Long appId) {
 //        Map<String, Set<String>> maps = new LinkedHashMap<>();
 //        if (appId != null) {
 //            I18nAppDTO i18nAppDTO = i18nAppBO.selectById(appId);

@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class EnumScan {
 
 
-    public static void doScan(String projectPath, String targetJsonFilePath) throws Exception {
+    public static void doScan(String projectPath, String targetJsonFilePath, String uploadI18nServer) throws Exception {
 
         List<String> srcPaths = new SourcePathScan(projectPath).generateSrcPath();
 
@@ -64,14 +64,19 @@ public class EnumScan {
                 }
             }
 
-//            String jsons = JsonUtil.toJson(keyUploads);
-//
-//            String appCode = (type == EnumItem.EnumItemType.I18nDictionary) ? "java_enum" : "java_error";
+            if (CommonUtil.isNotEmpty(uploadI18nServer)) {
 
-//            System.out.println(CommonUtil.format("start upload i18n dict, app: {}, json: {} ", appCode, jsons));
-//
-//            // 上传词条
-//            HttpUtil.postJson("http://i18n.imlb2c.com/i18n/i18n_server/DictRpc/auto_create_dict_by_scan.json?appCode=" + appCode, jsons);
+                String jsons = JsonUtil.toJson4Web(keyUploads);
+
+                System.out.println(jsons);
+
+                String appCode = (type == EnumItem.EnumItemType.I18nDictionary) ? "java_enum" : "java_error";
+
+                System.out.println(CommonUtil.format("start upload i18n dict, app: {} ", appCode));
+
+                // 上传词条
+                HttpUtil.postJson(uploadI18nServer + "/i18n/i18n_server/DictRpc/auto_create_dict_by_scan.json?appCode=" + appCode, jsons);
+            }
 
             // 前端国际枚举列表
             if (type == EnumItem.EnumItemType.I18nDictionary) {
