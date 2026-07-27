@@ -3,6 +3,8 @@ package org.armada.galileo.model.domain;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.armada.galileo.model.constant.RoleScopeEnum;
+import org.armada.galileo.model.constant.UserTypeEnum;
 
 /**
  * 当前登录用户（存储在 cookie 中, 不能加太多字段）
@@ -10,6 +12,43 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class LoginUser {
+
+    /**
+     * 当前用户是否为'平台管理员'
+     *
+     * @return
+     */
+    public boolean isSuperAdmin() {
+        return roleScope == RoleScopeEnum.DEFAULT; //&& userRoleType == RoleTypeEnum.ADMIN;
+    }
+
+    /**
+     * 当前用户是否为'机构'
+     *
+     * @return
+     */
+    public boolean isCompany() {
+        return roleScope == RoleScopeEnum.COMPANY && userType == UserTypeEnum.COMPANY;
+    }
+
+    /**
+     * 当前用户是否为客户
+     *
+     * @return
+     */
+    public boolean isCustomer() {
+        return userType == UserTypeEnum.CUSTOMER;
+    }
+
+    /**
+     * 当前用户组织类型: 供应商、机构、客户
+     */
+    private UserTypeEnum userType;
+
+    /**
+     * 当前用户角色有效范围：全局默认角色、公司角色
+     */
+    private RoleScopeEnum roleScope;
 
     /**
      * 用户Id
@@ -36,28 +75,10 @@ public class LoginUser {
      */
     private Long companyId;
 
-//    /**
-//     * 当前用户所属子机构code
-//     */
-//
-//    private String companyCode;
-
     /**
      * 当前用户所属子机构名称
      */
     private String companyName;
-//
-//    /**
-//     * 当前用户的 仓库id
-//     */
-//
-//    private Long currentWarehouseId;
-//
-//    /**
-//     * 客户 - 当前客户的 companyId
-//     */
-//
-//    private Long customerId;
 
     /**
      * 头像路径
@@ -115,6 +136,5 @@ public class LoginUser {
      * 当前用户所在部门名称
      */
     private String deptName;
-
 
 }

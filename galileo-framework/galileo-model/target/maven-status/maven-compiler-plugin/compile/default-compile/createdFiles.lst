@@ -1,0 +1,10 @@
+org/armada/galileo/model/domain/LabelValue.class
+org/armada/galileo/model/constant/YesOrNoEnum.class
+org/armada/galileo/model/constant/RoleTypeEnum.class
+org/armada/galileo/model/constant/UserTypeEnum.class
+org/armada/galileo/model/domain/KeyValue.class
+org/armada/galileo/model/domain/Pair.class
+org/armada/galileo/model/constant/RoleScopeEnum.class
+org/armada/galileo/model/domain/ThreadUser.class
+org/armada/galileo/model/constant/I18nDictionary.class
+org/armada/galileo/model/domain/LoginUser.class

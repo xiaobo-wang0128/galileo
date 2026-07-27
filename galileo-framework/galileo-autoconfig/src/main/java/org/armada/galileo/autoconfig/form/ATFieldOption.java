@@ -1,8 +1,8 @@
 package org.armada.galileo.autoconfig.form;
 
-import java.util.List;
-
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class ATFieldOption {
@@ -15,7 +15,7 @@ public class ATFieldOption {
 	/**
 	 * 选项值
 	 */
-	private String value;
+	private Object value;
 
 	/**
 	 * 备注
@@ -37,7 +37,7 @@ public class ATFieldOption {
 		/**
 		 * 选项值
 		 */
-		private String value;
+		private Object value;
 
 	}
 

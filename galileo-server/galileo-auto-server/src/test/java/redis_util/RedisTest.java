@@ -1,8 +1,6 @@
 package redis_util;
 
 import org.armada.galileo.AutoServer;
-import org.armada.galileo.auto_code.util.redis.CacheType;
-import org.armada.galileo.auto_code.util.redis.JedisUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

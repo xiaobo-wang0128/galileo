@@ -1,8 +1,8 @@
 package org.armada.galileo.autoconfig.form;
 
-import java.util.List;
-
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class ATField {
@@ -72,17 +72,17 @@ public class ATField {
 	 * 小数点位数
 	 */
 	private Integer precision;
-	
+
 	/**
 	 * 是否为组合表单
 	 */
 	private boolean combined;
-	
+
 	/**
 	 * 组合表单的配置项 json
 	 */
 	private String combinedFields;
-	
+
 	/**
 	 * 是否只读属性（ combined 类型的表单中会用到）
 	 */
@@ -99,10 +99,20 @@ public class ATField {
 	private String vif;
 
 	/**
-	 * 是否可追回， 仅针对于 list<object> 类型
+	 * 是否可追加， 仅针对于 list<object> 类型
 	 */
 	private boolean append;
-	
+
+	private String lineCode ;
+
+	private String prefix;
+
+	private String suffix ;
+
+	private int cssWidth;
+
+	private Boolean isFieldSet;
+
 //
 //	/**
 //	 * 后缀

@@ -22,9 +22,9 @@ import lombok.experimental.Accessors;
 public class OpenApiContext {
 
     /**
-     * 该平台对应的 货代租户 id
+     * 该平台对应的租户 id
      */
-    private Long agentId;
+    private Long tenantId;
 
     /**
      * 开放平台应用id

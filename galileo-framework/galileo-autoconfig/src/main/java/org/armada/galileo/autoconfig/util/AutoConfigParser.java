@@ -1,23 +1,19 @@
 package org.armada.galileo.autoconfig.util;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import lombok.extern.slf4j.Slf4j;
+import org.armada.galileo.autoconfig.annotation.AutoConfig;
 import org.armada.galileo.autoconfig.annotation.ConfigField;
-import org.armada.galileo.autoconfig.annotation.ConfigGroup;
 import org.armada.galileo.autoconfig.annotation.ConfigOption;
 import org.armada.galileo.autoconfig.annotation.Option;
 import org.armada.galileo.autoconfig.form.ATField;
 import org.armada.galileo.autoconfig.form.ATFieldOption;
 import org.armada.galileo.autoconfig.form.ATFormGroup;
-import org.armada.galileo.common.util.CommonUtil;
 import org.armada.galileo.common.util.JsonUtil;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.ReflectionUtils;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * autoconfig 的解析
@@ -28,82 +24,11 @@ import org.springframework.util.ReflectionUtils;
 @Slf4j
 public class AutoConfigParser {
 
-
-    public static void preCheck(List<NacosConfig> formValues) {
-        if (CommonUtil.isNotEmpty(formValues)) {
-            for (NacosConfig formValue : formValues) {
-                try {
-                    String clsName = formValue.getConfigId();
-                    String value = formValue.getConfigValue();
-
-                    Class<?> cls = Class.forName(clsName);
-
-                    ConfigGroup configGroup = cls.getDeclaredAnnotation(ConfigGroup.class);
-                    if (configGroup == null) {
-                        continue;
-                    }
-
-                    if (configGroup.preCheck()) {
-
-                        Method method = ReflectionUtils.findMethod(cls, "preCheck");
-                        if (method == null) {
-                            log.warn("{} 开启了 preCheck 校验，但没有实现该方法", clsName);
-                            continue;
-                        }
-
-                        Object obj = JsonUtil.fromJson(value, cls);
-
-                        method.invoke(obj);
-                    }
-                } catch (Exception e) {
-                    log.warn(e.getMessage(), e);
-                    throw new RuntimeException(CommonUtil.getDeepExceptionMsg(e));
-                }
-            }
-        }
-    }
-
-    public static void afterModify(List<NacosConfig> formValues) {
-        if (CommonUtil.isNotEmpty(formValues)) {
-            for (NacosConfig formValue : formValues) {
-                try {
-                    String clsName = formValue.getConfigId();
-                    String value = formValue.getConfigValue();
-
-                    Class<?> cls = Class.forName(clsName);
-
-                    ConfigGroup configGroup = cls.getDeclaredAnnotation(ConfigGroup.class);
-                    if (configGroup == null) {
-                        continue;
-                    }
-
-                    if (configGroup.afterModify()) {
-
-                        Method method = ReflectionUtils.findMethod(cls, "afterModify");
-                        if (method == null) {
-                            log.warn("{} 开启了 afterModify 校验，但没有实现该方法", clsName);
-                            continue;
-                        }
-                        Object obj = JsonUtil.fromJson(value, cls);
-                        method.invoke(obj);
-                    }
-                } catch (Exception e) {
-                    log.error(e.getMessage(), e);
-                }
-            }
-        }
-    }
-
-
     public static ATFormGroup parseForm(Class<?> configClass) {
 
-        ConfigGroup configGroup = configClass.getDeclaredAnnotation(ConfigGroup.class);
+        AutoConfig configGroup = configClass.getDeclaredAnnotation(AutoConfig.class);
 
         String className = configClass.getName();
-
-//		if ("org.armada.galileo.config.biz.StationConfig$SpaceAttribute".equals(className)) {
-//			System.out.println("");
-//		}
 
         String groupName = configGroup != null ? configGroup.group() : "";
         String groupDesc = configGroup != null ? configGroup.desc() : "";
@@ -166,6 +91,16 @@ public class AutoConfigParser {
             boolean readonly = configField.readonly();
 
             boolean slider = configField.slider();
+
+
+            String lineCode = configField.lineCode();
+
+            String prefix = configField.prefix();
+
+            String suffix = configField.suffix();
+
+            int cssWidth = configField.cssWidth();
+            boolean isFieldSet = configField.isFieldSet();
 
             // 是否多选
             boolean multiple = false;
@@ -259,13 +194,9 @@ public class AutoConfigParser {
 
                         // 加载子配置项
                         try {
-
                             Class<?> innerClass = Class.forName(innerType);
-
                             ATFormGroup innserFormGroup = AutoConfigParser.parseForm(innerClass);
-
                             combinedFields = JsonUtil.toJson(innserFormGroup.getFields());
-
                         } catch (Exception e) {
                             log.error(e.getMessage(), e);
                         }
@@ -310,6 +241,12 @@ public class AutoConfigParser {
             at.setSlider(slider);
             at.setVif(vif);
             at.setAppend(append);
+            at.setLineCode(lineCode);
+            at.setPrefix(prefix);
+            at.setSuffix(suffix);
+            at.setCssWidth(cssWidth);
+            at.setIsFieldSet(isFieldSet);
+
             fields.add(at);
         }
 
@@ -346,4 +283,9 @@ public class AutoConfigParser {
         return false;
     }
 
+    public static void preCheck(List<NacosConfig> formValues) {
+    }
+
+    public static void afterModify(List<NacosConfig> formValues) {
+    }
 }

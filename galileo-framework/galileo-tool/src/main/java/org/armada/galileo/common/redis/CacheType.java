@@ -1,4 +1,4 @@
-package org.armada.galileo.model.constant;
+package org.armada.galileo.common.redis;
 
 /**
  * 这个是公共的， 不要在这里添加枚举， 请在各个项目中定义自己的枚举

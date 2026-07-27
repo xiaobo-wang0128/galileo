@@ -1,10 +1,10 @@
 package org.armada.galileo.mybatis.mysql_auto;
 
 import lombok.extern.slf4j.Slf4j;
+import org.armada.galileo.common.redis.CacheType;
+import org.armada.galileo.common.redis.RedisSyncLock;
 import org.armada.galileo.common.util.CommonUtil;
 import org.armada.galileo.common.util.JsonUtil;
-import org.armada.galileo.model.constant.CacheType;
-import org.armada.galileo.model.util.SyncLockInterface;
 import org.armada.galileo.mybatis.annotation.Table;
 import org.armada.galileo.mybatis.domain.BaseEntity;
 import org.reflections.Reflections;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class AutoUpdateTableJob {
 
-    private SyncLockInterface syncLock;
+    private RedisSyncLock syncLock;
 
     private String jdbcUrl;
 
@@ -51,7 +51,7 @@ public class AutoUpdateTableJob {
     public AutoUpdateTableJob(
             String systemCode,
             List<String> entityPackageList,
-            SyncLockInterface syncLock,
+            RedisSyncLock syncLock,
             String jdbcUrl, String user, String password,
             boolean autoCreateUpdateTable) {
         this.syncLock = syncLock;

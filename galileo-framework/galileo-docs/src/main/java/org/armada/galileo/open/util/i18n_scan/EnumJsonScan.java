@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class EnumJsonScan {
 
 
-    public static void doScan(String projectPath, String targetJsonFilePath) throws Exception {
+    public static void doScan(String projectPath, String targetJsonFilePath, boolean onlyJson) throws Exception {
 
         List<String> srcPaths = new SourcePathScan(projectPath).generateSrcPath();
 
@@ -38,7 +38,6 @@ public class EnumJsonScan {
             scanEnumFiles(enumFileContents, allEnumItems, new File(srcPath));
         }
 
-
         LinkedHashMap map = new LinkedHashMap();
         for (EnumItem enumItem : allEnumItems) {
             if (EnumItem.EnumItemType.I18nDictionary == enumItem.getType()) {
@@ -46,12 +45,17 @@ public class EnumJsonScan {
             }
         }
 
-
         FileOutputStream fos = new FileOutputStream(targetJsonFilePath);
 
         String outputJson = JsonUtil.toJson(map);
 
-        String jsContent = "var __JAVA_ENUM_CONFIGS__=" + outputJson;
+        String jsContent = null;
+
+        if (onlyJson) {
+            jsContent = outputJson;
+        } else {
+            jsContent = "var __JAVA_ENUM_CONFIGS__=" + outputJson;
+        }
 
         fos.write(jsContent.getBytes(StandardCharsets.UTF_8));
 

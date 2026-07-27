@@ -32,19 +32,4 @@ public class ThreadUser {
         set(u);
     }
 
-
-    /**
-     * 设置用户上下文 warehouseId - 仅定时任务中使用
-     *
-     * @param warehouseId
-     */
-    public static void setCurrentWarehouseId(Long warehouseId) {
-        LoginUser u = get();
-        if (u == null) {
-            u = new LoginUser();
-        }
-        set(u);
-    }
-
-
 }

@@ -13,7 +13,7 @@ public class Option {
 	/**
 	 * 选项值
 	 */
-	private String value;
+	private Object value;
 
 	/**
 	 * 备注
@@ -23,12 +23,12 @@ public class Option {
 	public Option() {
 	}
 
-	public Option(String label, String value) {
+	public Option(String label, Object value) {
 		this.label = label;
 		this.value = value;
 	}
 
-	public Option(String label, String value, String remark) {
+	public Option(String label, Object value, String remark) {
 		this.label = label;
 		this.value = value;
 		this.remark = remark;

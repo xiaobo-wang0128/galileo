@@ -1,55 +1,75 @@
-package org.armada.galileo.auto_code.util.redis;
+package org.armada.galileo.common.redis;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.armada.galileo.common.util.CommonUtil;
 import org.armada.galileo.exception.BizException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 import redis.clients.jedis.*;
+import redis.clients.jedis.args.GeoUnit;
+import redis.clients.jedis.args.ListPosition;
 import redis.clients.jedis.commands.ProtocolCommand;
-import redis.clients.jedis.params.GeoRadiusParam;
-import redis.clients.jedis.params.ZAddParams;
-import redis.clients.jedis.params.ZIncrByParams;
+import redis.clients.jedis.params.*;
+import redis.clients.jedis.resps.GeoRadiusResponse;
+import redis.clients.jedis.resps.ScanResult;
+import redis.clients.jedis.resps.Tuple;
 import redis.clients.jedis.util.SafeEncoder;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+//@Order(30)
 //@Component
-public class JedisUtil {
+@Slf4j
+public class RedisUtil {
 
     private AtomicBoolean hasInit = new AtomicBoolean(false);
 
-    private Logger log = LoggerFactory.getLogger(JedisUtil.class);
-
     private JedisPool pool = null;
 
-    @Value("${spring.redis.host}")
-    private String host;
+//    @Value("${spring.redis.host}")
+//    private String host;
+//
+//    @Value("${spring.redis.password}")
+//    private String password;
+//
+//    @Value("${spring.redis.port}")
+//    private String port;
+//
+//    @Value("${spring.redis.database}")
+//    private Integer database;
+//
+//    @Value("${spring.redis.needInit:YES}")
+//    private String needInit;
 
-    @Value("${spring.redis.password}")
-    private String password;
+    private Boolean isAvailable = true;
 
-    @Value("${spring.redis.port}")
-    private String port;
+    public Boolean getIsAvailable() {
+        return isAvailable;
+    }
 
-    @Value("${spring.redis.database}")
-    private Integer database;
+    public void setIsAvailable(Boolean isAvailable) {
+        this.isAvailable = isAvailable;
+    }
 
-    @PostConstruct
-    public void init() {
+    public void init(
+            String host,
+            String password,
+            String port,
+            Integer database
+            ) {
 
         if (!hasInit.compareAndSet(false, true)) {
             return;
         }
         GenericObjectPoolConfig<Jedis> poolCfg = new GenericObjectPoolConfig<Jedis>();
         poolCfg.setMinIdle(5);
-        poolCfg.setMaxIdle(10);
+        poolCfg.setMaxIdle(20);
         poolCfg.setMaxTotal(100);
         poolCfg.setMaxWaitMillis(10000);
         poolCfg.setTestOnBorrow(false);
@@ -99,45 +119,6 @@ public class JedisUtil {
     }
 
 
-//
-//    public String set(CacheType cacheType, String key, String value, String nxxx, String expx, long time) {
-//        Jedis j = null;
-//        try {
-//            j = pool.getResource();
-//             if(CommonUtil.isNotEmpty(password)){ j.auth(password);}
-//            String redisKey = new StringBuilder(cacheType.toString()).append("_").append(key).toString();
-//            j.set
-//            return j.set(redisKey, value, nxxx, expx, time);
-//
-//        } catch (Exception e) {
-//            log.error("[reids]操作异常", e);
-//            throw new BizException("[reids]操作异常");
-//        } finally {
-//            if (j != null) {
-//                j.close();
-//            }
-//        }
-//
-//    }
-
-//    public String set(CacheType cacheType, String key, String value, String nxxx) {
-//        Jedis j = null;
-//        try {
-//            j = pool.getResource();
-//             if(CommonUtil.isNotEmpty(password)){ j.auth(password);}
-//            String redisKey = new StringBuilder(cacheType.toString()).append("_").append(key).toString();
-//            return j.set(redisKey, value, nxxx);
-//
-//        } catch (Exception e) {
-//            log.error("[reids]操作异常", e);
-//            throw new BizException("[reids]操作异常");
-//        } finally {
-//            if (j != null) {
-//                j.close();
-//            }
-//        }
-//    }
-
     public JedisPool getPool() {
         return pool;
     }
@@ -146,14 +127,10 @@ public class JedisUtil {
         Jedis j = null;
         try {
             j = pool.getResource();
-
             String redisKey = new StringBuilder(cacheType.toString()).append("_").append(key).toString();
-
             String v = j.get(redisKey);
             // log.info("[redis] get redisKey: " + redisKey + ", value:" + v);
-
             return v;
-
         } catch (Exception e) {
             log.error("[reids]操作异常", e);
             throw new BizException("[reids]操作异常");
@@ -162,14 +139,29 @@ public class JedisUtil {
                 j.close();
             }
         }
+    }
 
+
+    public String get(String redisKey) {
+        Jedis j = null;
+        try {
+            j = pool.getResource();
+            String v = j.get(redisKey);
+            return v;
+        } catch (Exception e) {
+            log.error("[reids]操作异常", e);
+            throw new BizException("[reids]操作异常");
+        } finally {
+            if (j != null) {
+                j.close();
+            }
+        }
     }
 
     public Boolean exists(CacheType cacheType, String key) {
         Jedis j = null;
         try {
             j = pool.getResource();
-
             String redisKey = new StringBuilder(cacheType.toString()).append("_").append(key).toString();
             return j.exists(redisKey);
         } catch (Exception e) {
@@ -237,10 +229,9 @@ public class JedisUtil {
                 j.close();
             }
         }
-
     }
 
-    public Long expire(String key, long seconds) {
+    public Long expire(String key, int seconds) {
         Jedis j = null;
         try {
             j = pool.getResource();
@@ -552,6 +543,9 @@ public class JedisUtil {
             j = pool.getResource();
 
             String redisKey = new StringBuilder(cacheType.toString()).append("_").append(key).toString();
+
+            log.info("[redis] setex key: {}, value: {}, expire:{} ", redisKey, value, seconds);
+
             return j.setex(redisKey, seconds, value);
 
         } catch (Exception e) {
@@ -562,7 +556,6 @@ public class JedisUtil {
                 j.close();
             }
         }
-
     }
 
     public String psetex(CacheType cacheType, String key, long milliseconds, String value) {
@@ -1420,7 +1413,7 @@ public class JedisUtil {
 
     }
 
-    public Set<String> zrange(CacheType cacheType, String key, long start, long end) {
+    public List<String> zrange(CacheType cacheType, String key, long start, long end) {
         Jedis j = null;
         try {
             j = pool.getResource();
@@ -1534,7 +1527,7 @@ public class JedisUtil {
 
     }
 
-    public Set<String> zrevrange(CacheType cacheType, String key, long start, long end) {
+    public List<String> zrevrange(CacheType cacheType, String key, long start, long end) {
         Jedis j = null;
         try {
             j = pool.getResource();
@@ -1553,7 +1546,7 @@ public class JedisUtil {
 
     }
 
-    public Set<Tuple> zrangeWithScores(CacheType cacheType, String key, long start, long end) {
+    public List<Tuple> zrangeWithScores(CacheType cacheType, String key, long start, long end) {
         Jedis j = null;
         try {
             j = pool.getResource();
@@ -1572,7 +1565,7 @@ public class JedisUtil {
 
     }
 
-    public Set<Tuple> zrevrangeWithScores(CacheType cacheType, String key, long start, long end) {
+    public List<Tuple> zrevrangeWithScores(CacheType cacheType, String key, long start, long end) {
         Jedis j = null;
         try {
             j = pool.getResource();
@@ -1705,7 +1698,7 @@ public class JedisUtil {
 
     }
 
-    public Set<String> zrangeByScore(CacheType cacheType, String key, double min, double max) {
+    public List<String> zrangeByScore(CacheType cacheType, String key, double min, double max) {
         Jedis j = null;
         try {
             j = pool.getResource();
@@ -1724,7 +1717,7 @@ public class JedisUtil {
 
     }
 
-    public Set<String> zrangeByScore(CacheType cacheType, String key, String min, String max) {
+    public List<String> zrangeByScore(CacheType cacheType, String key, String min, String max) {
         Jedis j = null;
         try {
             j = pool.getResource();
@@ -1743,7 +1736,7 @@ public class JedisUtil {
 
     }
 
-    public Set<String> zrevrangeByScore(CacheType cacheType, String key, double max, double min) {
+    public List<String> zrevrangeByScore(CacheType cacheType, String key, double max, double min) {
         Jedis j = null;
         try {
             j = pool.getResource();
@@ -1762,7 +1755,7 @@ public class JedisUtil {
 
     }
 
-    public Set<String> zrangeByScore(CacheType cacheType, String key, double min, double max, int offset, int count) {
+    public List<String> zrangeByScore(CacheType cacheType, String key, double min, double max, int offset, int count) {
         Jedis j = null;
         try {
             j = pool.getResource();
@@ -1781,7 +1774,7 @@ public class JedisUtil {
 
     }
 
-    public Set<String> zrevrangeByScore(CacheType cacheType, String key, String max, String min) {
+    public List<String> zrevrangeByScore(CacheType cacheType, String key, String max, String min) {
         Jedis j = null;
         try {
             j = pool.getResource();
@@ -1800,7 +1793,7 @@ public class JedisUtil {
 
     }
 
-    public Set<String> zrangeByScore(CacheType cacheType, String key, String min, String max, int offset, int count) {
+    public List<String> zrangeByScore(CacheType cacheType, String key, String min, String max, int offset, int count) {
         Jedis j = null;
         try {
             j = pool.getResource();
@@ -1819,7 +1812,7 @@ public class JedisUtil {
 
     }
 
-    public Set<String> zrevrangeByScore(CacheType cacheType, String key, double max, double min, int offset, int count) {
+    public List<String> zrevrangeByScore(CacheType cacheType, String key, double max, double min, int offset, int count) {
         Jedis j = null;
         try {
             j = pool.getResource();
@@ -1838,7 +1831,7 @@ public class JedisUtil {
 
     }
 
-    public Set<Tuple> zrangeByScoreWithScores(CacheType cacheType, String key, double min, double max) {
+    public List<Tuple> zrangeByScoreWithScores(CacheType cacheType, String key, double min, double max) {
         Jedis j = null;
         try {
             j = pool.getResource();
@@ -1857,7 +1850,7 @@ public class JedisUtil {
 
     }
 
-    public Set<Tuple> zrevrangeByScoreWithScores(CacheType cacheType, String key, double max, double min) {
+    public List<Tuple> zrevrangeByScoreWithScores(CacheType cacheType, String key, double max, double min) {
         Jedis j = null;
         try {
             j = pool.getResource();
@@ -1876,7 +1869,7 @@ public class JedisUtil {
 
     }
 
-    public Set<Tuple> zrangeByScoreWithScores(CacheType cacheType, String key, double min, double max, int offset, int count) {
+    public List<Tuple> zrangeByScoreWithScores(CacheType cacheType, String key, double min, double max, int offset, int count) {
         Jedis j = null;
         try {
             j = pool.getResource();
@@ -1895,7 +1888,7 @@ public class JedisUtil {
 
     }
 
-    public Set<String> zrevrangeByScore(CacheType cacheType, String key, String max, String min, int offset, int count) {
+    public List<String> zrevrangeByScore(CacheType cacheType, String key, String max, String min, int offset, int count) {
         Jedis j = null;
         try {
             j = pool.getResource();
@@ -1914,7 +1907,7 @@ public class JedisUtil {
 
     }
 
-    public Set<Tuple> zrangeByScoreWithScores(CacheType cacheType, String key, String min, String max) {
+    public List<Tuple> zrangeByScoreWithScores(CacheType cacheType, String key, String min, String max) {
         Jedis j = null;
         try {
             j = pool.getResource();
@@ -1933,7 +1926,7 @@ public class JedisUtil {
 
     }
 
-    public Set<Tuple> zrevrangeByScoreWithScores(CacheType cacheType, String key, String max, String min) {
+    public List<Tuple> zrevrangeByScoreWithScores(CacheType cacheType, String key, String max, String min) {
         Jedis j = null;
         try {
             j = pool.getResource();
@@ -1952,7 +1945,7 @@ public class JedisUtil {
 
     }
 
-    public Set<Tuple> zrangeByScoreWithScores(CacheType cacheType, String key, String min, String max, int offset, int count) {
+    public List<Tuple> zrangeByScoreWithScores(CacheType cacheType, String key, String min, String max, int offset, int count) {
         Jedis j = null;
         try {
             j = pool.getResource();
@@ -1971,7 +1964,7 @@ public class JedisUtil {
 
     }
 
-    public Set<Tuple> zrevrangeByScoreWithScores(CacheType cacheType, String key, double max, double min, int offset, int count) {
+    public List<Tuple> zrevrangeByScoreWithScores(CacheType cacheType, String key, double max, double min, int offset, int count) {
         Jedis j = null;
         try {
             j = pool.getResource();
@@ -1990,7 +1983,7 @@ public class JedisUtil {
 
     }
 
-    public Set<Tuple> zrevrangeByScoreWithScores(CacheType cacheType, String key, String max, String min, int offset, int count) {
+    public List<Tuple> zrevrangeByScoreWithScores(CacheType cacheType, String key, String max, String min, int offset, int count) {
         Jedis j = null;
         try {
             j = pool.getResource();
@@ -2085,7 +2078,7 @@ public class JedisUtil {
 
     }
 
-    public Set<String> zrangeByLex(CacheType cacheType, String key, String min, String max) {
+    public List<String> zrangeByLex(CacheType cacheType, String key, String min, String max) {
         Jedis j = null;
         try {
             j = pool.getResource();
@@ -2104,7 +2097,7 @@ public class JedisUtil {
 
     }
 
-    public Set<String> zrangeByLex(CacheType cacheType, String key, String min, String max, int offset, int count) {
+    public List<String> zrangeByLex(CacheType cacheType, String key, String min, String max, int offset, int count) {
         Jedis j = null;
         try {
             j = pool.getResource();
@@ -2123,7 +2116,7 @@ public class JedisUtil {
 
     }
 
-    public Set<String> zrevrangeByLex(CacheType cacheType, String key, String max, String min) {
+    public List<String> zrevrangeByLex(CacheType cacheType, String key, String max, String min) {
         Jedis j = null;
         try {
             j = pool.getResource();
@@ -2142,7 +2135,7 @@ public class JedisUtil {
 
     }
 
-    public Set<String> zrevrangeByLex(CacheType cacheType, String key, String max, String min, int offset, int count) {
+    public List<String> zrevrangeByLex(CacheType cacheType, String key, String max, String min, int offset, int count) {
         Jedis j = null;
         try {
             j = pool.getResource();

@@ -39,7 +39,11 @@ public class DocScanJob {
         }
         // 枚举 i18n json
         else if ("ENUM_SCAN_JSON".equals(jobType)) {
-            EnumJsonScan.doScan(projectPath, outputFileName);
+            EnumJsonScan.doScan(projectPath, outputFileName, false);
+        }
+        // 枚举 i18n json
+        else if ("ENUM_SCAN_JSON_ONLY".equals(jobType)) {
+            EnumJsonScan.doScan(projectPath, outputFileName, true);
         }
         // open api
         else if ("OPEN_API".equals(jobType)) {
