@@ -439,7 +439,7 @@ public class AutoCreateTableColumn {
                 col.tableName = rs.getString("TABLE_NAME");
                 col.columnName = rs.getString("COLUMN_NAME");
                 col.type = rs.getString("DATA_TYPE");
-                col.len = rs.getInt("CHARACTER_MAXIMUM_LENGTH");
+                col.len = rs.getLong("CHARACTER_MAXIMUM_LENGTH");
                 col.comment = rs.getString("COLUMN_COMMENT");
                 col.notnull = !"YES".equals(rs.getString("IS_NULLABLE"));
                 col.defaultValue = rs.getString("COLUMN_DEFAULT");
@@ -468,7 +468,7 @@ public class AutoCreateTableColumn {
         String tableName;
         String columnName;
         String type;
-        int len;
+        long len;
         String comment;
         boolean notnull;
         String defaultValue;

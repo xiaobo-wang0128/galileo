@@ -248,4 +248,39 @@ public class SequenceNoService {
     }
 
 
+
+
+    // ---------- SCM 兼容别名 ----------
+
+    /** @deprecated 使用 {@link #generateWithHeadDateSplitSeq(String, int)} */
+    @Deprecated
+    public String generateSequenceNoWithSplit(String head, int len) {
+        return generateWithHeadDateSplitSeq(head, len);
+    }
+
+    /** @deprecated 使用 {@link #generateWithHeadDateSplitSeq(String, int)} */
+    @Deprecated
+    public String generateSequenceNoWithSplit(String head, int len, String dateFormat) {
+        String day = CommonUtil.format(new Date(), dateFormat);
+        return generate(head, day, len, true, true);
+    }
+
+    /** @deprecated 使用 {@link #generateWithHeadDateSeq(String, int)} */
+    @Deprecated
+    public String generateSequenceNo(String head, int len) {
+        return generateWithHeadDateSeq(head, len);
+    }
+
+    /** @deprecated 使用 {@link #generateWithDateSeq(String, int)} */
+    @Deprecated
+    public String generateSequenceNoWithOutHead(String head, int len) {
+        return generateWithDateSeq(head, len);
+    }
+
+    /** @deprecated 使用 {@link #generateWithHeadSeq(String, int)} */
+    @Deprecated
+    public String generateSequenceNoSimple(String head, int len) {
+        return generateWithHeadSeq(head, len);
+    }
+
 }

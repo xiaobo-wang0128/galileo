@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-07-27T15:50:16+0800",
+    date = "2026-07-27T20:46:10+0800",
     comments = "version: 1.5.0.Beta2, compiler: javac, environment: Java 11.0.27 (Azul Systems, Inc.)"
 )
 @Component
@@ -81,5 +81,33 @@ public class I18nAppTransferImpl implements I18nAppTransfer {
         }
 
         return i18nAppDTO;
+    }
+
+    @Override
+    public List<I18nAppDTO> toListDTO(List<I18nApp> arg0) {
+        if ( arg0 == null ) {
+            return null;
+        }
+
+        List<I18nAppDTO> list = new ArrayList<I18nAppDTO>( arg0.size() );
+        for ( I18nApp i18nApp : arg0 ) {
+            list.add( toDTO( i18nApp ) );
+        }
+
+        return list;
+    }
+
+    @Override
+    public List<I18nApp> toListDO(List<I18nAppDTO> arg0) {
+        if ( arg0 == null ) {
+            return null;
+        }
+
+        List<I18nApp> list = new ArrayList<I18nApp>( arg0.size() );
+        for ( I18nAppDTO i18nAppDTO : arg0 ) {
+            list.add( toDO( i18nAppDTO ) );
+        }
+
+        return list;
     }
 }

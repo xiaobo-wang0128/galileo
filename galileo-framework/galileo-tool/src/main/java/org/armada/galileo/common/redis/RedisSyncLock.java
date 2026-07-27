@@ -181,11 +181,35 @@ public class RedisSyncLock {
         }
     }
 
+    /**
+     * redis get
+     *
+     * @param cacheType
+     * @param key
+     * @return
+     */
     public String get(CacheType cacheType, String key) {
         return redisUtil.get(cacheType, key);
     }
 
+    /**
+     * redis set
+     *
+     * @param cacheType
+     * @param key
+     * @param value
+     */
     public void set(CacheType cacheType, String key, String value) {
         redisUtil.set(cacheType, key, value);
+    }
+
+    /**
+     * 是否已加锁
+     * @param cacheType
+     * @param key
+     * @return
+     */
+    public boolean isLocked(CacheType cacheType, String key) {
+        return this.get(cacheType, key) != null;
     }
 }

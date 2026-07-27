@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.core.toolkit.*;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.logging.LogFactory;
@@ -51,7 +52,8 @@ public class BaseBOImpl<DO, DTO, M extends BaseMapper<DO>, C extends MapstructCo
 
 	private boolean isBaseEntity = isBaseEntity();
 
-	protected M getBaseMapper() {
+	@Override
+	public M getBaseMapper() {
 		return this.mapper;
 	}
 
@@ -350,6 +352,7 @@ public class BaseBOImpl<DO, DTO, M extends BaseMapper<DO>, C extends MapstructCo
 		for (DO ado : entityList) {
 			mapper.insert(ado);
 		}
+
 		return true;
 	}
 
@@ -421,7 +424,6 @@ public class BaseBOImpl<DO, DTO, M extends BaseMapper<DO>, C extends MapstructCo
 	}
 
 	public List<DTO> selectAll() {
-
 		if (ThreadPagingUtil.get() == null) {
 			PageParam pp = PageParam.instanceByOffset(0, 1000);
 			ThreadPagingUtil.set(pp);
@@ -436,8 +438,31 @@ public class BaseBOImpl<DO, DTO, M extends BaseMapper<DO>, C extends MapstructCo
 		return convertToDtoList(getBaseMapper().selectList(null));
 	}
 
-	public Integer selectCount(Wrapper<DO> query) {
-		return getBaseMapper().selectCount(query);
+
+	private static final int MAX_BATCH_SIZE = 1000;
+
+	@Override
+	public int selectCount(Wrapper<DO> query) {
+		Integer count = getBaseMapper().selectCount(query);
+		return count == null ? 0 : count;
+	}
+
+	@Override
+	public Page<DTO> page(Page<DO> page, Wrapper<DO> wrapper) {
+		Page<DO> resultPage = getBaseMapper().selectPage(page, wrapper);
+		Page<DTO> pageResult = new Page<>(resultPage.getCurrent(), resultPage.getSize(), resultPage.getTotal());
+		pageResult.setRecords(convertor.toListDTO(resultPage.getRecords()));
+		return pageResult;
+	}
+
+	@Override
+	public void insertExecBatchDTO(Collection<DTO> dtoList) {
+		this.insertBatchDTO(dtoList);
+	}
+
+	@Override
+	public void insertExecBatchDO(Collection<DO> entityList) {
+		this.insertBatchDO(entityList);
 	}
 
 }

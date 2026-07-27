@@ -3,6 +3,8 @@ package org.armada.galileo.mybatis.bo;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -164,5 +166,30 @@ public interface BaseBO<DO, DTO> {
 	 * @return
 	 */
 	public List<DTO> convertToDtoList(List<? extends DO> entityList);
+
+	/**
+	 * 条件计数
+	 */
+	int selectCount(Wrapper<DO> query);
+
+	/**
+	 * 分页查询
+	 */
+	Page<DTO> page(Page<DO> page, Wrapper<DO> wrapper);
+
+	/**
+	 * 获取 Mapper
+	 */
+	BaseMapper<DO> getBaseMapper();
+
+	/**
+	 * 大批量插入（DTO）
+	 */
+	void insertExecBatchDTO(Collection<DTO> dtoList);
+
+	/**
+	 * 大批量插入（DO）
+	 */
+	void insertExecBatchDO(Collection<DO> dos);
 
 }

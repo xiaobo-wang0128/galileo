@@ -7,14 +7,17 @@ package org.armada.galileo.model.constant;
  */
 public enum YesOrNoEnum implements I18nDictionary {
 
-    Y("是"),
+    Y("是", "S"),
 
-    N("否");
+    N("否", "D");
 
     private String desc;
 
-    YesOrNoEnum(String desc) {
+    private String printDesc;
+
+    YesOrNoEnum(String desc, String printDesc) {
         this.desc = desc;
+        this.printDesc = printDesc;
     }
 
     @Override
@@ -22,12 +25,20 @@ public enum YesOrNoEnum implements I18nDictionary {
         return this.desc;
     }
 
-    public static YesOrNoEnum getByDesc(String desc){
-        if(desc == null){
+    public String getPrintDesc() {
+        return printDesc;
+    }
+
+    public static Boolean isY(YesOrNoEnum yesOrNoEnum) {
+        return yesOrNoEnum == Y;
+    }
+
+    public static YesOrNoEnum getByDesc(String desc) {
+        if (desc == null) {
             return null;
         }
-        for (YesOrNoEnum belongEnum:YesOrNoEnum.values()) {
-            if(belongEnum.getDesc().equals(desc)){
+        for (YesOrNoEnum belongEnum : YesOrNoEnum.values()) {
+            if (belongEnum.getDesc().equals(desc)) {
                 return belongEnum;
             }
         }

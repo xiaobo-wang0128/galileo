@@ -1,6 +1,8 @@
 package org.armada.galileo.i18n_server.dal.transfer;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import javax.annotation.processing.Generated;
 import org.armada.galileo.i18n_server.dal.dto.I18nBranchKeysDTO;
@@ -9,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-07-27T15:50:16+0800",
+    date = "2026-07-27T20:46:10+0800",
     comments = "version: 1.5.0.Beta2, compiler: javac, environment: Java 11.0.27 (Azul Systems, Inc.)"
 )
 @Component
@@ -69,5 +71,33 @@ public class I18nBranchKeysTransferImpl implements I18nBranchKeysTransfer {
         }
 
         return i18nBranchKeysDTO;
+    }
+
+    @Override
+    public List<I18nBranchKeysDTO> toListDTO(List<I18nBranchKeys> arg0) {
+        if ( arg0 == null ) {
+            return null;
+        }
+
+        List<I18nBranchKeysDTO> list = new ArrayList<I18nBranchKeysDTO>( arg0.size() );
+        for ( I18nBranchKeys i18nBranchKeys : arg0 ) {
+            list.add( toDTO( i18nBranchKeys ) );
+        }
+
+        return list;
+    }
+
+    @Override
+    public List<I18nBranchKeys> toListDO(List<I18nBranchKeysDTO> arg0) {
+        if ( arg0 == null ) {
+            return null;
+        }
+
+        List<I18nBranchKeys> list = new ArrayList<I18nBranchKeys>( arg0.size() );
+        for ( I18nBranchKeysDTO i18nBranchKeysDTO : arg0 ) {
+            list.add( toDO( i18nBranchKeysDTO ) );
+        }
+
+        return list;
     }
 }

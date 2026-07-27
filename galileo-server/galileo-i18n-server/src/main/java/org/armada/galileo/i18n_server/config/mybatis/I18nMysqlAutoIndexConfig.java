@@ -40,9 +40,9 @@ public class I18nMysqlAutoIndexConfig {
     @PostConstruct
     public void init() {
         log.info("start mysql auto job");
-        AutoUpdateTableJob autoUpdateTableJob =
-                new AutoUpdateTableJob("i18n", entityPackageList, null, jdbcUrl, user, password, true);
-        autoUpdateTableJob.doJob();
+//        AutoUpdateTableJob autoUpdateTableJob =
+//                new AutoUpdateTableJob("i18n", entityPackageList, null, jdbcUrl, user, password, true);
+//        autoUpdateTableJob.doJob();
     }
 
 }

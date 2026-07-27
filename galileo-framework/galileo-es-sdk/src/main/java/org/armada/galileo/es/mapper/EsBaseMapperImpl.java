@@ -97,6 +97,9 @@ public class EsBaseMapperImpl<DO extends EsBaseEntity> implements EsBaseMapper<D
     @Value("${spring.profiles.active}")
     private String active;
 
+    @Value("${es.enabled:true}")
+    private boolean esEnabled;
+
     static {
         for (String s : baseType.split(",")) {
             if (s.matches("\\s*")) {
@@ -112,6 +115,11 @@ public class EsBaseMapperImpl<DO extends EsBaseEntity> implements EsBaseMapper<D
 
     @PostConstruct
     public void initIndex() {
+
+        if (!esEnabled) {
+            log.info("es.enabled=false, skip EsBaseMapperImpl init, class={}", getClass().getName());
+            return;
+        }
 
         if (hasInitClient.compareAndSet(false, true)) {
             EsClientInit esClientInit = applicationContext.getAutowireCapableBeanFactory().createBean(EsClientInit.class);

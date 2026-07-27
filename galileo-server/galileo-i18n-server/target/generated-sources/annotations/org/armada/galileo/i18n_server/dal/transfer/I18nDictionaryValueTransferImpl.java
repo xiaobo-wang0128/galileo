@@ -1,5 +1,7 @@
 package org.armada.galileo.i18n_server.dal.transfer;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.processing.Generated;
 import org.armada.galileo.i18n_server.dal.dto.I18nDictionaryValueDTO;
 import org.armada.galileo.i18n_server.dal.entity.I18nDictionaryValue;
@@ -7,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-07-27T15:50:16+0800",
+    date = "2026-07-27T20:46:10+0800",
     comments = "version: 1.5.0.Beta2, compiler: javac, environment: Java 11.0.27 (Azul Systems, Inc.)"
 )
 @Component
@@ -71,5 +73,33 @@ public class I18nDictionaryValueTransferImpl implements I18nDictionaryValueTrans
         }
 
         return i18nDictionaryValueDTO;
+    }
+
+    @Override
+    public List<I18nDictionaryValueDTO> toListDTO(List<I18nDictionaryValue> arg0) {
+        if ( arg0 == null ) {
+            return null;
+        }
+
+        List<I18nDictionaryValueDTO> list = new ArrayList<I18nDictionaryValueDTO>( arg0.size() );
+        for ( I18nDictionaryValue i18nDictionaryValue : arg0 ) {
+            list.add( toDTO( i18nDictionaryValue ) );
+        }
+
+        return list;
+    }
+
+    @Override
+    public List<I18nDictionaryValue> toListDO(List<I18nDictionaryValueDTO> arg0) {
+        if ( arg0 == null ) {
+            return null;
+        }
+
+        List<I18nDictionaryValue> list = new ArrayList<I18nDictionaryValue>( arg0.size() );
+        for ( I18nDictionaryValueDTO i18nDictionaryValueDTO : arg0 ) {
+            list.add( toDO( i18nDictionaryValueDTO ) );
+        }
+
+        return list;
     }
 }
