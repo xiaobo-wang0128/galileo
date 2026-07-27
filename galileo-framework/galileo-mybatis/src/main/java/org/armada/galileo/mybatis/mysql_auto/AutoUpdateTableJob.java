@@ -3,6 +3,7 @@ package org.armada.galileo.mybatis.mysql_auto;
 import lombok.extern.slf4j.Slf4j;
 import org.armada.galileo.common.redis.CacheType;
 import org.armada.galileo.common.redis.RedisSyncLock;
+import org.armada.galileo.common.redis.RedisUtil;
 import org.armada.galileo.common.util.CommonUtil;
 import org.armada.galileo.common.util.JsonUtil;
 import org.armada.galileo.mybatis.annotation.Table;
@@ -10,7 +11,10 @@ import org.armada.galileo.mybatis.domain.BaseEntity;
 import org.reflections.Reflections;
 import org.reflections.Store;
 import org.reflections.util.QueryFunction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
+import javax.sql.DataSource;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -28,12 +32,22 @@ import java.util.stream.Collectors;
 @Slf4j
 public class AutoUpdateTableJob {
 
-    private RedisSyncLock syncLock;
+    @Autowired
+    private RedisSyncLock redisSyncLock;
 
+    @Autowired
+    private RedisUtil redisUtil;
+
+    @Autowired
+    private DataSource ds;
+
+    @Value("${spring.datasource.url}")
     private String jdbcUrl;
 
+    @Value("${spring.datasource.username}")
     private String user;
 
+    @Value("${spring.datasource.password}")
     private String password;
 
     private String systemCode;
@@ -45,22 +59,8 @@ public class AutoUpdateTableJob {
      */
     private boolean autoCreateUpdateTable = false;
 
-    private AutoUpdateTableJob() {
-    }
-
-    public AutoUpdateTableJob(
-            String systemCode,
-            List<String> entityPackageList,
-            RedisSyncLock syncLock,
-            String jdbcUrl, String user, String password,
-            boolean autoCreateUpdateTable) {
-        this.syncLock = syncLock;
-        this.jdbcUrl = jdbcUrl;
-        this.user = user;
-        this.password = password;
-        this.systemCode = systemCode;
-        this.entityPackageList = entityPackageList;
-        this.autoCreateUpdateTable = autoCreateUpdateTable;
+    private static enum CommonCacheType implements CacheType {
+        AutoCreateTable
     }
 
     private static String currentSystemVersion = null;
@@ -76,9 +76,15 @@ public class AutoUpdateTableJob {
         }
     }
 
+    public void setUp(List<String> entityPackageList, String systemCode, boolean autoCreateUpdateTable) {
+        this.entityPackageList = entityPackageList;
+        this.systemCode = systemCode;
+        this.autoCreateUpdateTable = autoCreateUpdateTable;
+    }
 
-    private static enum MysqlCacheType implements CacheType {
-        AutoCreateTable
+    public void setUp(List<String> entityPackageList, String systemCode) {
+        this.entityPackageList = entityPackageList;
+        this.systemCode = systemCode;
     }
 
     public void doJob() {
@@ -87,18 +93,29 @@ public class AutoUpdateTableJob {
             return;
         }
 
+//        log.info("sun.java.command: " + (String) System.getProperties().get("sun.java.command"));
+//
+//        if (CommonUtil.isSpringApp()) {
+//            log.info("is spring");
+//            entityPackageList = entityPackageList.stream().map(e -> "BOOT-INF.classes." + e).collect(Collectors.toList());
+//        } else {
+//            log.info("is java ");
+//        }
+
         // 判断当前版本的代码是否已经执行过"自动添加索引"任务了
-        if (currentSystemVersion != null && syncLock != null) {
-            String v = syncLock.get(MysqlCacheType.AutoCreateTable, systemCode + "_" + currentSystemVersion);
+        if (currentSystemVersion != null) {
+            String v = redisUtil.get(CommonCacheType.AutoCreateTable, systemCode + "_" + currentSystemVersion);
             if (v != null) {
                 log.info("[mysql auto job] version :{} has been loaded", currentSystemVersion);
                 return;
             }
-            if (!syncLock.lock(MysqlCacheType.AutoCreateTable, systemCode + currentSystemVersion)) {
+        }
+
+        if (currentSystemVersion != null) {
+            if (!redisSyncLock.lock(CommonCacheType.AutoCreateTable, systemCode + currentSystemVersion)) {
                 return;
             }
         }
-
 
         Connection conn = null;
         try {
@@ -131,8 +148,8 @@ public class AutoUpdateTableJob {
             AutoCreateTableIndex autoIndex = new AutoCreateTableIndex(entityClassList, conn, dbName);
             indexSuccess = autoIndex.doAutoCreateUpdateIndex();
 
-            if (currentSystemVersion != null && columnSuccess && indexSuccess && syncLock != null) {
-                syncLock.set(MysqlCacheType.AutoCreateTable, systemCode + "_" + currentSystemVersion, "success");
+            if (currentSystemVersion != null && columnSuccess && indexSuccess) {
+                redisUtil.set(CommonCacheType.AutoCreateTable, systemCode + "_" + currentSystemVersion, "success");
             }
 
         } catch (Exception e) {
@@ -145,10 +162,8 @@ public class AutoUpdateTableJob {
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }
-            if (syncLock != null) {
-                syncLock.unlock(MysqlCacheType.AutoCreateTable, systemCode + currentSystemVersion);
-            }
 
+            redisSyncLock.unlock(CommonCacheType.AutoCreateTable, systemCode + currentSystemVersion);
         }
 
     }

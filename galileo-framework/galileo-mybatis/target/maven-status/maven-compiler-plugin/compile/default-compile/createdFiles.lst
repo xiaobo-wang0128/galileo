@@ -35,7 +35,6 @@ org/armada/galileo/mybatis/mysql_auto/AutoUpdateTableJob.class
 org/armada/galileo/mybatis/domain/BaseEntity.class
 org/armada/galileo/mybatis/annotation/Table.class
 org/armada/galileo/mybatis/interceptor/BaseMybatisInterceptor$BoundSqlSqlSource.class
-org/armada/galileo/mybatis/mysql_auto/AutoUpdateTableJob$MysqlCacheType.class
 org/armada/galileo/mybatis/sequence/SequenceNo.class
 org/armada/galileo/mybatis/interceptor/BaseMybatisInterceptor$Result.class
 org/armada/galileo/mybatis/mysql_auto/MybatisQueryUtil.class
@@ -46,5 +45,6 @@ org/armada/galileo/mybatis/mysql_auto/AutoCreateTableColumn$InnerTable.class
 org/armada/galileo/mybatis/util/ConcurrentInsertUtil$Updater.class
 org/armada/galileo/mybatis/generator/SuperMybatisGenerator$2.class
 org/armada/galileo/mybatis/mysql_auto/AutoCreateTableColumn.class
+org/armada/galileo/mybatis/mysql_auto/AutoUpdateTableJob$CommonCacheType.class
 org/armada/galileo/mybatis/handler/ListStringTypeHandler$3.class
 org/armada/galileo/mybatis/sequence/SequenceNoService.class

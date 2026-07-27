@@ -52,5 +52,15 @@ public @interface TableColumn {
      */
     String type() default "";
 
+    /**
+     * 字段长度，仅针对 decimal 类型
+     */
+    int decimalLen() default 16;
+
+    /**
+     * 字段是否存在表中，默认存在
+     */
+    boolean exists() default true;
+
 
 }

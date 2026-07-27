@@ -18,6 +18,16 @@ public enum TenantTypeEnum {
     COMPANY,
 
     /**
+     * 贷代（SCM 兼容）
+     */
+    AGENT,
+
+    /**
+     * 仓库（SCM 兼容）
+     */
+    WAREHOUSE,
+
+    /**
      * 客户
      */
     CUSTOMER,

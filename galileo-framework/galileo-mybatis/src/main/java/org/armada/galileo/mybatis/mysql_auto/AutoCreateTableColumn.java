@@ -267,6 +267,9 @@ public class AutoCreateTableColumn {
 
 
                 TableColumn define = field.getAnnotation(TableColumn.class);
+                if (define != null && !define.exists()) {
+                    continue;
+                }
                 if (define != null) {
                     if (CommonUtil.isNotEmpty(define.type())) {
                         type = define.type().toLowerCase();
@@ -313,6 +316,8 @@ public class AutoCreateTableColumn {
                             type = "json";
                         } else if (typeName.indexOf("BigDecimal") != -1) {
                             type = "decimal";
+                        } else if (Date.class.getName().equals(typeName)) {
+                            type = "datetime";
                         } else {
                             String error = CommonUtil.format("请不在要 entity 中使用此类型: {},  className:{}, field: {}， 如果是对象类型需要添加 @TableField 注解 "
                                     , typeName.substring(typeName.lastIndexOf(".") + 1)
@@ -322,7 +327,6 @@ public class AutoCreateTableColumn {
                         }
                     }
                 }
-
 
 
 

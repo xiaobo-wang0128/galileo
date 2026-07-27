@@ -129,7 +129,7 @@ public interface ConcurrentInsertUtil<Entity, ID extends Serializable> {
 
                     return Success_Singal;
 
-                }, TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+                }, TransactionDefinition.PROPAGATION_REQUIRED);
 
                 // 唤醒
                 if (Release_Singal == sign) {

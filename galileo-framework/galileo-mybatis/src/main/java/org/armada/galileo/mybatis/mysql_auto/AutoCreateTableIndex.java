@@ -21,11 +21,13 @@ import java.util.stream.Collectors;
 @Slf4j
 public class AutoCreateTableIndex {
 
+
     private Set<Class<?>> entityList;
 
     private Connection conn;
 
     private String dbName;
+
 
     public AutoCreateTableIndex(Set<Class<?>> entityList, Connection conn, String dbName) {
         this.entityList = entityList;

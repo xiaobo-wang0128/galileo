@@ -558,6 +558,13 @@ public class RedisUtil {
         }
     }
 
+    /**
+     * 兼容 long 过期时间（秒）入参
+     */
+    public String setex(CacheType cacheType, String key, long expire, String value) {
+        return setex(cacheType, key, (int) expire, value);
+    }
+
     public String psetex(CacheType cacheType, String key, long milliseconds, String value) {
         Jedis j = null;
         try {
