@@ -8,7 +8,7 @@ package org.armada.galileo.autoconfig.util;
 public enum TenantTypeEnum {
 
     /**
-     * 租户/平台
+     * 租户/平台/贷代
      */
     TENANT,
 
@@ -16,11 +16,6 @@ public enum TenantTypeEnum {
      * 子机构
      */
     COMPANY,
-
-    /**
-     * 贷代（SCM 兼容）
-     */
-    AGENT,
 
     /**
      * 仓库（SCM 兼容）

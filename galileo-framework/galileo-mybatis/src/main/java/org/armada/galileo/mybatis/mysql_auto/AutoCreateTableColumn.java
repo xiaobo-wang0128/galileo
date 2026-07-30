@@ -47,7 +47,7 @@ public class AutoCreateTableColumn {
         List<InnerColumn> existInnerColumns = selectColumnFromTable(
                 conn,
                 CommonUtil.format(
-                        "select TABLE_NAME, COLUMN_NAME, IS_NULLABLE, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH ,COLUMN_DEFAULT,COLUMN_COMMENT,NUMERIC_SCALE  from information_schema.`COLUMNS` where TABLE_SCHEMA='{}'"
+                        "select TABLE_NAME, COLUMN_NAME, IS_NULLABLE, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, COLUMN_DEFAULT, COLUMN_COMMENT, NUMERIC_SCALE from information_schema.`COLUMNS` where TABLE_SCHEMA='{}'"
                         , dbName
                 )
         );
@@ -333,8 +333,13 @@ public class AutoCreateTableColumn {
                 if (len == -1) {
                     len = 255;
                 }
+                // decimal 长度取 decimalLen（默认 16），不要沿用 varchar 的 255
                 if ("decimal".equals(type)) {
-                    log.debug("xxxx");
+                    if (define != null) {
+                        len = define.decimalLen();
+                    } else {
+                        len = 16;
+                    }
                 }
                 InnerColumn innerColumn = new InnerColumn();
                 innerColumn.tableName = tableName;
@@ -368,8 +373,9 @@ public class AutoCreateTableColumn {
                     innerColumn.comment);
         }
         if ("decimal".equals(innerColumn.type)) {
-            return CommonUtil.format("`{}` decimal(16,{}) {} COMMENT '{}'",
+            return CommonUtil.format("`{}` decimal({},{}) {} COMMENT '{}'",
                     innerColumn.columnName,
+                    innerColumn.len,
                     innerColumn.precision,
                     printDefault(innerColumn),
                     innerColumn.comment);
@@ -435,20 +441,22 @@ public class AutoCreateTableColumn {
 
             while (rs.next()) {
                 InnerColumn col = new InnerColumn();
-                // TABLE_NAME,COLUMN_NAME,IS_NULLABLE,DATA_TYPE,CHARACTER_MAXIMUM_LENGTH , COLUMN_COMMENT, NUMERIC_SCALE
+                // TABLE_NAME,COLUMN_NAME,IS_NULLABLE,DATA_TYPE,CHARACTER_MAXIMUM_LENGTH,NUMERIC_PRECISION,COLUMN_DEFAULT,COLUMN_COMMENT,NUMERIC_SCALE
                 col.tableName = rs.getString("TABLE_NAME");
                 col.columnName = rs.getString("COLUMN_NAME");
                 col.type = rs.getString("DATA_TYPE");
-                col.len = rs.getLong("CHARACTER_MAXIMUM_LENGTH");
                 col.comment = rs.getString("COLUMN_COMMENT");
                 col.notnull = !"YES".equals(rs.getString("IS_NULLABLE"));
                 col.defaultValue = rs.getString("COLUMN_DEFAULT");
-                col.precision = rs.getInt("NUMERIC_SCALE");
-                result.add(col);
+                col.precision = readIntColumn(rs, "NUMERIC_SCALE");
 
-//                if (col.columnName.equals("id")) {
-//                    log.debug("xxx");
-//                }
+                // decimal/float/double 用 NUMERIC_PRECISION；其它字符类型用 CHARACTER_MAXIMUM_LENGTH
+                if ("decimal".equals(col.type) || "float".equals(col.type) || "double".equals(col.type)) {
+                    col.len = readIntColumn(rs, "NUMERIC_PRECISION");
+                } else {
+                    col.len = readLongColumn(rs, "CHARACTER_MAXIMUM_LENGTH");
+                }
+                result.add(col);
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -480,11 +488,12 @@ public class AutoCreateTableColumn {
             sb.append("columnName='").append(columnName).append('\'');
             sb.append(", type='").append(type).append('\'');
             sb.append(", notnull=").append(notnull);
-            sb.append(", defaultValue='").append(defaultValue).append('\'');
+            sb.append(", defaultValue='").append(normalizeDefaultValue(type, defaultValue)).append('\'');
             if ("varchar".equals(type)) {
                 sb.append(", len=").append(len);
             }
             if ("decimal".equals(type)) {
+                sb.append(", len=").append(len);
                 sb.append(", precision=").append(precision);
             }
             //sb.append(", comment='").append(comment).append('\'');
@@ -494,15 +503,64 @@ public class AutoCreateTableColumn {
 
         @Override
         public boolean equals(Object o) {
-            //  if (columnName.equals("amount")) {
-            //   log.debug("xx");
-            //}
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             InnerColumn innerColumn = (InnerColumn) o;
             return this.toString().equals(innerColumn.toString());
         }
 
+    }
+
+    /**
+     * information_schema 中部分数值可能超出 Integer（如 LONGTEXT 的 CHARACTER_MAXIMUM_LENGTH=4294967295）
+     */
+    private static int readIntColumn(ResultSet rs, String column) throws Exception {
+        long value = rs.getLong(column);
+        if (rs.wasNull()) {
+            return 0;
+        }
+        if (value > Integer.MAX_VALUE) {
+            return Integer.MAX_VALUE;
+        }
+        if (value < Integer.MIN_VALUE) {
+            return Integer.MIN_VALUE;
+        }
+        return (int) value;
+    }
+
+    private static long readLongColumn(ResultSet rs, String column) throws Exception {
+        long value = rs.getLong(column);
+        if (rs.wasNull()) {
+            return 0;
+        }
+        return value;
+    }
+
+    /**
+     * 统一默认值比较：MySQL 对 decimal(16,2) DEFAULT '0' 会返回 0.00，避免每次启动误判为变更
+     */
+    private static String normalizeDefaultValue(String type, String defaultValue) {
+        if (defaultValue == null) {
+            return null;
+        }
+        String value = defaultValue.trim();
+        if (value.isEmpty()) {
+            return null;
+        }
+        // 个别版本可能带引号
+        if (value.length() >= 2 && value.startsWith("'") && value.endsWith("'")) {
+            value = value.substring(1, value.length() - 1);
+        }
+        if ("decimal".equals(type) || "int".equals(type) || "bigint".equals(type)
+                || "float".equals(type) || "double".equals(type) || "tinyint".equals(type)
+                || "smallint".equals(type) || "mediumint".equals(type)) {
+            try {
+                return new java.math.BigDecimal(value).stripTrailingZeros().toPlainString();
+            } catch (Exception ignore) {
+                return value;
+            }
+        }
+        return value;
     }
 
 
