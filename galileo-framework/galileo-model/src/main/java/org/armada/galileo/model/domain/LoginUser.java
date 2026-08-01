@@ -81,6 +81,26 @@ public class LoginUser {
     private String companyName;
 
     /**
+     * 当前登陆的仓库 id
+     */
+    private Long warehouseId;
+
+    /**
+     * 当前登陆的仓库name
+     */
+    private String warehouseName;
+
+    /**
+     * 所属队伍id
+     */
+    private Long teamId;
+
+    /**
+     * 所属队伍名称
+     */
+    private String teamName;
+
+    /**
      * 头像路径
      */
     private String avatarUrl;
@@ -88,13 +108,11 @@ public class LoginUser {
     /**
      * 第三方平台用户： 当前用户所属平台编号
      */
-
     private String platformCode;
 
     /**
      * 第三方平台用户： 当前用户所属平台名称
      */
-
     private String platformName;
 
     /**
@@ -112,15 +130,6 @@ public class LoginUser {
      */
     private String mobile;
 
-    /**
-     * 普查队伍id
-     */
-    private Long teamId;
-
-    /**
-     * 普查队伍名称
-     */
-    private String teamName;
 
     /**
      * 随机key 用于 websocket连接

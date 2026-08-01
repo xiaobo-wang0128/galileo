@@ -97,6 +97,10 @@ public class AutoConfigSpringAspect {
         else if (tenantType == TenantTypeEnum.COMPANY) {
             tenantId = loginUser.getCompanyId();
         }
+        // 子机构
+        else if (tenantType == TenantTypeEnum.WAREHOUSE) {
+            tenantId = loginUser.getWarehouseId();
+        }
         // 客户
         else if (tenantType == TenantTypeEnum.CUSTOMER) {
             tenantId = loginUser.getUserId();
@@ -105,16 +109,13 @@ public class AutoConfigSpringAspect {
         else if (tenantType == TenantTypeEnum.USER) {
             tenantId = loginUser.getUserId();
         }
-
         if (tenantId == null) {
-            throw new BizException("无法获取到租户ID, current user: " + JsonUtil.toJson(loginUser));
+            throw new BizException("无法获取到租户ID, 租户类型：{}, current user:{}", tenantType.toString(), JsonUtil.toJson(loginUser));
         }
-
         AutoConfigEntity entity = new AutoConfigEntity();
         entity.setTenantId(tenantId);
         entity.setTenantType(tenantType);
         entity.setConfigClass(configClass);
-
         return entity;
     }
 

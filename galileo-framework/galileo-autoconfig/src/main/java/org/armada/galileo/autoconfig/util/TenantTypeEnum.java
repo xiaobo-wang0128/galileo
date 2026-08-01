@@ -1,7 +1,7 @@
 package org.armada.galileo.autoconfig.util;
 
 /**
- * 租户类型
+ * 用户隔离类型
  *
  * @date 2024/1/12 14:11
  */
