@@ -1,0 +1,86 @@
+
+<script>
+function jsonToString(obj) {
+    var t = typeof (obj);
+    if (t != "object" || obj === null) {
+        // simple data type
+        if (t == "string") obj = '"'+obj+'"';
+        return String(obj);
+    }
+    else {
+        // recurse array or object
+        var n, v, json = [], arr = (obj && obj.constructor == Array);
+        for (n in obj) {
+            v = obj[n]; t = typeof(v);
+            if (t == "string") v = '"'+v+'"';
+            else if (t == "object" && v !== null) v = JSON.stringify(v);
+            json.push((arr ? "" : '"' + n + '":') + String(v));
+        }
+        return (arr ? "[" : "{") + String(json) + (arr ? "]" : "}");
+    }
+};
+
+
+
+$(function(){
+	
+	$('#loginSubmitBtnId').bind('click', function(){
+		$.ajax({
+			url:'/askja/askja/Proxy/proxy.json',
+			dataType : 'json',
+			data:{
+				_uri_: '/optimus-user/user/account/login.json',
+				accessFrom: $('#input_id_accessFrom').val(),
+				mobile: $('#loginMobileInputId').val(),
+				pass: MD5($('#loginPwdInputId').val())
+			},
+			success : function(data) {
+				if (data.success) {
+					$('#input_id_userId').val(data.data.userId);
+					$('#input_id_token').val(data.data.token);
+				} else {
+					alert(data.errorMsg);
+				}
+			}
+		});
+	});
+
+	
+	$('#api_ajax_form').ajaxForm({
+		dataType : 'json',
+		success : function(data) {
+			$('#api_ajax_form_result').val(jsonToString(data));
+		}
+	});
+	
+});
+
+</script>
+
+
+#if($doc.needToken)
+	用户手机号：<br />
+
+	<input id="loginMobileInputId" type="text" name="mobile" value="13675888303" placeHolder="手机号" style="width: 100px;" />
+	
+	<input id="loginSubmitBtnId" type="button" value="mock登陆" style="width: 90px; text-align: center;" />
+	
+#end
+<form id="api_ajax_form" action="/askja/askja/Proxy/proxy.json" method="post">
+	<input type="hidden" name="_uri_" value="${doc.apiUrl}"/>
+	#foreach($input in $doc.inputParams) 
+		 #*
+		 #if($input.name=='accessFrom')
+		 	<input id="input_id_$input.name" type="hidden" name="$input.name" value="1.0_h5-cgtz" style="width: 220px;" /><br />
+		 #else
+		 	$util.substring($input.description,8)（${input.name}）<br /> 
+		 	<input id="input_id_$input.name" type="text" name="$input.name" style="width: 220px;" /><br />
+		 #end
+		 *#
+		 
+		$util.substring($input.description,8)（${input.name}）<br /> 
+		<input id="input_id_$input.name" type="text" name="$input.name" #if($input.name=='accessFrom') value="1.0_h5-cgtz"  #end style="width: 220px;" /><br />
+	#end
+	
+	<input type="submit" value="提交" style="margin-top: 5px;"/>
+</form>

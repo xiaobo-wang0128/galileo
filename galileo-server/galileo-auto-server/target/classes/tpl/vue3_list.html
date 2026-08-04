@@ -1,0 +1,160 @@
+<template>
+    <div class="ex-page-container">
+        <div class="ex-search">
+            <div class="ex-search-box">
+                <el-form :inline="true" ref="ruleFormRef" label-width="100" class="demo-form-inline">
+
+                    <el-form-item label="关键字">
+                        <el-input v-model="formSearch.keyword" placeholder=" " clearable />
+                    </el-form-item>
+
+                    <el-form-item class="ex-btn">
+                        <el-button type="primary" @click="$refs['tableRef'].loadData(formSearch)">搜索</el-button>
+                        <el-button @click="handleReset">重置</el-button>
+                        <el-button :icon="Plus"
+                                   @click="
+                formValue= {};
+                formTitle='新增${domainCnName}';
+                formValueDialogVisible = true; ">新增</el-button>
+                    </el-form-item>
+
+                </el-form>
+            </div>
+
+            <div class="ex-action">
+                <div class="ex-action-box-left">
+
+                </div>
+                <div class="ex-action-box-right"></div>
+            </div>
+        </div>
+
+        <div class="ex-table-page-body">
+            <ex-table-auto ref="tableRef" border url="${listUrl}" :autoPage="false">
+                <el-table-column type="index" label="#" width="43"></el-table-column>
+
+#foreach($obj in $fields)
+                <el-table-column prop="${obj.prop}" label="${obj.label}" align="left">
+                </el-table-column>
+#end
+                <el-table-column prop="status" fixed="right" align="center" label="操作" width="230">
+                    <template #default="scope">
+
+                        <el-button
+                                text type="primary"
+                                @click="
+                formValue = JSON.parse(JSON.stringify(scope.row));
+                formTitle='修改${domainCnName}';
+                formValueDialogVisible = true; " >修改</el-button>
+
+                        <ex-button-delete deleteUrl="${delUrl}" :deleteParam="{ id: scope.row.id }"
+                                          @afterOperationDone="$refs['tableRef'].reload()" message="确认删吗？" label="删除" type="danger" text :disabled="false">
+                        </ex-button-delete>
+
+                    </template>
+                </el-table-column>
+            </ex-table-auto>
+        </div>
+    </div>
+
+    <el-dialog
+            v-model="formValueDialogVisible"
+            :rules="rules"
+            :draggable="true"
+            :close-on-click-modal="false"
+            @open="$refs['formRefEl'].clearValidate(); "
+            :title="formTitle"
+            width="600">
+
+        <el-form ref="formRefEl" label-position="right" label-width="auto" :model="formValue" :rules="rules"
+                 style="max-width: 600px">
+
+#foreach($obj in $fields)
+            <el-form-item label="${obj.label}" prop="formValue.${obj.prop}">
+                <el-input v-model="formValue.${obj.prop}" placeholder="" />
+            </el-form-item>
+#end
+
+        </el-form>
+
+        <template #footer>
+            <div class="dialog-footer">
+                <el-button @click="formValueDialogVisible = false">取消</el-button>
+                <el-button type="primary" @click="submitformValue()">
+                    确定
+                </el-button>
+            </div>
+        </template>
+    </el-dialog>
+</template>
+
+<script>
+
+
+    export default {
+
+        components: {},
+
+        title: '患者详情',
+
+        data() {
+
+            return {
+
+                formValueDialogVisible: false,
+
+                formTitle: '',
+
+                rules:{
+#foreach($obj in $fields)
+                    ${obj.prop}: [{required: true, message: '请输入${obj.label}', trigger: 'blur' }],
+#end
+                },
+
+                formSearch: {
+                },
+
+                formValue: {
+                }
+
+            };
+        },
+
+        mounted() {
+
+        },
+
+        methods: {
+
+            submitformValue(){
+
+                this.$refs['formRefEl'].validate((valid, fields) => {
+                    if (valid) {
+
+                        this.$ajax
+                            .postJson('${submitUrl}', this.formValue)
+                            .then(res => {
+                                this.$message({
+                                    'type': 'success',
+                                    'message': '操作成功！'
+                                })
+                                this.formValueDialogVisible = false
+                                this.$refs['tableRef'].reload()
+                            })
+
+                    }
+
+                });
+
+
+            }
+
+
+
+        }
+
+
+    };
+
+</script>
+<style></style>

@@ -1,0 +1,9 @@
+org/armada/galileo/auto_code/vo/ImageRequestVO.class
+org/armada/galileo/vue/util/FormGeneratorCommon$CodeOutput.class
+org/armada/galileo/facade/web/screen/Index.class
+org/armada/galileo/auto_code/config/mvc/NovaPortalViewConfig.class
+org/armada/galileo/vue/web/rpc/CodeRpc.class
+org/armada/galileo/vue/domain/CodeParams.class
+org/armada/galileo/AutoServer.class
+org/armada/galileo/vue/util/FormGeneratorCommon.class
+org/armada/galileo/vue/util/FormGeneratorCommon$1.class

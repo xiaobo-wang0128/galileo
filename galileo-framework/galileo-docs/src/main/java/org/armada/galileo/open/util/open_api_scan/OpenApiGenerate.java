@@ -732,7 +732,18 @@ public class OpenApiGenerate {
             String javaFilePath = findJavaFilePath(javaFileItem, cls);
 
             if (javaFilePath == null) {
-                throw new RuntimeException(typeName + " not exist");
+
+                bean.setTypeName(typeName);
+                bean.setTypeShowName(typeShowName);
+                bean.setInnerType(innerType);
+                bean.setHasInnerClass(hasInnerClass);
+                bean.setParamTypes(paramTypes);
+                bean.setIsEnum(isEnum);
+                bean.setEnumDesc(enumDesc);
+
+                return bean;
+
+                // throw new RuntimeException(typeName + " not exist");
             }
 
             try {

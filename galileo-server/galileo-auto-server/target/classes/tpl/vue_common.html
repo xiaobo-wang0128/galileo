@@ -1,0 +1,185 @@
+<template>
+  <div class="ex-page-container">
+    <div class="ex-search">
+      <div class="ex-search-box">
+        <el-form :inline="true" ref="ruleFormRef" class="standard-search-form-wrapper">
+          <el-form-item label="关键字">
+            <el-input v-model="formSearch.keyword" placeholder=" " clearable />
+          </el-form-item>
+          <el-form-item label="xx类型" >
+            <enum-select v-model="formSearch.modifyType" enumKey="AccountModifyTypeEnum" @handleSelect="(item) => {}" style="width: 140px;"></enum-select>
+          </el-form-item>
+          <el-form-item label="发生时间" >
+            <div style="display: flex; flex-direction: row; gap: 4px; width: 280px;">
+              <el-date-picker v-model="formSearch.time1" type="date" placeholder="" value-format="x"/>
+              <el-date-picker v-model="formSearch.time2" type="date" placeholder="" value-format="x"/>
+            </div>
+          </el-form-item>
+          <el-form-item class="ex-btn">
+            <el-button type="primary" @click="$refs['tableRef'].loadData(formSearch)">搜索</el-button>
+            <el-button @click="formSearch={}">重置</el-button>
+            <el-button :icon="Plus"
+                       @click="
+                formValue= {};
+                formTitle='新增${domainCnName}';
+                formValueDialogVisible = true; ">新增${domainCnName}</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+
+      <div class="ex-action">
+      </div>
+    </div>
+
+    <div class="ex-table-page-body">
+      <ex-table-auto ref="tableRef" border url="${listUrl}"  :autoPage="true" class="el-table-nowwarp">
+        <el-table-column type="index" label="#" width="43"></el-table-column>
+    #foreach($obj in $fields)
+      #if($util.isNotEmpty($obj.formatRender))
+        <el-table-column prop="${obj.prop}" label="${obj.label}" align="left" min-width="100">
+          <template #default="scope">
+            ${obj.formatRender}
+          </template>
+        </el-table-column>
+      #else
+        <el-table-column prop="${obj.prop}" label="${obj.label}" align="left" min-width="100">
+        </el-table-column>
+      #end
+
+    #end
+        <el-table-column prop="status" fixed="right" align="center" label="操作" width="230">
+          <template #default="scope">
+            <!-- 编辑 -->
+            <el-button
+              text type="primary"
+              @click="
+                formValue = JSON.parse(JSON.stringify(scope.row));
+                formTitle='修改${domainCnName}';
+                formValueDialogVisible = true;" >编辑</el-button>
+
+            <!-- 启用、禁用 -->
+            <ex-button-delete
+              deleteUrl="${statusChangeUrl}"
+              :deleteParam="{ id: scope.row.id, type: (scope.row.status=='ENABLE'? 'DISABLED' : 'ENABLE') }"
+              @afterOperationDone="handleSearch"
+              :message="'确定要' + (scope.row.status=='ENABLE'? '禁用' : '启用') + scope.row.name + ' 吗？'"
+              :label="scope.row.status=='ENABLE'? '禁用' : '启用'"
+              type="danger"
+              text
+              :disabled="false">
+            </ex-button-delete>
+
+            <!-- 删除 -->
+            <ex-button-delete
+                deleteUrl="${delUrl}"
+                :deleteParam="{ id: scope.row.id }"
+                @afterOperationDone="$refs['tableRef'].reload()"
+                message="确认删吗？"
+                label="删除"
+                text
+                :disabled="false">
+            </ex-button-delete>
+
+          </template>
+        </el-table-column>
+      </ex-table-auto>
+    </div>
+  </div>
+
+  <el-dialog
+          v-model="formValueDialogVisible"
+          :rules="rules"
+          :draggable="true"
+          :close-on-click-modal="false"
+          @open="$refs['formRefEl'].clearValidate(); "
+          :title="formTitle"
+          width="600">
+
+    <el-form ref="formRefEl" label-position="right" label-width="auto" :model="formValue" :rules="rules" style="width:96%;">
+  #foreach($obj in $fields)
+      <el-form-item label="${obj.label}" prop="${obj.prop}">
+      #if($obj.elType == 'date')
+        <el-date-picker v-model="formValue.${obj.prop}" type="date" placeholder="" value-format="x"/>
+      #elseif($obj.elType == 'enum')
+        <enum-select v-model="formValue.${obj.prop}" enumKey="${obj.type}" @handleSelect="(item) => {}" ></enum-select>
+      #else
+        <el-input v-model="formValue.${obj.prop}" placeholder="" />
+      #end
+      </el-form-item>
+  #end
+    </el-form>
+
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="formValueDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="submitformValue()">
+          确定
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
+</template>
+
+<script>
+
+
+  export default {
+
+    components: {},
+
+    title: '患者详情',
+
+    data() {
+
+      return {
+
+        formValueDialogVisible: false,
+
+        formTitle: '',
+
+        rules:{
+#foreach($obj in $fields)
+          ${obj.prop}: [{required: true, message: '请输入${obj.label}', trigger: 'blur' }],
+#end
+        },
+
+        formSearch: {
+        },
+
+        formValue: {
+        }
+      };
+    },
+
+    mounted() {
+
+    },
+
+    methods: {
+
+      // 提交表单
+      submitformValue(){
+        this['$refs']['formRefEl'].validate((valid, fields) => {
+          if (valid) {
+            this.$ajax
+              .postJson('${submitUrl}', this.formValue)
+              .then(res => {
+                this.$message({
+                  'type': 'success',
+                  'message': '操作成功！'
+                })
+                this.formValueDialogVisible = false
+                this.$refs['tableRef'].reload()
+              })
+          }
+
+        });
+
+      }
+      //
+
+    }
+  };
+
+</script>
+<style></style>

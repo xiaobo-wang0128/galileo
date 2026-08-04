@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>$title</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="Author" content="">
+<meta name="Keywords" content="">
+<meta name="Description" content="">
+<style type="text/css">
+* {
+	font: 14px/1.5 "微软雅黑",tahoma,arial,"Hiragino Sans GB","宋体",sans-serif;
+}
+a:LINK{
+	/* color: #740D06; */
+	/* text-decoration: none; */
+}
+.head_div {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	width: 1100px;
+	left: -550px;
+	position: relative;
+	margin-left: 50%;
+	border-bottom: 1px solid #ccc;
+}
+
+.main_box_div {
+	padding-top: 10px;
+	width: 1100px;
+	left: -550px;
+	position: relative;
+	margin-left: 50%;
+}
+
+.menu_div {
+	padding-left: 10px;
+	width: 230px;
+	height: 700px; text-align : left;
+	float: left;
+	display: block;
+	border-right: 1px solid #ccc;
+	margin: 0px 0px 50px 0px;
+	text-align: left;
+}
+
+.menu_div div {
+	cursor: pointer;
+	height: 30px;
+	line-height: 30px;
+	vertical-align: middle;
+}
+
+.right_div {
+	width: 850px;
+	float: right;
+}
+.right_div div{
+	padding: 5px 5px 5px 15px;
+}
+
+.error_msg_div {
+	color: red;
+}
+
+.comment_table{
+	background-color: #ccc;
+	width: 100%;
+}
+
+.comment_table td{
+	background-color: #fff;
+}
+.comment_table .table_head td{
+	background-color: #E1DFDB;
+}
+
+.doc_group_highlight{
+	font-weight: bold; 
+	font-size: 15px; 
+	color: #f60;
+}
+
+.search_result{
+	padding-left: 10px;
+}
+
+.keyword_input{
+	width: 400px; 
+	line-height: 30px;
+	border-left: 1px solid #ccc;
+	border-top:  1px solid #ccc;
+	border-bottom:  1px solid #ccc;
+	border-right:  none;
+	padding-left: 5px;
+	float: left;
+}
+.search_btn{
+	width: 100px;
+	height: 34px;
+	color: #fff;
+	letter-spacing: 1px;
+	background: #3385ff;
+	border-bottom: 1px solid #2d78f4;
+	outline: medium;
+	-webkit-appearance: none;
+	-webkit-border-radius: 0;
+	border: 0;
+	cursor: pointer;
+}
+</style>
+
+
+<script type="text/javascript" src="//statics/resource/jquery1.7.js"></script>
+<script type="text/javascript" src="//statics/resource/jquery.form.js"></script>
+
+<!-- <script type="text/javascript" src="/resource/md5.js"></script> -->
+
+</head>
+
+<body>
+
+
+	
+
+	<div class="head_div">
+	<table style="width: 100%;">
+		<tr>
+			<td >
+	<form action="/search.htm">
+				<input type="text" name="keyword" class="keyword_input" value="$!{keyword}" /><input class="search_btn" type="submit" value="搜索" />
+    </form>
+			</td>
+			<td style="text-align: right; width: 200px;">
+				
+				<a href="/">2.0文档首页</a>
+			</td>
+		</tr>
+	</table>
+	</div>
+
+	<div class="main_box_div">
+		
+	 #foreach($obj in $list)
+	 	<div class="search_result">
+	 		<div class="doc_title"><font style="color: #999;">[$obj.group]</font> <a href="/?uri=${obj.apiUrl}" #if($obj.isDeprecated) style="text-decoration:line-through;" #end>$obj.apiName #if($obj.isDeprecated)(已废弃) #end</a></div>
+	 		<div class="doc_desc">接口地址： ${obj.apiUrl}</div>
+	 	</div>
+	 	
+	 	<br/>
+	 #end
+	</div>
+
+
+</body>
+</html>

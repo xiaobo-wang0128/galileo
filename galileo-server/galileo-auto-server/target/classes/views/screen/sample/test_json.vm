@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>find pwd sms code</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+
+<script type="text/javascript" src="/statics/resource/jquery1.7.js"></script>
+<script type="text/javascript" src="/statics/resource/jquery.form.js"></script>
+
+<style>
+table {
+	background-color: #ccc;
+	width: 600px;
+}
+
+table td {
+	background-color: #fff;
+}
+</style>
+<body>
+
+
+
+	<script>
+		$.ajax({
+			url: '/askja/demo/SampleRpc/test.json',
+			dataType: 'json',
+			type: 'POST',
+			contentType: 'application/json',
+			data: JSON.stringify({
+				"platformId": "50002",
+				"orderId": "02bcf4eaf0414b1cbf2037595ce61e3f ",
+				"jjdh": "123456789",
+				"noiseStr": "askdfsaldkfjkwarueiutiwoiqetuiqt",
+				"sign": "fewiutdhglsagjaljgagsfda",
+				"userName": "你好",
+				"aaa": [{
+					'b11': 'aa'
+				}, {
+					'b22': 'aa'
+				}]
+			}),
+			success: function(response) {
+				console.log(response)
+			}
+		});
+	</script>
+
+</body>
+</head>
