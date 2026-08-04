@@ -81,15 +81,17 @@ public class EnumJsonScan {
                 String javaFileContent = new String(bufs);
                 if (javaFileContent.indexOf("implements I18nDictionary") != -1) {
                     EnumItem item = scanJavaEnum(javaFileContent);
-                    item.setType(EnumItem.EnumItemType.I18nDictionary);
-
-                    enumItems.add(item);
+                    if (item != null) {
+                        item.setType(EnumItem.EnumItemType.I18nDictionary);
+                        enumItems.add(item);
+                    }
 
                 } else if (javaFileContent.indexOf("implements I18nError") != -1) {
                     EnumItem item = scanJavaEnum(javaFileContent);
-                    item.setType(EnumItem.EnumItemType.I18nError);
-
-                    enumItems.add(item);
+                    if (item != null) {
+                        item.setType(EnumItem.EnumItemType.I18nError);
+                        enumItems.add(item);
+                    }
                 }
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
@@ -117,6 +119,13 @@ public class EnumJsonScan {
 
 
             public void visit(final EnumDeclaration n, final EnumItem arg) {
+
+                // 忽略被标记 @Deprecated 的枚举
+                boolean deprecated = n.getAnnotations().stream()
+                        .anyMatch(e -> "Deprecated".equals(e.getName().asString()));
+                if (deprecated) {
+                    return;
+                }
 
                 arg.setTypeName(n.getName().asString());
 
@@ -149,6 +158,11 @@ public class EnumJsonScan {
         }, enumItem);
 
         in.close();
+
+        // 被 @Deprecated 标记的枚举不会设置 typeName，直接跳过
+        if (CommonUtil.isEmpty(enumItem.getTypeName())) {
+            return null;
+        }
 
         return enumItem;
     }
