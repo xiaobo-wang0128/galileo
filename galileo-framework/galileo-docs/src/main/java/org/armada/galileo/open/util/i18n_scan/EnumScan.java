@@ -3,6 +3,7 @@ package org.armada.galileo.open.util.i18n_scan;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.StringLiteralExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
@@ -160,9 +161,7 @@ public class EnumScan {
             public void visit(final EnumDeclaration n, final EnumItem arg) {
 
                 // 忽略被标记 @Deprecated 的枚举
-                boolean deprecated = n.getAnnotations().stream()
-                        .anyMatch(e -> "Deprecated".equals(e.getName().asString()));
-                if (deprecated) {
+                if (isDeprecated(n.getAnnotations())) {
                     return;
                 }
 
@@ -173,6 +172,11 @@ public class EnumScan {
                 Map<String, String> defaultDesc = new LinkedHashMap<>();
 
                 n.getEntries().forEach(p -> {
+
+                    // 忽略被标记 @Deprecated 的枚举值
+                    if (isDeprecated(p.getAnnotations())) {
+                        return;
+                    }
 
                     if (arg.getTypeName().equals("AcceptanceAbnormalCauseEnum")) {
                         log.debug("xx");
@@ -204,5 +208,9 @@ public class EnumScan {
         }
 
         return enumItem;
+    }
+
+    private static boolean isDeprecated(NodeList<? extends AnnotationExpr> annotations) {
+        return annotations.stream().anyMatch(e -> "Deprecated".equals(e.getName().getIdentifier()));
     }
 }
