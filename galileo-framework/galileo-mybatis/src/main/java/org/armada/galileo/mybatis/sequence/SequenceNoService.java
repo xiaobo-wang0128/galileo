@@ -239,6 +239,13 @@ public class SequenceNoService {
                 return no;
 
             } catch (Exception e) {
+                if (isSequenceTableNotExist(e)) {
+                    log.error("表 {} 不存在，退出算号循环: {}", tableName, e.getMessage());
+                    if (e instanceof RuntimeException) {
+                        throw (RuntimeException) e;
+                    }
+                    throw new RuntimeException(e);
+                }
                 log.error(e.getMessage());
                 continue;
             }
@@ -247,7 +254,25 @@ public class SequenceNoService {
 
     }
 
-
+    /**
+     * 判断异常是否为 sequence_no 表不存在，例如：
+     * Table 'scm_tms.tms_sequence_no' doesn't exist
+     */
+    private boolean isSequenceTableNotExist(Throwable e) {
+        Throwable t = e;
+        while (t != null) {
+            String msg = t.getMessage();
+            if (msg != null) {
+                String lower = msg.toLowerCase();
+                boolean tableMissing = lower.contains("doesn't exist") || lower.contains("does not exist");
+                if (tableMissing && (msg.contains(tableName) || lower.contains("sequence_no"))) {
+                    return true;
+                }
+            }
+            t = t.getCause();
+        }
+        return false;
+    }
 
 
     // ---------- SCM 兼容别名 ----------
